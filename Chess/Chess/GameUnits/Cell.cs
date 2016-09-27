@@ -8,6 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+using Chess.GameParameters;
+
 namespace Chess.GameUnits
 {
     enum CellType
@@ -30,7 +33,7 @@ namespace Chess.GameUnits
         int CurrentState { get; set; }
         static int StatesCount { get; } = 3;
         int Type { get; set; }
-
+        
 
         Texture2D[] StatesArray { get; set; } = new Texture2D[StatesCount];
         Rectangle Position { get; set; }
@@ -62,20 +65,26 @@ namespace Chess.GameUnits
             StatesArray[(int)CellState.POSSIBLE] = Content.Load<Texture2D>(@"cell/possible");
         }
 
-        bool cursorInCell()
+        bool isInCell(MouseState currentMouseState)
         {
-            return (Mouse.GetState().Y > Position.Top && Mouse.GetState().Y < Position.Bottom && Mouse.GetState().X > Position.Left && Mouse.GetState().Y < Position.Right) ? true : false;
+            return (currentMouseState.Y> Position.Top && currentMouseState.Y < Position.Bottom && currentMouseState.X > Position.Left && currentMouseState.X < Position.Right) ? true : false;
+        }
+
+        bool isInScreen(MouseState currentMouseState)
+        {
+            return (currentMouseState.X >= 0 && currentMouseState.X <= GameConstants.WindowWidth && currentMouseState.Y >= 0 && currentMouseState.Y <= GameConstants.WindowHeight) ? true : false;
         }
 
         public void Update()
         {
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            MouseState currentMouseState = Mouse.GetState();
+
+            if (isInScreen(currentMouseState) && isInCell(currentMouseState))
             {
-                if(Mouse.GetState().Y > Position.Top)
-                    if(Mouse.GetState().Y < Position.Bottom)
-                        if(Mouse.GetState().X > Position.Left)
-                            if(Mouse.GetState().Y < Position.Right)
-                CurrentState = (int)CellState.SELECT;
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    CurrentState = (int)CellState.SELECT;
+                else if (currentMouseState.RightButton == ButtonState.Pressed)
+                    CurrentState = (int)CellState.IDLE;
             }
         }
 
