@@ -39,6 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameParameters\Coursor.cs" />
+    <Compile Include="GameParameters\GameConstants.cs" />
+    <Compile Include="GameUnits\BlackBoard.cs" />
+    <Compile Include="GameUnits\Cell.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -54,6 +58,39 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\coursor\coursorIDLE.xnb">
+      <Link>Content\coursor\coursorIDLE.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\coursor\coursorPICK.xnb">
+      <Link>Content\coursor\coursorPICK.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\coursor\coursorWAIT.xnb">
+      <Link>Content\coursor\coursorWAIT.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\cell\black.xnb">
+      <Link>Content\cell\black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\cell\checked.xnb">
+      <Link>Content\cell\checked.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\cell\possible.xnb">
+      <Link>Content\cell\possible.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\cell\white.xnb">
+      <Link>Content\cell\white.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

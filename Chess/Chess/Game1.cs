@@ -2,6 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+
+using Chess.GameParameters;
+using Chess.GameUnits;
+
 namespace Chess
 {
     /// <summary>
@@ -12,10 +16,17 @@ namespace Chess
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        BlackBoard board;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = GameConstants.WindowWidth;
+            graphics.PreferredBackBufferHeight = GameConstants.WindowHeight;
+
+            board = new BlackBoard();
         }
 
         /// <summary>
@@ -27,6 +38,8 @@ namespace Chess
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            this.IsMouseVisible = true;
 
             base.Initialize();
         }
@@ -41,6 +54,7 @@ namespace Chess
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            board.LoadContent(Content);
         }
 
         /// <summary>
@@ -64,6 +78,8 @@ namespace Chess
 
             // TODO: Add your update logic here
 
+            board.Update();
+
             base.Update(gameTime);
         }
 
@@ -76,6 +92,10 @@ namespace Chess
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+
+            spriteBatch.Begin();
+            board.Draw(spriteBatch);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
