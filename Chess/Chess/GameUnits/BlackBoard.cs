@@ -53,22 +53,37 @@ namespace Chess.GameUnits
             }
         }
 
+        #region Methods
+
         public void LoadContent(ContentManager Content)
         {
             foreach (Cell cell in Board)
                 cell.LoadContent(Content);
         }
 
+        #region Update 
+
+        /// <summary>
+        /// Checks whether the mouse click hit the chess board
+        /// </summary>
+        /// <param name="curMouseState"> Current Mouse State </param>
+        /// <returns> True if mouse click hits the chess board, false otherwise </returns>
         bool IsInCheesBoard(MouseState curMouseState)
         {
             return (curMouseState.Position.X >= GameConstants.IndentLeft && curMouseState.Position.X <= GameConstants.IndentRight
                 && curMouseState.Y >= GameConstants.IndentTop && curMouseState.Y <= GameConstants.IndentBottom) ? true : false;
         }
 
+        /// <summary>
+        /// Calculate index (Name) of current clicked cell by it's own position
+        /// </summary>
+        /// <param name="curMouseState"> Current Mouse State </param>
+        /// <returns> Pair: Key - row index, Value - column index </returns>
         KeyValuePair<int, int> getSelectedCellName(MouseState curMouseState)
         {
             int rowID = (curMouseState.Position.X - GameConstants.IndentLeft) / Cell.Width;
             int columnID = (curMouseState.Position.Y - GameConstants.IndentTop) / Cell.Height;
+
             return new KeyValuePair<int, int>(rowID, columnID);
         }
 
@@ -106,11 +121,15 @@ namespace Chess.GameUnits
 
         }
 
+        #endregion
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Cell cell in Board)
                 cell.Draw(spriteBatch);
         }
+
+        #endregion
 
     }
 }

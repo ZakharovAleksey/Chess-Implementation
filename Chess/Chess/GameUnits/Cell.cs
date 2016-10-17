@@ -27,7 +27,7 @@ namespace Chess.GameUnits
         POSSIBLE = 2
     }
 
-    enum CellName
+    enum CellNameLetter
     {
         A = 0,
         B = 1,
@@ -51,15 +51,16 @@ namespace Chess.GameUnits
         Texture2D[] StatesArray { get; set; } = new Texture2D[StatesCount];
         Rectangle Position { get; set; }
 
+        // Name of cell - for example: A1, F8
         KeyValuePair<int, int> Name = new KeyValuePair<int, int>();
 
+        // Width and Height of cell
         public static int Width { get; } = GameConstants.CellWidth;
         public static int Height { get; } = GameConstants.CellHeight;
 
-
-
         #region Actions
 
+        // True if cell is selected, false otherwise
         public bool IsSelect { get; set; } = false;
 
         #endregion
@@ -74,9 +75,7 @@ namespace Chess.GameUnits
             this.Name = Name;
         }
 
-        #region Properties
-
-        #endregion
+        #region Methods 
 
         public void LoadContent(ContentManager Content)
         {
@@ -125,5 +124,6 @@ namespace Chess.GameUnits
             spriteBatch.Draw(StatesArray[CurrentState], Position, Color.White);
         }
 
+        #endregion
     }
 }
