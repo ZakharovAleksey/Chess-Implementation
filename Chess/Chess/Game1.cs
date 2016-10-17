@@ -16,7 +16,7 @@ namespace Chess
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        BlackBoard board;
+        ChessBoard board;
 
         public Game1()
         {
@@ -26,7 +26,7 @@ namespace Chess
             graphics.PreferredBackBufferWidth = GameConstants.WindowWidth;
             graphics.PreferredBackBufferHeight = GameConstants.WindowHeight;
 
-            board = new BlackBoard();
+            board = new ChessBoard();
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Collections.Generic;
 
 using Chess.GameParameters;
 
@@ -26,11 +27,23 @@ namespace Chess.GameUnits
         POSSIBLE = 2
     }
 
+    enum CellName
+    {
+        A = 0,
+        B = 1,
+        C = 2,
+        D = 3,
+        E = 4,
+        F = 5,
+        G = 6,
+        H = 7
+    }
+
     class Cell
     {
         #region Fields
 
-        int CurrentState { get; set; }
+        int CurrentState { get; set; } = 0;
         static int StatesCount { get; } = 3;
         int Type { get; set; }
         
@@ -38,16 +51,27 @@ namespace Chess.GameUnits
         Texture2D[] StatesArray { get; set; } = new Texture2D[StatesCount];
         Rectangle Position { get; set; }
 
+        KeyValuePair<int, int> Name = new KeyValuePair<int, int>();
 
-        public static int Width { get; } = 100;
-        public static int Height { get; } = 100;
+        public static int Width { get; } = GameConstants.CellWidth;
+        public static int Height { get; } = GameConstants.CellHeight;
+
+
+
+        #region Actions
+
+        public bool IsSelect { get; set; } = false;
 
         #endregion
 
-        public Cell(int cellType, Rectangle position)
+        #endregion
+
+        public Cell(int cellType, Rectangle position, KeyValuePair<int, int> Name)
         {
             Type = cellType;
             Position = position;
+
+            this.Name = Name;
         }
 
         #region Properties
@@ -65,26 +89,34 @@ namespace Chess.GameUnits
             StatesArray[(int)CellState.POSSIBLE] = Content.Load<Texture2D>(@"cell/possible");
         }
 
-        bool isInCell(MouseState currentMouseState)
+        bool IsInCell(MouseState currentMouseState)
         {
-            return (currentMouseState.Y> Position.Top && currentMouseState.Y < Position.Bottom && currentMouseState.X > Position.Left && currentMouseState.X < Position.Right) ? true : false;
-        }
-
-        bool isInScreen(MouseState currentMouseState)
-        {
-            return (currentMouseState.X >= 0 && currentMouseState.X <= GameConstants.WindowWidth && currentMouseState.Y >= 0 && currentMouseState.Y <= GameConstants.WindowHeight) ? true : false;
+            return (currentMouseState.Y> Position.Top && currentMouseState.Y < Position.Bottom 
+                && currentMouseState.X > Position.Left && currentMouseState.X < Position.Right) ? true : false;
         }
 
         public void Update()
         {
             MouseState currentMouseState = Mouse.GetState();
 
-            if (isInScreen(currentMouseState) && isInCell(currentMouseState))
+            if (IsInCell(currentMouseState))
             {
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                    CurrentState = (int)CellState.SELECT;
-                else if (currentMouseState.RightButton == ButtonState.Pressed)
-                    CurrentState = (int)CellState.IDLE;
+                {
+                    if (!IsSelect)
+                    {
+                        CurrentState = (int)CellState.SELECT;
+                        IsSelect = true;
+                    }
+                }
+                if (Mouse.GetState().RightButton == ButtonState.Pressed)
+                {
+                    if (IsSelect)
+                    {
+                        CurrentState = (int)CellState.IDLE;
+                        IsSelect = false;
+                    }
+                }
             }
         }
 

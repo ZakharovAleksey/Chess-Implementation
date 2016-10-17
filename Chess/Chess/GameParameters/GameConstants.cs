@@ -1,19 +1,47 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Chess.GameParameters
 {
     public static class GameConstants
     {
-        // Window Screen Parameters
-        public const int WindowWidth = 800;
-        public const int WindowHeight = WindowWidth;
+        #region Main window parameters
 
-        // Blackboard size
+        public const int WindowWidth = 900;
+        public const int WindowHeight = 500;
+
+        #endregion
+
+        #region Chess Board parameters
+
+        // Number of cells on the chees board
         public const int BlackBoardSize = 8;
+
+        #region Cell parameters
+
+        public const int CellHeight = WindowHeight / (BlackBoardSize + 2);
+        public const int CellWidth = CellHeight;
+
+
+        #endregion
+
+        // Chees board indents from apropriate border
+        #region Indents 
+
+        public const int IndentTop = CellHeight;
+        public const int IndentBottom = WindowHeight - CellHeight;
+        public const int IndentRight = WindowWidth - CellWidth;
+        public const int IndentLeft = WindowWidth - (CellWidth * (BlackBoardSize + 1));
+
+        #endregion
+
+        #endregion
+
 
     }
 }
