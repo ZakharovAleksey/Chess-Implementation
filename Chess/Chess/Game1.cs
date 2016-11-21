@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Chess.GameParameters;
 using Chess.GameUnits;
+using Chess.GameFigures;
 
 namespace Chess
 {
@@ -18,6 +19,10 @@ namespace Chess
 
         ChessBoard board;
 
+        // >>>
+        Figures f;
+        //<<<
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,6 +32,7 @@ namespace Chess
             graphics.PreferredBackBufferHeight = GameConstants.WindowHeight;
 
             board = new ChessBoard();
+            f = new Figures();
         }
 
         /// <summary>
@@ -55,6 +61,7 @@ namespace Chess
 
             // TODO: use this.Content to load your game content here
             board.LoadContent(Content);
+            f.LoadContent(Content);
         }
 
         /// <summary>
@@ -79,7 +86,7 @@ namespace Chess
             // TODO: Add your update logic here
 
             board.Update();
-
+            f.Update();
             base.Update(gameTime);
         }
 
@@ -95,6 +102,7 @@ namespace Chess
 
             spriteBatch.Begin();
             board.Draw(spriteBatch);
+            f.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

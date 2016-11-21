@@ -18,7 +18,7 @@ namespace Chess.GameUnits
 
         #region Fields
 
-        Cell[,] Board { get; set; } = new Cell[GameConstants.BlackBoardSize, GameConstants.BlackBoardSize];
+        Cell[,] Board { get; set; } = new Cell[GameConstants.BoardSize, GameConstants.BoardSize];
 
         #region Actions
 
@@ -32,14 +32,13 @@ namespace Chess.GameUnits
 
         public ChessBoard()
         {
-            for (int rowID = 0; rowID < GameConstants.BlackBoardSize; ++rowID)
+            for (int rowID = 0; rowID < GameConstants.BoardSize; ++rowID)
             {
                 int currentColor = (rowID % 2 == 0) ? (int)CellType.WHITE : (int)CellType.BLACK;
 
-                for (int columnID = 0; columnID < GameConstants.BlackBoardSize; ++columnID)
+                for (int columnID = 0; columnID < GameConstants.BoardSize; ++columnID)
                 {
-                    Rectangle currentPosition = new Rectangle
-                        (
+                    Rectangle currentPosition = new Rectangle(
                             GameConstants.IndentLeft + rowID * Cell.Width,
                             GameConstants.IndentTop + columnID * Cell.Height,
                             Cell.Width,

@@ -39,6 +39,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameFigures\Figures.cs" />
+    <Compile Include="GameFigures\Pawn.cs" />
     <Compile Include="GameParameters\Coursor.cs" />
     <Compile Include="GameParameters\GameConstants.cs" />
     <Compile Include="GameUnits\BlackBoard.cs" />
@@ -73,7 +75,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Content\figures\pawn.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\Content\bin\cell\black.xnb">
       <Link>Content\cell\black.xnb</Link>

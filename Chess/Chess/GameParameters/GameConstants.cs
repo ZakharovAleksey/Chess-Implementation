@@ -20,11 +20,11 @@ namespace Chess.GameParameters
         #region Chess Board parameters
 
         // Number of cells on the chees board
-        public const int BlackBoardSize = 8;
+        public const int BoardSize = 8;
 
         #region Cell parameters
 
-        public const int CellHeight = WindowHeight / (BlackBoardSize + 2);
+        public const int CellHeight = WindowHeight / (BoardSize + 2);
         public const int CellWidth = CellHeight;
 
 
@@ -36,7 +36,7 @@ namespace Chess.GameParameters
         public const int IndentTop = CellHeight;
         public const int IndentBottom = WindowHeight - CellHeight;
         public const int IndentRight = WindowWidth - CellWidth;
-        public const int IndentLeft = WindowWidth - (CellWidth * (BlackBoardSize + 1));
+        public const int IndentLeft = WindowWidth - (CellWidth * (BoardSize + 1));
 
         #endregion
 
