@@ -58,7 +58,7 @@ namespace Chess.GameFigures
             {
                 IsSelect = false;
             }
-            if(curState.LeftButton == ButtonState.Pressed && IsChecked(curState))
+            //if(curState.LeftButton == ButtonState.Pressed && IsChecked(curState))
 
         }
 

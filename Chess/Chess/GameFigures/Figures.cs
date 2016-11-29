@@ -33,7 +33,6 @@ namespace Chess.GameFigures
 
         #endregion
 
-
         #region Methods
 
         public void LoadContent(ContentManager Content)
