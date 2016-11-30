@@ -18,7 +18,6 @@ namespace Chess
         SpriteBatch spriteBatch;
 
         ChessBoard board;
-        Pawn lol;
 
         public Game1()
         {
@@ -29,7 +28,6 @@ namespace Chess
             graphics.PreferredBackBufferHeight = GameConstants.WindowHeight;
 
             board = new ChessBoard();
-            lol = new Pawn(0, 0);
         }
 
         protected override void Initialize()
@@ -44,7 +42,6 @@ namespace Chess
 
             // TODO: use this.Content to load your game content here
             board.LoadContent(Content);
-            lol.LoadContent(Content);
         }
 
         protected override void UnloadContent() { }
@@ -68,7 +65,6 @@ namespace Chess
 
             spriteBatch.Begin();
             board.Draw(spriteBatch);
-            lol.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

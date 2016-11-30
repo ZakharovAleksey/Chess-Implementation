@@ -39,6 +39,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameFigures\EmptyCell.cs" />
+    <Compile Include="GameFigures\Figure.cs" />
+    <Compile Include="GameFigures\IFigure.cs" />
     <Compile Include="GameFigures\Pawn.cs" />
     <Compile Include="GameParameters\GameConstants.cs" />
     <Compile Include="GameUnits\BlackBoard.cs" />

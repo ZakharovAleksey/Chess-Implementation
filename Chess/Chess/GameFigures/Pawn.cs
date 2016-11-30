@@ -16,47 +16,25 @@ using GC = Chess.GameParameters.GameConstants;
 namespace Chess.GameFigures
 {
     /// <summary>
-    /// Имплементация класса пешки
+    /// Pawn loginc implementation.
     /// </summary>
-    class Pawn
+    class Pawn : Figure
     {
         #region Construcor
 
-        public Pawn(int indexY, int indexX)
-        {
-            this.IndexY = indexY;
-            this.IndexX = indexX;
-        }
+        public Pawn(int indexY, int indexX) : base(indexY, indexX) { }
 
         #endregion
 
         #region Methods
 
-        public void LoadContent(ContentManager Content)
-        {
-            PawnTexture = Content.Load<Texture2D>(@"figures/pawn");
-        }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void  LoadContent(ContentManager Content)
         {
-            Rectangle drawPos = new Rectangle(GC.IndentLeft + IndexX * GC.CellHeight, GC.IndentTop + IndexY * GC.CellWidth, GC.CellWidth, GC.CellHeight);
-            spriteBatch.Draw(PawnTexture, drawPos, Color.White);
+            Texture = Content.Load<Texture2D>(@"figures/pawn");
         }
 
         #endregion
 
-        #region Properties
-
-        // Index on the pawn on the chessboard
-        int IndexX { get; set; }
-        int IndexY { get; set; }
-
-        bool IsChoosen { get; set; } = false;
-
-
-        // Drawing fields
-        Texture2D PawnTexture { get; set; }
-        
-        #endregion
     }
 }

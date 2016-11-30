@@ -20,22 +20,9 @@ namespace Chess.GameUnits
     class ChessBoard
     {
 
-        #region Fields
-
-        Cell[,] Board { get; set; } = new Cell[GC.BoardSize, GC.BoardSize];
-
-        #region Actions
-
-        // True if user already select one cell
-        bool IsPlayerSelectCell { get; set; } = false;
-
-        #endregion
-
-
-        #endregion
-
         public ChessBoard()
         {
+            // Board declaration
             for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
             {
                 int curColor = (rowID % 2 == 0) ? (int)CellType.WHITE : (int)CellType.BLACK;
@@ -43,8 +30,18 @@ namespace Chess.GameUnits
                 {
                     Board[rowID, columnID] = new Cell(rowID, columnID, curColor);
                     curColor = (curColor == (int)CellType.BLACK) ? (int)CellType.WHITE : (int)CellType.BLACK;
+
+                    // Load chess content
+                    if (rowID == GC.BoardSize - 2)
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID);
+                    else
+                        FigureBoard[rowID, columnID] = new EmptyCell(rowID, columnID);
                 }
             }
+
+            // White Pawn initialization
+
+            
 
         }
 
@@ -54,6 +51,11 @@ namespace Chess.GameUnits
         {
             foreach (Cell cell in Board)
                 cell.LoadContent(Content);
+
+            // Load pawn content
+            foreach (Figure fig in FigureBoard)
+                fig.LoadContent(Content);
+
         }
 
         #region Update 
@@ -66,13 +68,26 @@ namespace Chess.GameUnits
 
         void SetCellSelect(MouseState curMouseState)
         {
-            int x = (curMouseState.Position.X - GC.IndentLeft) / Cell.Width;
-            int y = (curMouseState.Position.Y - GC.IndentTop) / Cell.Height;
+            int x = (curMouseState.Position.X - GC.IndentLeft) / GC.CellWidth;
+            int y = (curMouseState.Position.Y - GC.IndentTop) / GC.CellHeight;
 
             Board[y, x].Update();
 
             IsPlayerSelectCell = !IsPlayerSelectCell;
 
+        }
+
+
+        void SetCellUnselect(MouseState curMouseState)
+        {
+            int x = (curMouseState.Position.X - GC.IndentLeft) / GC.CellWidth;
+            int y = (curMouseState.Position.Y - GC.IndentTop) / GC.CellHeight;
+
+            if (Board[y, x].IsSelect)
+            {
+                Board[y, x].Update();
+                IsPlayerSelectCell = !IsPlayerSelectCell;
+            }
         }
 
         void ClickOnLeftButtonActions(MouseState curMouseState)
@@ -93,17 +108,7 @@ namespace Chess.GameUnits
             }
         }
 
-        void SetCellUnselect(MouseState curMouseState)
-        {
-            int x = (curMouseState.Position.X - GC.IndentLeft) / Cell.Width;
-            int y = (curMouseState.Position.Y - GC.IndentTop) / Cell.Height;
 
-            if (Board[y, x].IsSelect)
-            {
-                Board[y, x].Update();
-                IsPlayerSelectCell = !IsPlayerSelectCell;
-            }
-        }
 
         public void Update()
         {
@@ -123,7 +128,27 @@ namespace Chess.GameUnits
         {
             foreach (Cell cell in Board)
                 cell.Draw(spriteBatch);
+
+            foreach (Figure fig in FigureBoard)
+                fig.Draw(spriteBatch);
         }
+
+        #endregion
+
+        #region Fields
+
+        Cell[,] Board { get; set; } = new Cell[GC.BoardSize, GC.BoardSize];
+
+        // True if user already select one cell
+        bool IsPlayerSelectCell { get; set; } = false;
+
+
+        #region Chess figures
+
+        Figure[,] FigureBoard { get; set; } = new Figure[GC.BoardSize, GC.BoardSize];
+
+        #endregion
+
 
         #endregion
 

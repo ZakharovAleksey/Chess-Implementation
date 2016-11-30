@@ -29,18 +29,6 @@ namespace Chess.GameUnits
         POSSIBLE = 2
     }
 
-    enum CellNameLetter
-    {
-        A = 0,
-        B = 1,
-        C = 2,
-        D = 3,
-        E = 4,
-        F = 5,
-        G = 6,
-        H = 7
-    }
-
     class Cell
     {
 
@@ -66,10 +54,9 @@ namespace Chess.GameUnits
             StatesArray[(int)CellState.POSSIBLE] = Content.Load<Texture2D>(@"cell/possible");
         }
 
-        bool IsInCell(MouseState currentMouseState)
+        bool IsInCell(MouseState curMouseState)
         {
-            return (currentMouseState.Y> ScreenPos.Top && currentMouseState.Y < ScreenPos.Bottom 
-                && currentMouseState.X > ScreenPos.Left && currentMouseState.X < ScreenPos.Right) ? true : false;
+            return (curMouseState.Y> ScreenPos.Top && curMouseState.Y < ScreenPos.Bottom  && curMouseState.X > ScreenPos.Left && curMouseState.X < ScreenPos.Right) ? true : false;
         }
 
         public void Update()
@@ -108,8 +95,6 @@ namespace Chess.GameUnits
         #region Fields
 
 
-
-
         int CurrentState { get; set; } = 0;
         static int StatesCount { get; } = 3;
 
@@ -122,10 +107,6 @@ namespace Chess.GameUnits
 
         int IndexX { get; set; }
         int IndexY { get; set; }
-
-        // Width and Height of cell
-        public static int Width { get; } = GameConstants.CellWidth;
-        public static int Height { get; } = GameConstants.CellHeight;
 
         #region Actions
 
