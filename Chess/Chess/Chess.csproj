@@ -41,7 +41,6 @@
     <Compile Include="Game1.cs" />
     <Compile Include="GameFigures\Figures.cs" />
     <Compile Include="GameFigures\Pawn.cs" />
-    <Compile Include="GameParameters\Coursor.cs" />
     <Compile Include="GameParameters\GameConstants.cs" />
     <Compile Include="GameUnits\BlackBoard.cs" />
     <Compile Include="GameUnits\Cell.cs" />
@@ -60,20 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Content\bin\coursor\coursorIDLE.xnb">
-      <Link>Content\coursor\coursorIDLE.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\coursor\coursorPICK.xnb">
-      <Link>Content\coursor\coursorPICK.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\coursor\coursorWAIT.xnb">
-      <Link>Content\coursor\coursorWAIT.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\figures\pawn.xnb">

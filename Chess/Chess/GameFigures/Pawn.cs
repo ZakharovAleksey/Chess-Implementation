@@ -18,12 +18,11 @@ namespace Chess.GameFigures
     /// </summary>
     class Pawn
     {
-
         #region Construcor
 
         public Pawn(Vector2 position)
         {
-            this.CurPosition = new Rectangle((int) position.X, (int) position.Y, GameConstants.CellWidth, GameConstants.CellHeight);
+            this.Position = new Rectangle((int) position.X, (int) position.Y, GameConstants.CellWidth, GameConstants.CellHeight);
         }
 
         public Pawn(Vector2 position, ContentManager Content) : this(position)
@@ -40,38 +39,21 @@ namespace Chess.GameFigures
             Texture = Content.Load<Texture2D>(@"figures/pawn");
         }
 
-        bool IsChecked(MouseState curMouseState)
-        {
-            return (curMouseState.Y > CurPosition.Top && curMouseState.Y < CurPosition.Bottom
-                && curMouseState.X > CurPosition.Left && curMouseState.X < CurPosition.Right) ? true : false;
-        }
-
         public void Update()
         {
-            MouseState curState = Mouse.GetState();
-
-            if (curState.LeftButton == ButtonState.Pressed && IsChecked(curState))
-            {
-                IsSelect = true;
-            }
-            if (curState.RightButton == ButtonState.Pressed && IsChecked(curState) && IsSelect)
-            {
-                IsSelect = false;
-            }
-            //if(curState.LeftButton == ButtonState.Pressed && IsChecked(curState))
 
         }
 
         public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(texture, CurPosition, Color.White);
+        { 
+                spriteBatch.Draw(texture, Position, Color.White);
         }
 
         #endregion
 
         #region Properties
 
-        Rectangle CurPosition { get; set; }
+        Rectangle Position { get; set; }
          
         Texture2D Texture
         {

@@ -42,6 +42,5 @@ namespace Chess.GameParameters
 
         #endregion
 
-
     }
 }

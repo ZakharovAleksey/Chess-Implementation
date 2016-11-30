@@ -41,31 +41,6 @@ namespace Chess.GameUnits
 
     class Cell
     {
-        #region Fields
-
-        int CurrentState { get; set; } = 0;
-        static int StatesCount { get; } = 3;
-        int Type { get; set; }
-        
-
-        Texture2D[] StatesArray { get; set; } = new Texture2D[StatesCount];
-        Rectangle Position { get; set; }
-
-        // Name of cell - for example: A1, F8
-        KeyValuePair<int, int> Name = new KeyValuePair<int, int>();
-
-        // Width and Height of cell
-        public static int Width { get; } = GameConstants.CellWidth;
-        public static int Height { get; } = GameConstants.CellHeight;
-
-        #region Actions
-
-        // True if cell is selected, false otherwise
-        public bool IsSelect { get; set; } = false;
-
-        #endregion
-
-        #endregion
 
         public Cell(int cellType, Rectangle position, KeyValuePair<int, int> Name)
         {
@@ -125,5 +100,35 @@ namespace Chess.GameUnits
         }
 
         #endregion
+
+
+        #region Fields
+
+        int CurrentState { get; set; } = 0;
+        static int StatesCount { get; } = 3;
+        int Type { get; set; }
+
+
+        Texture2D[] StatesArray { get; set; } = new Texture2D[StatesCount];
+        Rectangle Position { get; set; }
+
+        // Name of cell - for example: A1, F8
+        KeyValuePair<int, int> Name = new KeyValuePair<int, int>();
+
+        // Width and Height of cell
+        public static int Width { get; } = GameConstants.CellWidth;
+        public static int Height { get; } = GameConstants.CellHeight;
+
+        #region Actions
+
+        // True if cell is selected, false otherwise [Means player click on it with left button]
+        public bool IsSelect { get; set; } = false;
+
+        public bool IsFree { get; set; } = true;
+
+        #endregion
+
+        #endregion
+
     }
 }

@@ -38,7 +38,8 @@ namespace Chess.GameUnits
 
                 for (int columnID = 0; columnID < GameConstants.BoardSize; ++columnID)
                 {
-                    Rectangle currentPosition = new Rectangle(
+                    Rectangle currentPosition = new Rectangle
+                        (
                             GameConstants.IndentLeft + rowID * Cell.Width,
                             GameConstants.IndentTop + columnID * Cell.Height,
                             Cell.Width,
@@ -46,6 +47,7 @@ namespace Chess.GameUnits
                         );
 
                     Board[rowID, columnID] = new Cell(currentColor, currentPosition, new KeyValuePair<int, int>(rowID, columnID));
+
 
                     currentColor = (currentColor == (int)CellType.BLACK) ? (int)CellType.WHITE : (int)CellType.BLACK;
                 }
