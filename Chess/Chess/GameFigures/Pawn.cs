@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Chess.GameParameters;
 using Microsoft.Xna.Framework.Input;
 
+using GC = Chess.GameParameters.GameConstants;
+
 namespace Chess.GameFigures
 {
     /// <summary>
@@ -20,14 +22,10 @@ namespace Chess.GameFigures
     {
         #region Construcor
 
-        public Pawn(Vector2 position)
+        public Pawn(int indexY, int indexX)
         {
-            this.Position = new Rectangle((int) position.X, (int) position.Y, GameConstants.CellWidth, GameConstants.CellHeight);
-        }
-
-        public Pawn(Vector2 position, ContentManager Content) : this(position)
-        {
-            texture = Content.Load<Texture2D>(@"figure/pawn");
+            this.IndexY = indexY;
+            this.IndexX = indexX;
         }
 
         #endregion
@@ -36,39 +34,28 @@ namespace Chess.GameFigures
 
         public void LoadContent(ContentManager Content)
         {
-            Texture = Content.Load<Texture2D>(@"figures/pawn");
-        }
-
-        public void Update()
-        {
-
+            PawnTexture = Content.Load<Texture2D>(@"figures/pawn");
         }
 
         public void Draw(SpriteBatch spriteBatch)
-        { 
-                spriteBatch.Draw(texture, Position, Color.White);
+        {
+            Rectangle drawPos = new Rectangle(GC.IndentLeft + IndexX * GC.CellHeight, GC.IndentTop + IndexY * GC.CellWidth, GC.CellWidth, GC.CellHeight);
+            spriteBatch.Draw(PawnTexture, drawPos, Color.White);
         }
 
         #endregion
 
         #region Properties
 
-        Rectangle Position { get; set; }
-         
-        Texture2D Texture
-        {
-            get { return texture; }
-            // Постораться убрать
-            set { texture = value; }
-        }
+        // Index on the pawn on the chessboard
+        int IndexX { get; set; }
+        int IndexY { get; set; }
 
-        bool IsSelect { get; set; } = false;
+        bool IsChoosen { get; set; } = false;
 
-        #endregion
 
-        #region Fields
-
-        Texture2D texture;
+        // Drawing fields
+        Texture2D PawnTexture { get; set; }
         
         #endregion
     }

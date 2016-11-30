@@ -12,6 +12,8 @@ using System.Collections.Generic;
 
 using Chess.GameParameters;
 
+using GC = Chess.GameParameters.GameConstants;
+
 namespace Chess.GameUnits
 {
     enum CellType
@@ -42,12 +44,13 @@ namespace Chess.GameUnits
     class Cell
     {
 
-        public Cell(int cellType, Rectangle position, KeyValuePair<int, int> Name)
+        public Cell(int indexY, int indexX, int cellType)
         {
-            Type = cellType;
-            Position = position;
+            this.IndexY = indexY;
+            this.IndexX = indexX;
 
-            this.Name = Name;
+            Type = cellType;
+            ScreenPos = new Rectangle(GC.IndentLeft + IndexX * GC.CellHeight, GC.IndentTop + IndexY * GC.CellWidth, GC.CellWidth, GC.CellHeight);
         }
 
         #region Methods 
@@ -65,8 +68,8 @@ namespace Chess.GameUnits
 
         bool IsInCell(MouseState currentMouseState)
         {
-            return (currentMouseState.Y> Position.Top && currentMouseState.Y < Position.Bottom 
-                && currentMouseState.X > Position.Left && currentMouseState.X < Position.Right) ? true : false;
+            return (currentMouseState.Y> ScreenPos.Top && currentMouseState.Y < ScreenPos.Bottom 
+                && currentMouseState.X > ScreenPos.Left && currentMouseState.X < ScreenPos.Right) ? true : false;
         }
 
         public void Update()
@@ -96,7 +99,7 @@ namespace Chess.GameUnits
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(StatesArray[CurrentState], Position, Color.White);
+            spriteBatch.Draw(StatesArray[CurrentState], ScreenPos, Color.White);
         }
 
         #endregion
@@ -104,16 +107,21 @@ namespace Chess.GameUnits
 
         #region Fields
 
+
+
+
         int CurrentState { get; set; } = 0;
         static int StatesCount { get; } = 3;
+
         int Type { get; set; }
 
 
         Texture2D[] StatesArray { get; set; } = new Texture2D[StatesCount];
-        Rectangle Position { get; set; }
+        Rectangle ScreenPos { get; set; }
+        
 
-        // Name of cell - for example: A1, F8
-        KeyValuePair<int, int> Name = new KeyValuePair<int, int>();
+        int IndexX { get; set; }
+        int IndexY { get; set; }
 
         // Width and Height of cell
         public static int Width { get; } = GameConstants.CellWidth;
@@ -123,8 +131,6 @@ namespace Chess.GameUnits
 
         // True if cell is selected, false otherwise [Means player click on it with left button]
         public bool IsSelect { get; set; } = false;
-
-        public bool IsFree { get; set; } = true;
 
         #endregion
 

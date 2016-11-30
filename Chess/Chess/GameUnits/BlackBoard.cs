@@ -11,6 +11,10 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Chess.GameFigures;
+
+using GC = Chess.GameParameters.GameConstants;
+
 namespace Chess.GameUnits
 {
     class ChessBoard
@@ -18,12 +22,12 @@ namespace Chess.GameUnits
 
         #region Fields
 
-        Cell[,] Board { get; set; } = new Cell[GameConstants.BoardSize, GameConstants.BoardSize];
+        Cell[,] Board { get; set; } = new Cell[GC.BoardSize, GC.BoardSize];
 
         #region Actions
 
         // True if user already select one cell
-        bool IsCellSelect { get; set; } = false;
+        bool IsPlayerSelectCell { get; set; } = false;
 
         #endregion
 
@@ -32,26 +36,16 @@ namespace Chess.GameUnits
 
         public ChessBoard()
         {
-            for (int rowID = 0; rowID < GameConstants.BoardSize; ++rowID)
+            for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
             {
-                int currentColor = (rowID % 2 == 0) ? (int)CellType.WHITE : (int)CellType.BLACK;
-
-                for (int columnID = 0; columnID < GameConstants.BoardSize; ++columnID)
+                int curColor = (rowID % 2 == 0) ? (int)CellType.WHITE : (int)CellType.BLACK;
+                for (int columnID = 0; columnID < GC.BoardSize; ++columnID)
                 {
-                    Rectangle currentPosition = new Rectangle
-                        (
-                            GameConstants.IndentLeft + rowID * Cell.Width,
-                            GameConstants.IndentTop + columnID * Cell.Height,
-                            Cell.Width,
-                            Cell.Height
-                        );
-
-                    Board[rowID, columnID] = new Cell(currentColor, currentPosition, new KeyValuePair<int, int>(rowID, columnID));
-
-
-                    currentColor = (currentColor == (int)CellType.BLACK) ? (int)CellType.WHITE : (int)CellType.BLACK;
+                    Board[rowID, columnID] = new Cell(rowID, columnID, curColor);
+                    curColor = (curColor == (int)CellType.BLACK) ? (int)CellType.WHITE : (int)CellType.BLACK;
                 }
             }
+
         }
 
         #region Methods
@@ -64,60 +58,61 @@ namespace Chess.GameUnits
 
         #region Update 
 
-        /// <summary>
-        /// Checks whether the mouse click hit the chess board
-        /// </summary>
-        /// <param name="curMouseState"> Current Mouse State </param>
-        /// <returns> True if mouse click hits the chess board, false otherwise </returns>
-        bool IsInCheesBoard(MouseState curMouseState)
+        bool IsClickInChessboard(MouseState curMouseState)
         {
-            return (curMouseState.Position.X >= GameConstants.IndentLeft && curMouseState.Position.X <= GameConstants.IndentRight
-                && curMouseState.Y >= GameConstants.IndentTop && curMouseState.Y <= GameConstants.IndentBottom) ? true : false;
+            return (curMouseState.Position.X >= GC.IndentLeft && curMouseState.Position.X <= GC.IndentRight
+                && curMouseState.Y >= GC.IndentTop && curMouseState.Y <= GC.IndentBottom) ? true : false;
         }
 
-        /// <summary>
-        /// Calculate index (Name) of current clicked cell by it's own position
-        /// </summary>
-        /// <param name="curMouseState"> Current Mouse State </param>
-        /// <returns> Pair: Key - row index, Value - column index </returns>
-        KeyValuePair<int, int> getSelectedCellName(MouseState curMouseState)
+        void SetCellSelect(MouseState curMouseState)
         {
-            int rowID = (curMouseState.Position.X - GameConstants.IndentLeft) / Cell.Width;
-            int columnID = (curMouseState.Position.Y - GameConstants.IndentTop) / Cell.Height;
+            int x = (curMouseState.Position.X - GC.IndentLeft) / Cell.Width;
+            int y = (curMouseState.Position.Y - GC.IndentTop) / Cell.Height;
 
-            return new KeyValuePair<int, int>(rowID, columnID);
+            Board[y, x].Update();
+
+            IsPlayerSelectCell = !IsPlayerSelectCell;
+
+        }
+
+        void ClickOnLeftButtonActions(MouseState curMouseState)
+        {
+            if (curMouseState.LeftButton == ButtonState.Pressed)
+            {
+                if (!IsPlayerSelectCell)
+                    SetCellSelect(curMouseState);
+            }
+        }
+
+        void ClickOnRightButtonActions(MouseState curMouseState)
+        {
+            if (curMouseState.RightButton == ButtonState.Pressed)
+            {
+                if (IsPlayerSelectCell)
+                    SetCellUnselect(curMouseState);
+            }
+        }
+
+        void SetCellUnselect(MouseState curMouseState)
+        {
+            int x = (curMouseState.Position.X - GC.IndentLeft) / Cell.Width;
+            int y = (curMouseState.Position.Y - GC.IndentTop) / Cell.Height;
+
+            if (Board[y, x].IsSelect)
+            {
+                Board[y, x].Update();
+                IsPlayerSelectCell = !IsPlayerSelectCell;
+            }
         }
 
         public void Update()
         {
             MouseState curMouseState = Mouse.GetState();
 
-            if (IsInCheesBoard(curMouseState))
+            if (IsClickInChessboard(curMouseState))
             {
-                if (curMouseState.LeftButton == ButtonState.Pressed)
-                {
-                    if (!IsCellSelect)
-                    {
-                        KeyValuePair<int, int> selectedCellName = getSelectedCellName(curMouseState);
-                        Board[selectedCellName.Key, selectedCellName.Value].Update();
-
-                        IsCellSelect = true;
-                    }
-                }
-                if (curMouseState.RightButton == ButtonState.Pressed)
-                {
-                    if (IsCellSelect)
-                    {
-                        KeyValuePair<int, int> selectedCellName = getSelectedCellName(curMouseState);
-
-                        if (Board[selectedCellName.Key, selectedCellName.Value].IsSelect)
-                        {
-                            Board[selectedCellName.Key, selectedCellName.Value].Update();
-                            IsCellSelect = false;
-                        }
-                    }
-
-                }
+                ClickOnLeftButtonActions(curMouseState);
+                ClickOnRightButtonActions(curMouseState);
             }
 
         }
