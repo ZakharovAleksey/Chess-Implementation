@@ -65,39 +65,71 @@ namespace Chess.GameUnits
 
         #region Update 
 
+
+
         bool IsClickInChessboard(MouseState curMouseState)
         {
             return (curMouseState.Position.X >= GC.IndentLeft && curMouseState.Position.X <= GC.IndentRight
                 && curMouseState.Y >= GC.IndentTop && curMouseState.Y <= GC.IndentBottom) ? true : false;
         }
 
+
+        // По нажатию на кнопку мыши берет индекс позиции
+        IndexPair GetChosenCellIndex(MouseState curMouseState)
+        {
+            int Y = (curMouseState.Position.Y - GC.IndentTop) / GC.CellHeight;
+            int X = (curMouseState.Position.X - GC.IndentLeft) / GC.CellWidth;
+
+            return new IndexPair(Y, X);
+        }
+
+        // Проверяет является ли ячейка с переданными индексами пустой
+        bool IsCellEmpty(int indexY, int indexX)
+        {
+            object emptyCellType = typeof(EmptyCell);
+            object selectedCellType = FigureBoard[indexY, indexX].GetType();
+
+            return (selectedCellType == emptyCellType) ? true : false;
+
+        }
+
+
         void SetCellSelect(MouseState curMouseState)
         {
-            ChosenIndexY = (curMouseState.Position.Y - GC.IndentTop) / GC.CellHeight;
-            ChosenIndexX = (curMouseState.Position.X - GC.IndentLeft) / GC.CellWidth;
+            // Переменная хранит выбранную на данный момент пользователем позицию
+            IndexPair selectPos = GetChosenCellIndex(curMouseState);
 
-            // Берем тип Пустой клетки и тип нажатой клетки
-            object EmptySellType = typeof(EmptyCell);
-            object SelectedCellType = FigureBoard[ChosenIndexY, ChosenIndexX].GetType();
+            // Находим тип выбранной, для начала движения клетки чтобы проверить не выбрана ли клетка в которой нет фигуры.
+            object emptyCellType = typeof(EmptyCell);
+            object selectedCellType = FigureBoard[selectPos.IndexY, selectPos.IndexX].GetType();
 
-            // Если нажали не на пустую клетку то подсвечиваем клетку
-            if (EmptySellType != SelectedCellType)
+            // Если выбранная клетка с фигурой то подсвечиваем ее красным цветом
+            if (emptyCellType != selectedCellType)
             {
-                Board[ChosenIndexY, ChosenIndexX].Update();
+                StartMoveIndexY = selectPos.IndexY;
+                StartMoveIndexX = selectPos.IndexX;
+
+                Board[StartMoveIndexY, StartMoveIndexX].Update();
+
+                // Говорим что пользователь действительно выбрал клетку с фигурой [чтобы сделать этой фигурой шаг]
                 IsPlayerSelectCell = true;
-                // Говорим что игрок выбрал именно фигуру а не пустую клетку
                 IsFigureSelect = true;
+            }
+            else
+            {
+                StartMoveIndexY = -1;
+                StartMoveIndexX = -1;
             }
         }
 
         void SetCellUnselect(MouseState curMouseState)
         {
-            ChosenIndexX = (curMouseState.Position.X - GC.IndentLeft) / GC.CellWidth;
-            ChosenIndexY = (curMouseState.Position.Y - GC.IndentTop) / GC.CellHeight;
+            //StartMoveIndexX = (curMouseState.Position.X - GC.IndentLeft) / GC.CellWidth;
+            //StartMoveIndexY = (curMouseState.Position.Y - GC.IndentTop) / GC.CellHeight;
 
-            if (Board[ChosenIndexY, ChosenIndexX].IsSelect)
+            if (Board[StartMoveIndexY, StartMoveIndexX].IsSelect)
             {
-                Board[ChosenIndexY, ChosenIndexX].Update();
+                Board[StartMoveIndexY, StartMoveIndexX].Update();
                 IsPlayerSelectCell = !IsPlayerSelectCell;
             }
         }
@@ -109,12 +141,34 @@ namespace Chess.GameUnits
             if (curMouseState.LeftButton == ButtonState.Pressed)
             {
                 if (!IsPlayerSelectCell)
-                    SetCellSelect(curMouseState);
+                {
+                    // Переменная хранит выбранную на данный момент пользователем позицию
+                    IndexPair selectPos = GetChosenCellIndex(curMouseState);
+
+                    if (IsCellEmpty(selectPos.IndexY, selectPos.IndexX))
+                    {
+                        StartMoveIndexY = -1;
+                        StartMoveIndexX = -1;
+                    }
+                    else
+                    {
+                        StartMoveIndexY = selectPos.IndexY;
+                        StartMoveIndexX = selectPos.IndexX;
+
+                        Board[StartMoveIndexY, StartMoveIndexX].Update();
+
+                        // Говорим что пользователь действительно выбрал клетку с фигурой [чтобы сделать этой фигурой шаг]
+                        IsPlayerSelectCell = true;
+                        IsFigureSelect = true;
+                    }
+
+                    //SetCellSelect(curMouseState);
+                }
                 else if (IsPlayerSelectCell && IsFigureSelect)
                 {
                     // Находим все доступные для хода позиции
                     List<IndexPair> possibleSteps = new List<IndexPair>();
-                    FigureBoard[ChosenIndexY, ChosenIndexX].GetPossiblePositions(possibleSteps);
+                    FigureBoard[StartMoveIndexY, StartMoveIndexX].GetPossiblePositions(possibleSteps);
 
                     // Индексы клетки куда нажал пользователь
                     int X = (curMouseState.Position.X - GC.IndentLeft) / GC.CellWidth;
@@ -123,8 +177,8 @@ namespace Chess.GameUnits
                     // Если пользователь нажат на ячейку в которую можно сходить данной фигурой
                     if (possibleSteps.Contains(curStep))
                     {
-                        FigureBoard[ChosenIndexY, ChosenIndexX].Update(Y, X);
-                        FigureBoard[Y, X].Update(ChosenIndexY, ChosenIndexX);
+                        FigureBoard[StartMoveIndexY, StartMoveIndexX].Update(Y, X);
+                        FigureBoard[Y, X].Update(StartMoveIndexY, StartMoveIndexX);
                     }
                 }
             }
@@ -169,10 +223,15 @@ namespace Chess.GameUnits
         #region Fields
 
         Cell[,] Board { get; set; } = new Cell[GC.BoardSize, GC.BoardSize];
+        
+        // Индексы ячейки откуда начнется движение выбранной фигуры
+        int StartMoveIndexX { get; set; } = -1;
+        int StartMoveIndexY { get; set; } = -1;
 
-        // Индекс выбранной играком ячейки в данный момент (-1 - знеачит не выбрана)
-        int ChosenIndexX { get; set; } = -1;
-        int ChosenIndexY { get; set; } = -1;
+        // Индексы ячейки в которой закончится движение выбранной фигуры
+        int EndMoveIndexX { get; set; } = -1;
+        int EndMoveIndexY { get; set; } = -1;
+
         // Показывает выбранна ли какая-либо из фигур
         bool IsFigureSelect { get; set; } = false;
 

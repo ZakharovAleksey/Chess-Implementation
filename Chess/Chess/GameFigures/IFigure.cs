@@ -12,8 +12,8 @@ namespace Chess.GameFigures
 {
     struct IndexPair
     {
-        int IndexX;
-        int IndexY;
+        public int IndexX;
+        public int IndexY;
 
         public IndexPair(int indexY, int indexX)
         {
