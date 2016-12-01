@@ -19,7 +19,17 @@ namespace Chess.GameUnits
 {
     class ChessBoard
     {
-
+        /*
+         * Надо добавить:
+         * IsChoosen - показывает выбрана ли какая либо фигура
+         * ChosenIndexX
+         * ChosenIndexY
+         * -> когда пытаемся нажать левой кнопкой второй раз на выбранную позицию.
+         *  - list = board[chy,chX].return list of possible values.
+         *  - пробегаемся по выбраным id и смотрим заняты ли они!
+         *  - получаем окончательный вид list
+         *  - если выбрана возможная ячейка то тогда идем в нее, в противном случае нет!
+         * */
         public ChessBoard()
         {
             // Board declaration
@@ -38,11 +48,6 @@ namespace Chess.GameUnits
                         FigureBoard[rowID, columnID] = new EmptyCell(rowID, columnID);
                 }
             }
-
-            // White Pawn initialization
-
-            
-
         }
 
         #region Methods
