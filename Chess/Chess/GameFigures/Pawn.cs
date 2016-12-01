@@ -28,10 +28,16 @@ namespace Chess.GameFigures
 
         #region Methods
 
-
         public override void  LoadContent(ContentManager Content)
         {
             Texture = Content.Load<Texture2D>(@"figures/pawn");
+        }
+
+        // Вычисляет позиции куда может пойти пешка
+        public override void GetPossiblePositions(List<IndexPair> possibleSteps)
+        {
+            if (IndexY > 0)
+                possibleSteps.Add(new IndexPair(IndexY - 1, IndexX));
         }
 
         #endregion
