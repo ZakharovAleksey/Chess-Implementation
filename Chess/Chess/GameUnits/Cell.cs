@@ -97,7 +97,7 @@ namespace Chess.GameUnits
             CurrentState = (int)CellState.IDLE;
         }
 
-        public void SetStateSelect()
+        public void SetStateSELECT()
         {
             CurrentState = (int)CellState.SELECT;
         }

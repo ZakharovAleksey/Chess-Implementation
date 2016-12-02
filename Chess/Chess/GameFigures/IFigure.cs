@@ -32,7 +32,5 @@ namespace Chess.GameFigures
         void Draw(SpriteBatch spriteBatch);
 
         void GetPossiblePositions(List<IndexPair> possibleSteps);
-
-        void Update(int NewIndexY, int newIndexX);
     }
 }

@@ -53,7 +53,7 @@ namespace Chess
 
             // TODO: Add your update logic here
 
-            board.Update();
+            board.Update(gameTime);
             base.Update(gameTime);
         }
 

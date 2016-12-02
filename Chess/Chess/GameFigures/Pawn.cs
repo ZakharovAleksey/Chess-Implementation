@@ -40,14 +40,6 @@ namespace Chess.GameFigures
                 possibleSteps.Add(new IndexPair(IndexY - 1, IndexX));
         }
 
-
-        public override object Clone()
-        {
-            Pawn res = new Pawn(IndexY, IndexX);
-            res.Texture = Texture;
-            return res;
-        }
-
         #endregion
 
     }

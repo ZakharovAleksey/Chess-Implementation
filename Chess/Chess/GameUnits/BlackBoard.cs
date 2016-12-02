@@ -30,6 +30,7 @@ namespace Chess.GameUnits
          *  - получаем окончательный вид list
          *  - если выбрана возможная ячейка то тогда идем в нее, в противном случае нет!
          * */
+
         public ChessBoard()
         {
             // Board declaration
@@ -51,17 +52,6 @@ namespace Chess.GameUnits
         }
 
         #region Methods
-
-        public void LoadContent(ContentManager Content)
-        {
-            foreach (Cell cell in Board)
-                cell.LoadContent(Content);
-
-            // Load pawn content
-            foreach (Figure fig in FigureBoard)
-                fig.LoadContent(Content);
-
-        }
 
         #region Update 
         
@@ -90,10 +80,7 @@ namespace Chess.GameUnits
             return (selectedCellType == emptyCellType) ? true : false;
         }
 
-
-
         #region On left button click
-
 
         #region First click on left button actions
 
@@ -157,27 +144,27 @@ namespace Chess.GameUnits
                 FigureBoard[StartMoveIndexY, StartMoveIndexX] = new EmptyCell(StartMoveIndexY, StartMoveIndexX);
                 FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Pawn(EndMoveIndexY, EndMoveIndexX);
 
-                MadeAStep = true;
-
                 // Пользователь сделал ход - обнуляем все параметры
                 IsFirstLeftBtnClick = false;
                 IsFigureSelect = false;
+                IsStepMade = true;
 
-                // Ставим стартовой позиции статус не начальной
+                // Говорим что стартовая клетка пустая
                 Board[StartMoveIndexY, StartMoveIndexX].SetStateIDLE();
-
+                Board[EndMoveIndexY, EndMoveIndexX].SetStateIDLE();
             }
         }
 
         #endregion
 
-            void ClickOnLeftButtonActions(MouseState curMouseState)
+        void ClickOnLeftButtonActions(MouseState curMouseState, GameTime gameTime)
         {
             if (curMouseState.LeftButton == ButtonState.Pressed)
             {
-                if (!IsFirstLeftBtnClick)
+                if (!IsFirstLeftBtnClick && Timer > GC.TimerDelay)
                 {
                     FirstClickOnLeftButtonActions(curMouseState);
+                    Timer = 0.0;
                 }
                 else if (IsFirstLeftBtnClick && IsFigureSelect)
                 {
@@ -192,35 +179,35 @@ namespace Chess.GameUnits
 
         #region On right button click
 
-        void SetCellUnselect(MouseState curMouseState)
+        void SetCellUnselect()
         {
-            //StartMoveIndexX = (curMouseState.Position.X - GC.IndentLeft) / GC.CellWidth;
-            //StartMoveIndexY = (curMouseState.Position.Y - GC.IndentTop) / GC.CellHeight;
-
             if (Board[StartMoveIndexY, StartMoveIndexX].IsSelect)
             {
-                Board[StartMoveIndexY, StartMoveIndexX].Update();
-                IsFirstLeftBtnClick = !IsFirstLeftBtnClick;
+                Board[StartMoveIndexY, StartMoveIndexX].SetStateIDLE(); //.Update();
+                IsFirstLeftBtnClick = false;
+                
             }
         }
+
         void ClickOnRightButtonActions(MouseState curMouseState)
         {
             if (curMouseState.RightButton == ButtonState.Pressed)
             {
                 if (IsFirstLeftBtnClick)
-                    SetCellUnselect(curMouseState);
+                    SetCellUnselect();
             }
         }
 
         #endregion
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
+            Timer += gameTime.ElapsedGameTime.TotalMilliseconds;
             MouseState curMouseState = Mouse.GetState();
 
             if (IsClickInChessboard(curMouseState))
             {
-                ClickOnLeftButtonActions(curMouseState);
+                ClickOnLeftButtonActions(curMouseState, gameTime);
                 ClickOnRightButtonActions(curMouseState);
             }
 
@@ -228,13 +215,27 @@ namespace Chess.GameUnits
 
         #endregion
 
+        public void LoadContent(ContentManager Content)
+        {
+            foreach (Cell cell in Board)
+                cell.LoadContent(Content);
+
+            // Load pawn content
+            foreach (Figure fig in FigureBoard)
+                fig.LoadContent(Content);
+
+        }
+
         public void Draw(SpriteBatch spriteBatch, ContentManager Content)
         {
-            if (MadeAStep)
+            if (IsStepMade)
             {
                 FigureBoard[StartMoveIndexY, StartMoveIndexX].LoadContent(Content);
                 FigureBoard[EndMoveIndexY, EndMoveIndexX].LoadContent(Content);
-                MadeAStep = false;
+                IsStepMade = false;
+
+                //EndMoveIndexX = -1;
+                //EndMoveIndexY = -1;
             }
 
             foreach (Cell cell in Board)
@@ -263,10 +264,16 @@ namespace Chess.GameUnits
 
         // True if user already select one cell
         bool IsFirstLeftBtnClick { get; set; } = false;
+        bool IsSecondLeftBtnClick { get; set; } = false;
+
 
         // True если сделан ход! False в противном случае 
-        bool MadeAStep { get; set; } = false;
-        
+        bool IsStepMade { get; set; } = false;
+
+
+        // Таймер нужен для того, чтобы от (якобы) двойнова щелчка фигуры которой сходили сразу же не выбиралась
+        double Timer { get; set; } = 0;
+
         #region Chess figures
 
         Figure[,] FigureBoard { get; set; } = new Figure[GC.BoardSize, GC.BoardSize];
