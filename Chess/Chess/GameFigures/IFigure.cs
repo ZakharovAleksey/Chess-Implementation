@@ -20,6 +20,7 @@ namespace Chess.GameFigures
             this.IndexY = indexY;
             this.IndexX = indexX;
         }
+
     }
 
 

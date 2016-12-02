@@ -12,7 +12,7 @@ using GC = Chess.GameParameters.GameConstants;
 namespace Chess.GameFigures
 {
     // Базовый абстрактный класс для всех фигур на шахматной доске.
-    abstract class Figure : IFigure
+    abstract class Figure : IFigure, ICloneable
     {
         // Задает начальное положение для фигуры
         public Figure(int indexY, int indexX)
@@ -40,6 +40,12 @@ namespace Chess.GameFigures
         {
             IndexY = NewIndexY;
             IndexX = newIndexX;
+        }
+
+
+        public virtual object Clone()
+        {
+            return null;
         }
 
         #region Properties

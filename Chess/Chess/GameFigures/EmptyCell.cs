@@ -9,5 +9,12 @@ namespace Chess.GameFigures
     class EmptyCell : Figure
     {
         public EmptyCell(int indexY, int indexX) : base(indexY, indexX) { }
+
+        public override object Clone()
+        {
+            EmptyCell res = new EmptyCell(IndexX, IndexY);          
+            return res;
+        }
+
     }
 }

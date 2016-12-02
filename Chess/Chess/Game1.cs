@@ -62,9 +62,8 @@ namespace Chess
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
             spriteBatch.Begin();
-            board.Draw(spriteBatch);
+            board.Draw(spriteBatch, Content);
             spriteBatch.End();
 
             base.Draw(gameTime);
