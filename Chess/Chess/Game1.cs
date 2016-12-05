@@ -53,7 +53,7 @@ namespace Chess
 
             // TODO: Add your update logic here
 
-            board.Update();
+            board.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -62,9 +62,8 @@ namespace Chess
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
             spriteBatch.Begin();
-            board.Draw(spriteBatch);
+            board.Draw(spriteBatch, Content);
             spriteBatch.End();
 
             base.Draw(gameTime);

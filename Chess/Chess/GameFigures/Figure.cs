@@ -33,6 +33,11 @@ namespace Chess.GameFigures
             }
         }
 
+        // Вычисляет все возможные позикии для хода
+        public virtual void GetPossiblePositions(List<IndexPair> possibleSteps) { }
+
+        #region Properties
+
         // y и x координата положения фигуры на доске соответственно
         protected int IndexY { get; set; }
         protected int IndexX { get; set; }
@@ -40,5 +45,7 @@ namespace Chess.GameFigures
         protected bool IsChoosen { get; set; } = false;
 
         protected Texture2D Texture { get; set; } = null;
+
+        #endregion
     }
 }

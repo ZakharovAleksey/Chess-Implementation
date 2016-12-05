@@ -82,6 +82,7 @@ namespace Chess.GameUnits
                     }
                 }
             }
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -90,6 +91,18 @@ namespace Chess.GameUnits
         }
 
         #endregion
+
+        public void SetStateIDLE()
+        {
+            CurrentState = (int)CellState.IDLE;
+            IsSelect = false;
+        }
+
+        public void SetStateSELECT()
+        {
+            CurrentState = (int)CellState.SELECT;
+            IsSelect = true;
+        }
 
 
         #region Fields
