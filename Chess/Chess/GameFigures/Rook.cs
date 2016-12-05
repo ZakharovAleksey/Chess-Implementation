@@ -26,29 +26,33 @@ namespace Chess.GameFigures
         }
 
         // Вычисляет позиции куда может пойти пешка
-        public override void GetPossiblePositions(List<IndexPair> possibleSteps)
+        public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
         {
-            IndexPair posStep = new IndexPair();
-            for (int X = 0; X < GC.BoardSize; ++X)
-            {
-                if (X != IndexX)
-                {
-                    posStep.IndexY = IndexY;
-                    posStep.IndexX = X;
 
-                    possibleSteps.Add(posStep);
-                }
+            // Проверем возможные движения вдоль оси X до первой попавшейся фигуры
+            int curX = IndexX - 1;
+            while (curX > 0 && IsCellEmpty(board, IndexY, curX))
+            {
+                possibleSteps.Add(new IndexPair(IndexY, curX--));
             }
 
-            for (int Y = 0; Y < GC.BoardSize; ++Y)
+            curX = IndexX + 1;
+            while (curX < GC.BoardSize && IsCellEmpty(board, IndexY, curX))
             {
-                if (Y != IndexY)
-                {
-                    posStep.IndexY = Y;
-                    posStep.IndexX = IndexX;
-                    
-                    possibleSteps.Add(posStep);
-                }
+                possibleSteps.Add(new IndexPair(IndexY, curX++));
+            }
+
+            // Проверем возможные движения вдоль оси Y до первой попавшейся фигуры
+            int curY = IndexY - 1;
+            while (curY > 0 && IsCellEmpty(board, curY, IndexX))
+            {
+                possibleSteps.Add(new IndexPair(curY--, IndexX));
+            }
+
+            curY = IndexY + 1;
+            while (curY < GC.BoardSize && IsCellEmpty(board, curY, IndexX))
+            {
+                possibleSteps.Add(new IndexPair(curY++, IndexX));
             }
         }
 

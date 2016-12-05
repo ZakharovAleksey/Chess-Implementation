@@ -23,18 +23,25 @@ namespace Chess.GameFigures
             Texture = Content.Load<Texture2D>(@"figures/Knight_White");
         }
 
-        // Вычисляет позиции куда может пойти пешка
-        public override void GetPossiblePositions(List<IndexPair> possibleSteps)
+        // Проверяет существует ли такой индекс для шахматной доски
+        bool IsIndexInChessboard(int IndexY, int IndexX)
         {
-            IndexPair curStep = new IndexPair();
+            return (IndexX >= 0 && IndexX < GC.BoardSize && IndexY >= 0 && IndexY < GC.BoardSize) ? true : false;
+        }
+
+        // Вычисляет позиции куда может пойти пешка
+        public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
+        {
+            int Y, X;
+
             for (int curStepId = 0; curStepId < 8; ++curStepId)
             {
-                curStep.IndexY = IndexY + stepsY[curStepId];
-                curStep.IndexX = IndexX + stepsX[curStepId];
+                Y = IndexY + stepsY[curStepId];
+                X = IndexX + stepsX[curStepId];
 
-                if (curStep.IndexX >= 0 && curStep.IndexX < GC.BoardSize && curStep.IndexY >= 0 && curStep.IndexY < GC.BoardSize)
+                if (IsIndexInChessboard(Y, X) && IsCellEmpty(board, Y, X))
                 {
-                    possibleSteps.Add(curStep);
+                    possibleSteps.Add(new IndexPair(Y,X));
                 }
             }
         }

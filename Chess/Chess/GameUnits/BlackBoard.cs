@@ -143,7 +143,7 @@ namespace Chess.GameUnits
         {
             // Находим все доступные для выбранной фигуры позиции для хода
             List<IndexPair> figPosMoves = new List<IndexPair>();
-            FigureBoard[StartMoveIndexY, StartMoveIndexX].GetPossiblePositions(figPosMoves);
+            FigureBoard[StartMoveIndexY, StartMoveIndexX].GetPossiblePositions(figPosMoves, this.FigureBoard);
 
             // Индексы клетки куда пользователь хочет сделать ход
             IndexPair selectPos = GetChosenCellIndex(curMouseState);
@@ -157,22 +157,22 @@ namespace Chess.GameUnits
 
                 // Выполняем ход 
                 // Определяем тип выбранной фигуры
-                object selectedCellType = FigureBoard[StartMoveIndexY, StartMoveIndexX].GetType();
+                object selCellType = FigureBoard[StartMoveIndexY, StartMoveIndexX].GetType();
                 // Клетка из которой мы ходили теперь пустая
                 FigureBoard[StartMoveIndexY, StartMoveIndexX] = new EmptyCell(StartMoveIndexY, StartMoveIndexX);
 
                 // Клетка в которую мы сходим теперь будет содержать фигуру, которой мы сходили
-                if (selectedCellType == typeof(Pawn))
+                if (selCellType == typeof(Pawn))
                     FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Pawn(EndMoveIndexY, EndMoveIndexX);
-                else if (selectedCellType == typeof(Knight))
+                else if (selCellType == typeof(Knight))
                     FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Knight(EndMoveIndexY, EndMoveIndexX);
-                else if (selectedCellType == typeof(Rook))
+                else if (selCellType == typeof(Rook))
                     FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Rook(EndMoveIndexY, EndMoveIndexX);
-                else if (selectedCellType == typeof(Bishop))
+                else if (selCellType == typeof(Bishop))
                     FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Bishop(EndMoveIndexY, EndMoveIndexX);
-                else if (selectedCellType == typeof(Queen))
+                else if (selCellType == typeof(Queen))
                     FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Queen(EndMoveIndexY, EndMoveIndexX);
-                else if (selectedCellType == typeof(King))
+                else if (selCellType == typeof(King))
                     FigureBoard[EndMoveIndexY, EndMoveIndexX] = new King(EndMoveIndexY, EndMoveIndexX);
 
 

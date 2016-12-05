@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-
 namespace Chess.GameFigures
 {
     struct IndexPair
@@ -23,7 +22,6 @@ namespace Chess.GameFigures
 
     }
 
-
     // Интерфейс для всех фигур на доске.
     interface IFigure
     {
@@ -31,6 +29,6 @@ namespace Chess.GameFigures
 
         void Draw(SpriteBatch spriteBatch);
 
-        void GetPossiblePositions(List<IndexPair> possibleSteps);
+        void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board);
     }
 }

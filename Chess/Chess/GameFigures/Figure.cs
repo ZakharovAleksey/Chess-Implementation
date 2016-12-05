@@ -34,7 +34,12 @@ namespace Chess.GameFigures
         }
 
         // Вычисляет все возможные позикии для хода
-        public virtual void GetPossiblePositions(List<IndexPair> possibleSteps) { }
+        public virtual void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board) { }
+
+        protected bool IsCellEmpty(Figure[,] board, int IndexY, int IndexX)
+        {
+            return (board[IndexY, IndexX].GetType() == typeof(EmptyCell)) ? true : false;
+        }
 
         #region Properties
 

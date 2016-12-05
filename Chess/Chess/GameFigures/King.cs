@@ -26,7 +26,7 @@ namespace Chess.GameFigures
         }
 
         // Вычисляет позиции куда может пойти пешка
-        public override void GetPossiblePositions(List<IndexPair> possibleSteps)
+        public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
         {
             if (IndexY > 0)
                 possibleSteps.Add(new IndexPair(IndexY - 1, IndexX));
