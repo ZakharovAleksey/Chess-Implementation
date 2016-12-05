@@ -121,6 +121,7 @@ namespace Chess.GameUnits
             else
             {
                 SetStartMoveCell(selectPos);
+                prevMouseState = curMouseState;
             }
         }
 
@@ -150,6 +151,8 @@ namespace Chess.GameUnits
 
                 // Говорим что пользователь сделал ход (Нужно будет для отрисовки)
                 IsFigureMadeStep = true;
+
+                prevMouseState = curMouseState;
             }
         }
 
@@ -161,9 +164,9 @@ namespace Chess.GameUnits
             {
                 if (!IsFigureChosenForStep)
                 {
-
-                    FirstClickOnLeftButtonActions(curMouseState);
-                    int a = 10;
+                    // Сделано чтобы при нажатии два раза мыши по одной позиции она не загаралась как выделенная
+                    if(prevMouseState != curMouseState)
+                        FirstClickOnLeftButtonActions(curMouseState);
                 }
                 else if (IsFigureChosenForStep)
                 {
@@ -191,7 +194,10 @@ namespace Chess.GameUnits
             {
                 // Если уже выбрана фигура для хода то тогда отменяем ее выбор
                 if (IsFigureChosenForStep)
+                {
                     SetCellUnselect();
+                    prevMouseState = curMouseState;
+                }
             }
         }
 
