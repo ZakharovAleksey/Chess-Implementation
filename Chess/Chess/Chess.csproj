@@ -39,10 +39,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameFigures\Bishop.cs" />
     <Compile Include="GameFigures\EmptyCell.cs" />
     <Compile Include="GameFigures\Figure.cs" />
     <Compile Include="GameFigures\IFigure.cs" />
+    <Compile Include="GameFigures\King.cs" />
+    <Compile Include="GameFigures\Knight.cs" />
     <Compile Include="GameFigures\Pawn.cs" />
+    <Compile Include="GameFigures\Queen.cs" />
+    <Compile Include="GameFigures\Rook.cs" />
     <Compile Include="GameParameters\GameConstants.cs" />
     <Compile Include="GameUnits\BlackBoard.cs" />
     <Compile Include="GameUnits\Cell.cs" />
@@ -82,6 +87,36 @@
     </Content>
     <Content Include="..\..\Content\bin\cell\white.xnb">
       <Link>Content\cell\white.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\figures\Knight_White.xnb">
+      <Link>Content\figures\Knight_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\figures\Rook_White.xnb">
+      <Link>Content\figures\Rook_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\figures\Bishop_White.xnb">
+      <Link>Content\figures\Bishop_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\figures\Queen_White.xnb">
+      <Link>Content\figures\Queen_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\figures\King_White.xnb">
+      <Link>Content\figures\King_White.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
