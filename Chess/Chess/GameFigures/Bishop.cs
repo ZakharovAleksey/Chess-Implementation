@@ -40,6 +40,11 @@ namespace Chess.GameFigures
             {
                 if (IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y--, X--));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -51,6 +56,11 @@ namespace Chess.GameFigures
             {
                 if(IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y++, X--));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -62,6 +72,11 @@ namespace Chess.GameFigures
             {
                 if(IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y--, X++));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -73,6 +88,11 @@ namespace Chess.GameFigures
             {
                 if(IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y++, X++));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }

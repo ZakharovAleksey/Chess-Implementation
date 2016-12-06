@@ -46,12 +46,14 @@ namespace Chess.GameFigures
                     possibleSteps.Add(new IndexPair(IndexY - 1, IndexX));
 
                 // Может ли бить на лево
-                if(IndexY > 0 && IsCellOtherColor(board, IndexY - 1, IndexX - 1, this.Color))
-                    possibleSteps.Add(new IndexPair(IndexY - 1, IndexX - 1));
+                if(IndexY > 0 && IndexX > 0)
+                    if (IsCellOtherColor(board, IndexY - 1, IndexX - 1, this.Color))
+                        possibleSteps.Add(new IndexPair(IndexY - 1, IndexX - 1));
 
                 // Может ли бить на право
-                if (IndexY > 0 && IsCellOtherColor(board, IndexY - 1, IndexX + 1, this.Color))
-                    possibleSteps.Add(new IndexPair(IndexY - 1, IndexX + 1));
+                if (IndexY > 0 && IndexX < GC.BoardSize -1)
+                    if(IsCellOtherColor(board, IndexY - 1, IndexX + 1, this.Color))
+                        possibleSteps.Add(new IndexPair(IndexY - 1, IndexX + 1));
             }
             else
             {
@@ -60,12 +62,14 @@ namespace Chess.GameFigures
                     possibleSteps.Add(new IndexPair(IndexY + 1, IndexX));
 
                 // Может ли бить на лево
-                if (IndexY > 0 && IsCellOtherColor(board, IndexY + 1, IndexX - 1, this.Color))
-                    possibleSteps.Add(new IndexPair(IndexY + 1, IndexX - 1));
+                if (IndexY > 0 && IndexX > 0)
+                    if (IsCellOtherColor(board, IndexY + 1, IndexX - 1, this.Color))
+                        possibleSteps.Add(new IndexPair(IndexY + 1, IndexX - 1));
 
                 // Может ли бить на право
-                if (IndexY > 0 && IsCellOtherColor(board, IndexY + 1, IndexX + 1, this.Color))
-                    possibleSteps.Add(new IndexPair(IndexY + 1, IndexX + 1));
+                if (IndexY > 0 && IndexX < GC.BoardSize- 1)
+                    if (IsCellOtherColor(board, IndexY + 1, IndexX + 1, this.Color))
+                        possibleSteps.Add(new IndexPair(IndexY + 1, IndexX + 1));
             }
 
         }

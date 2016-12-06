@@ -42,7 +42,7 @@ namespace Chess.GameFigures
                 Y = IndexY + stepsY[curStepId];
                 X = IndexX + stepsX[curStepId];
 
-                if (IsIndexInChessboard(Y, X) && IsCellEmpty(board, Y, X))
+                if (IsIndexInChessboard(Y, X) && ( IsCellOtherColor(board, Y,X,this.Color) || IsCellEmpty(board, Y, X)) )
                 {
                     possibleSteps.Add(new IndexPair(Y,X));
                 }
