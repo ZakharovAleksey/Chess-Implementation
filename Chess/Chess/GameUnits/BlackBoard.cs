@@ -48,11 +48,11 @@ namespace Chess.GameUnits
                     // Load chess content
                     // Подгружаем пешки
                     if (rowID == GC.BoardSize - 2)
-                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int) FigureColor.WHITE);
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int)FigureColor.WHITE);
                     else if (rowID == 1)
                         FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int)FigureColor.BLACK);
                     // Подгружаем коней
-                    else if (rowID == GC.BoardSize - 1 && ( columnID == 1 || columnID == GC.BoardSize - 2) )
+                    else if (rowID == GC.BoardSize - 1 && (columnID == 1 || columnID == GC.BoardSize - 2))
                         FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.WHITE);
                     else if (rowID == 0 && (columnID == 1 || columnID == GC.BoardSize - 2))
                         FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.BLACK);
@@ -85,7 +85,7 @@ namespace Chess.GameUnits
         #region Methods
 
         #region Update 
-        
+
         // Проверяет попадает ли клик пользователя в область шахматной доски
         bool IsClickInChessboard(MouseState curMouseState)
         {
@@ -109,6 +109,14 @@ namespace Chess.GameUnits
             object selectedCellType = FigureBoard[indexY, indexX].GetType();
 
             return (selectedCellType == emptyCellType) ? true : false;
+        }
+
+        // Проверяет содержит ли ячейка фигуру по цвету противоположную данному
+        bool IsCellContainFigure(int indexY, int indexX, int color)
+        {
+            int anotherColor = (color == (int)FigureColor.WHITE) ? (int)FigureColor.BLACK : (int)FigureColor.WHITE;
+
+            return (!IsCellEmpty(indexY, indexX) && FigureBoard[indexY, indexX].Color == anotherColor) ? true : false;
         }
 
         #region On left button click
@@ -168,7 +176,7 @@ namespace Chess.GameUnits
             FigureBoard[EndMoveIndexY, EndMoveIndexX].GetPossiblePositions(postStepPosMoves, this.FigureBoard);
 
             // Провереям есть ли среди них позиции с королем противоположного цвета
-            foreach(IndexPair curPair in postStepPosMoves)
+            foreach (IndexPair curPair in postStepPosMoves)
             {
                 object figureType = FigureBoard[curPair.IndexY, curPair.IndexX].GetType();
                 if (FigureBoard[curPair.IndexY, curPair.IndexX].Color != figureColor && figureType == typeof(King))
@@ -271,45 +279,75 @@ namespace Chess.GameUnits
 
         void CheckOnMat(int figureColor)
         {
-            //int anotherColor = (figureColor == (int)FigureColor.WHITE) ? (int)FigureColor.BLACK : (int)FigureColor.WHITE;
+            int anotherColor = (figureColor == (int)FigureColor.WHITE) ? (int)FigureColor.BLACK : (int)FigureColor.WHITE;
 
-            //List<IndexPair> allSteps = new List<IndexPair>();
-            //foreach (Figure figure in FigureBoard)
-            //{
-            //    figure.GetPossiblePositions(allSteps, FigureBoard);
-            //}
+            List<IndexPair> allSteps = new List<IndexPair>();
+            foreach (Figure figure in FigureBoard)
+            {
+                if(figure.Color == anotherColor)
+                    figure.GetPossiblePositions(allSteps, FigureBoard);
+            }
 
-            //// Все позиции КОРОЛЯ : только надо проверить чтобы не выходили за границы
-            //List<IndexPair> KingPosSteps = new List<IndexPair>();
-            //if (StartMoveIndexY - 1 >= 0)
-            //    KingPosSteps.Add(new IndexPair(StartMoveIndexY - 1, StartMoveIndexX));
-            //if(StartMoveIndexY + 1 < GC.BoardSize)
-            //    KingPosSteps.Add(new IndexPair(StartMoveIndexY + 1, StartMoveIndexX));
-            //if(StartMoveIndexX - 1 >= 0)
-            //    KingPosSteps.Add(new IndexPair(StartMoveIndexY, StartMoveIndexX - 1));
-            //if(StartMoveIndexX + 1 < GC.BoardSize)
-            //    KingPosSteps.Add(new IndexPair(StartMoveIndexY, StartMoveIndexX + 1));
 
             object curCellType;
 
             // Проверяем заняты ли возможные для Короля позиции для хода другими фигурами !!!! ПРОВЕРКА ПО СОФПАДЕНИЮ ЦВЕТА ОКРУЖАЮЩИХ ФИГУР
-            bool up = true, down = true, left = true, right = true;
-            if (StartMoveIndexY - 1 >= 0)
-                if ((curCellType = FigureBoard[StartMoveIndexY - 1, StartMoveIndexX].GetType()) == typeof(EmptyCell))
-                    up = false;
-            if (StartMoveIndexY + 1 < GC.BoardSize)
-                if ((curCellType = FigureBoard[StartMoveIndexY + 1, StartMoveIndexX].GetType()) == typeof(EmptyCell))
-                    down = false;
-            if (StartMoveIndexX - 1 >= 0)
-                if ((curCellType = FigureBoard[StartMoveIndexY, StartMoveIndexX - 1].GetType()) == typeof(EmptyCell))
-                    left = false;
-            if (StartMoveIndexX + 1 >= 0)
-                if ((curCellType = FigureBoard[StartMoveIndexY, StartMoveIndexX + 1].GetType()) == typeof(EmptyCell))
-                    right = false;
+            bool couldMoveUP = false, couldMoveDown = false, couldMoveLeft = false, couldMoveRight = false;
 
-            if (left && up && down && right)
+            if (StartMoveIndexY - 1 >= 0)
+                if (IsCellEmpty(StartMoveIndexY - 1, StartMoveIndexX) || IsCellContainFigure(StartMoveIndexY - 1, StartMoveIndexX, figureColor))
+                    couldMoveUP = true;
+
+            if (StartMoveIndexY + 1 < GC.BoardSize)
+                if (IsCellEmpty(StartMoveIndexY + 1, StartMoveIndexX) || IsCellContainFigure(StartMoveIndexY + 1, StartMoveIndexX, figureColor))
+                    couldMoveDown = true;
+
+            if (StartMoveIndexX - 1 >= 0)
+                if (IsCellEmpty(StartMoveIndexY, StartMoveIndexX - 1) || IsCellContainFigure(StartMoveIndexY, StartMoveIndexX - 1, figureColor))
+                    couldMoveLeft = true;
+
+            if (StartMoveIndexX + 1 >= 0)
+                if (IsCellEmpty(StartMoveIndexY, StartMoveIndexX + 1) || IsCellContainFigure(StartMoveIndexY, StartMoveIndexX + 1, figureColor))
+                    couldMoveRight = true;
+
+            // Оставшаяся проверка на битые позиции
+
+            int Y = StartMoveIndexY;
+            int X = StartMoveIndexX;
+
+            if (couldMoveUP)
+            {
+                IndexPair up = new IndexPair(StartMoveIndexY - 1, StartMoveIndexX);
+                if (allSteps.Contains(up))
+                    couldMoveUP = false;
+            }
+
+            if (couldMoveDown)
+            {
+                IndexPair down = new IndexPair(StartMoveIndexY + 1, StartMoveIndexX);
+                if (allSteps.Contains(down))
+                    couldMoveDown = false;
+            }
+
+            if (couldMoveLeft)
+            {
+                IndexPair left = new IndexPair(StartMoveIndexY, StartMoveIndexX - 1);
+                if (allSteps.Contains(left))
+                    couldMoveLeft = false;
+            }
+
+            if (couldMoveRight)
+            {
+                IndexPair right = new IndexPair(StartMoveIndexY, StartMoveIndexX + 1);
+                if (allSteps.Contains(right))
+                    couldMoveRight = false;
+            }
+
+
+            if (!couldMoveLeft && !couldMoveUP && !couldMoveDown && !couldMoveRight)
             {
                 isMat = true;
+                return;
             }
 
         }
@@ -374,27 +412,28 @@ namespace Chess.GameUnits
 
         public void Update(GameTime gameTime)
         {
-            MouseState curMouseState = Mouse.GetState();
-
-            TimeBetweenLeftBTNClick += gameTime.ElapsedGameTime.Milliseconds;
-
-            if (IsClickInChessboard(curMouseState))
+            // Играем до тех пор, пока не поставили мат
+            if (!isMat)
             {
-                if (IsWhiteMove)
-                {
-                    ClickOnLeftButtonActions(curMouseState, gameTime, (int)FigureColor.WHITE);
-                    ClickOnRightButtonActions(curMouseState);
-                }
-                else if (IsBlackMove)
-                {
-                    ClickOnLeftButtonActions(curMouseState, gameTime, (int)FigureColor.BLACK);
-                    ClickOnRightButtonActions(curMouseState);
+                MouseState curMouseState = Mouse.GetState();
 
-                }
+                TimeBetweenLeftBTNClick += gameTime.ElapsedGameTime.Milliseconds;
 
-                // Таймер установлен так как мышь делает двойное нажатие (почему то!!) И поэтому после хода сразу выполняется функция выбрать ячейку
-                //ClickOnLeftButtonActions(curMouseState, gameTime, (int)FigureColor.WHITE);
-                //ClickOnRightButtonActions(curMouseState);
+                if (IsClickInChessboard(curMouseState))
+                {
+                    // Ход белых
+                    if (IsWhiteMove)
+                    {
+                        ClickOnLeftButtonActions(curMouseState, gameTime, (int)FigureColor.WHITE);
+                        ClickOnRightButtonActions(curMouseState);
+                    }
+                    // Ход черных
+                    else if (IsBlackMove)
+                    {
+                        ClickOnLeftButtonActions(curMouseState, gameTime, (int)FigureColor.BLACK);
+                        ClickOnRightButtonActions(curMouseState);
+                    }
+                }
             }
 
         }
