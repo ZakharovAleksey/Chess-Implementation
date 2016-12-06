@@ -25,13 +25,13 @@ namespace Chess.GameFigures
             Texture = Content.Load<Texture2D>(@"figures/Rook_White");
         }
 
-        // Вычисляет позиции куда может пойти пешка
+        // Вычисляет позиции куда может пойти ладья
         public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
         {
 
             // Проверем возможные движения вдоль оси X до первой попавшейся фигуры
             int curX = IndexX - 1;
-            while (curX > 0 && IsCellEmpty(board, IndexY, curX))
+            while (curX >= 0 && IsCellEmpty(board, IndexY, curX))
             {
                 possibleSteps.Add(new IndexPair(IndexY, curX--));
             }
@@ -44,7 +44,7 @@ namespace Chess.GameFigures
 
             // Проверем возможные движения вдоль оси Y до первой попавшейся фигуры
             int curY = IndexY - 1;
-            while (curY > 0 && IsCellEmpty(board, curY, IndexX))
+            while (curY >= 0 && IsCellEmpty(board, curY, IndexX))
             {
                 possibleSteps.Add(new IndexPair(curY--, IndexX));
             }

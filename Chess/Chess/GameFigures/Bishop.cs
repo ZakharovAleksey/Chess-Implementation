@@ -25,34 +25,53 @@ namespace Chess.GameFigures
             Texture = Content.Load<Texture2D>(@"figures/Bishop_White");
         }
 
-        // Вычисляет позиции куда может пойти пешка
+        // Вычисляет позиции куда может пойти слон
         public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
         {
-            int Y = IndexY;
-            int X = IndexX;
-            IndexPair posStep = new IndexPair();
+            int Y, X;
 
-            for (int i = 1; i < GC.BoardSize; ++i)
+            // Проверяем позиции по направлению в лево вверх
+            Y = IndexY - 1;
+            X = IndexX - 1;
+            while (Y >= 0 && X >= 0)
             {
-                posStep.IndexY = IndexY - i;
-                posStep.IndexX = IndexX - i;
-                if (posStep.IndexX >= 0 && posStep.IndexX < GC.BoardSize && posStep.IndexY >= 0 && posStep.IndexY < GC.BoardSize)
-                    possibleSteps.Add(posStep);
+                if (IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y--, X--));
+                else
+                    break;
+            }
 
-                posStep.IndexY = IndexY + i;
-                posStep.IndexX = IndexX + i;
-                if (posStep.IndexX >= 0 && posStep.IndexX < GC.BoardSize && posStep.IndexY >= 0 && posStep.IndexY < GC.BoardSize)
-                    possibleSteps.Add(posStep);
+            // Проверяем позиции по направлению в лево вниз
+            Y = IndexY + 1;
+            X = IndexX - 1;
+            while (Y <GC.BoardSize && X >= 0)
+            {
+                if(IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y++, X--));
+                else
+                    break;
+            }
 
-                posStep.IndexY = IndexY + i;
-                posStep.IndexX = IndexX - i;
-                if (posStep.IndexX >= 0 && posStep.IndexX < GC.BoardSize && posStep.IndexY >= 0 && posStep.IndexY < GC.BoardSize)
-                    possibleSteps.Add(posStep);
+            // Проверяем позиции по направлению в вправо вниз
+            Y = IndexY - 1;
+            X = IndexX + 1;
+            while (Y >= 0 && X < GC.BoardSize)
+            {
+                if(IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y--, X++));
+                else
+                    break;
+            }
 
-                posStep.IndexY = IndexY - i;
-                posStep.IndexX = IndexX + i;
-                if (posStep.IndexX >= 0 && posStep.IndexX < GC.BoardSize && posStep.IndexY >= 0 && posStep.IndexY < GC.BoardSize)
-                    possibleSteps.Add(posStep);
+            // Проверяем позиции по направлению в право вверх
+            Y = IndexY + 1;
+            X = IndexX + 1;
+            while (Y < GC.BoardSize && X < GC.BoardSize)
+            {
+                if(IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y++, X++));
+                else
+                    break;
             }
         }
 

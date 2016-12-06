@@ -29,7 +29,7 @@ namespace Chess.GameFigures
             return (IndexX >= 0 && IndexX < GC.BoardSize && IndexY >= 0 && IndexY < GC.BoardSize) ? true : false;
         }
 
-        // Вычисляет позиции куда может пойти пешка
+        // Вычисляет позиции куда может пойти конь
         public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
         {
             int Y, X;

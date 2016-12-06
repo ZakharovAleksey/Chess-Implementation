@@ -25,63 +25,95 @@ namespace Chess.GameFigures
             Texture = Content.Load<Texture2D>(@"figures/Queen_White");
         }
 
-        // Вычисляет позиции куда может пойти пешка
+        // Вычисляет все возможные позиции для хода королевы как слоном
+        void BishopSteps(List<IndexPair> possibleSteps, Figure[,] board)
+        {
+            int Y, X;
+
+            // Проверяем позиции по направлению в лево вверх
+            Y = IndexY - 1;
+            X = IndexX - 1;
+            while (Y >= 0 && X >= 0)
+            {
+                if (IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y--, X--));
+                else
+                    break;
+            }
+
+            // Проверяем позиции по направлению в лево вниз
+            Y = IndexY + 1;
+            X = IndexX - 1;
+            while (Y < GC.BoardSize && X >= 0)
+            {
+                if (IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y++, X--));
+                else
+                    break;
+            }
+
+            // Проверяем позиции по направлению в вправо вниз
+            Y = IndexY - 1;
+            X = IndexX + 1;
+            while (Y >= 0 && X < GC.BoardSize)
+            {
+                if (IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y--, X++));
+                else
+                    break;
+            }
+
+            // Проверяем позиции по направлению в право вверх
+            Y = IndexY + 1;
+            X = IndexX + 1;
+            while (Y < GC.BoardSize && X < GC.BoardSize)
+            {
+                if (IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y++, X++));
+                else
+                    break;
+            }
+        }
+
+        // Вычисляет все возможные позиции для хода королевы как ладьей
+        void RookSteps(List<IndexPair> possibleSteps, Figure[,] board)
+        {
+            // Проверем возможные движения вдоль оси X до первой попавшейся фигуры
+            int curX = IndexX - 1;
+            while (curX >= 0 && IsCellEmpty(board, IndexY, curX))
+            {
+                possibleSteps.Add(new IndexPair(IndexY, curX--));
+            }
+
+            curX = IndexX + 1;
+            while (curX < GC.BoardSize && IsCellEmpty(board, IndexY, curX))
+            {
+                possibleSteps.Add(new IndexPair(IndexY, curX++));
+            }
+
+            // Проверем возможные движения вдоль оси Y до первой попавшейся фигуры
+            int curY = IndexY - 1;
+            while (curY >= 0 && IsCellEmpty(board, curY, IndexX))
+            {
+                possibleSteps.Add(new IndexPair(curY--, IndexX));
+            }
+
+            curY = IndexY + 1;
+            while (curY < GC.BoardSize && IsCellEmpty(board, curY, IndexX))
+            {
+                possibleSteps.Add(new IndexPair(curY++, IndexX));
+            }
+        }
+
+
+        // Вычисляет позиции куда может пойти ферзь
         public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
         {
-            IndexPair posStep = new IndexPair();
-            {
-                int Y = IndexY;
-                int X = IndexX;
-                
+            // Находим возможные позиции ходов как для слона
+            BishopSteps(possibleSteps, board);
+            // Находим возможные позиции ходов как для ладьи
+            RookSteps(possibleSteps, board);
 
-                // Как для слона
-
-                for (int i = 1; i < GC.BoardSize; ++i)
-                {
-                    posStep.IndexY = IndexY - i;
-                    posStep.IndexX = IndexX - i;
-                    if (posStep.IndexX >= 0 && posStep.IndexX < GC.BoardSize && posStep.IndexY >= 0 && posStep.IndexY < GC.BoardSize)
-                        possibleSteps.Add(posStep);
-
-                    posStep.IndexY = IndexY + i;
-                    posStep.IndexX = IndexX + i;
-                    if (posStep.IndexX >= 0 && posStep.IndexX < GC.BoardSize && posStep.IndexY >= 0 && posStep.IndexY < GC.BoardSize)
-                        possibleSteps.Add(posStep);
-
-                    posStep.IndexY = IndexY + i;
-                    posStep.IndexX = IndexX - i;
-                    if (posStep.IndexX >= 0 && posStep.IndexX < GC.BoardSize && posStep.IndexY >= 0 && posStep.IndexY < GC.BoardSize)
-                        possibleSteps.Add(posStep);
-
-                    posStep.IndexY = IndexY - i;
-                    posStep.IndexX = IndexX + i;
-                    if (posStep.IndexX >= 0 && posStep.IndexX < GC.BoardSize && posStep.IndexY >= 0 && posStep.IndexY < GC.BoardSize)
-                        possibleSteps.Add(posStep);
-                }
-            }
-            // Как для ладьи
-
-            for (int X = 0; X < GC.BoardSize; ++X)
-            {
-                if (X != IndexX)
-                {
-                    posStep.IndexY = IndexY;
-                    posStep.IndexX = X;
-
-                    possibleSteps.Add(posStep);
-                }
-            }
-
-            for (int Y = 0; Y < GC.BoardSize; ++Y)
-            {
-                if (Y != IndexY)
-                {
-                    posStep.IndexY = Y;
-                    posStep.IndexX = IndexX;
-
-                    possibleSteps.Add(posStep);
-                }
-            }
         }
 
         #endregion

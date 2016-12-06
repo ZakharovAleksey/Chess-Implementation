@@ -25,18 +25,46 @@ namespace Chess.GameFigures
             Texture = Content.Load<Texture2D>(@"figures/King_White");
         }
 
-        // Вычисляет позиции куда может пойти пешка
+        // Вычисляет позиции куда может пойти король
         public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
         {
-            if (IndexY > 0)
-                possibleSteps.Add(new IndexPair(IndexY - 1, IndexX));
-            if(IndexY < GC.BoardSize)
-                possibleSteps.Add(new IndexPair(IndexY + 1, IndexX));
+            int Y, X;
 
-            if (IndexX > 0)
-                possibleSteps.Add(new IndexPair(IndexY, IndexX - 1));
-            if (IndexY < GC.BoardSize)
-                possibleSteps.Add(new IndexPair(IndexY, IndexX + 1));
+            // Ход влево
+            Y = IndexY;
+            X = IndexX - 1;
+            if (X >= 0)
+            {
+                if(IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y, X));
+            }
+
+            // Ход вправо
+            Y = IndexY;
+            X = IndexX + 1;
+            if (X < GC.BoardSize)
+            {
+                if (IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y, X));
+            }
+
+            // Ход вверх
+            Y = IndexY - 1;
+            X = IndexX;
+            if (Y >= 0)
+            {
+                if (IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y, X));
+            }
+
+            // Ход вниз
+            Y = IndexY + 1;
+            X = IndexX;
+            if (Y < GC.BoardSize)
+            {
+                if (IsCellEmpty(board, Y, X))
+                    possibleSteps.Add(new IndexPair(Y, X));
+            }
         }
 
         #endregion
