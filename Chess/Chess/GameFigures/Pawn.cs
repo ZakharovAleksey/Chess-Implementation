@@ -22,7 +22,7 @@ namespace Chess.GameFigures
     {
         #region Construcor
 
-        public Pawn(int indexY, int indexX) : base(indexY, indexX) { }
+        public Pawn(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
 
         #endregion
 
@@ -30,14 +30,26 @@ namespace Chess.GameFigures
 
         public override void  LoadContent(ContentManager Content)
         {
-            Texture = Content.Load<Texture2D>(@"figures/pawn");
+            if(Color == (int)FigureColor.WHITE)
+                Texture = Content.Load<Texture2D>(@"figures/pawn");
+            else
+                Texture = Content.Load<Texture2D>(@"figures/Pawn_Black");
         }
 
         // Вычисляет позиции куда может пойти пешка
         public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
         {
-            if (IndexY > 0 && IsCellEmpty(board, IndexY - 1, IndexX))
-                possibleSteps.Add(new IndexPair(IndexY - 1, IndexX));
+            if (Color == (int)FigureColor.WHITE)
+            {
+                if (IndexY > 0 && IsCellEmpty(board, IndexY - 1, IndexX))
+                    possibleSteps.Add(new IndexPair(IndexY - 1, IndexX));
+            }
+            else
+            {
+                if (IndexY < GC.BoardSize && IsCellEmpty(board, IndexY + 1, IndexX))
+                    possibleSteps.Add(new IndexPair(IndexY + 1, IndexX));
+            }
+
         }
 
         #endregion

@@ -14,7 +14,7 @@ namespace Chess.GameFigures
     {
         #region Construcor
 
-        public Rook(int indexY, int indexX) : base(indexY, indexX) { }
+        public Rook(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
 
         #endregion
 
@@ -22,7 +22,10 @@ namespace Chess.GameFigures
 
         public override void LoadContent(ContentManager Content)
         {
-            Texture = Content.Load<Texture2D>(@"figures/Rook_White");
+            if (Color == (int)FigureColor.WHITE)
+                Texture = Content.Load<Texture2D>(@"figures/Rook_White");
+            else
+                Texture = Content.Load<Texture2D>(@"figures/Rook_Black");
         }
 
         // Вычисляет позиции куда может пойти ладья

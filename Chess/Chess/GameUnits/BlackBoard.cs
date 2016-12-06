@@ -46,18 +46,36 @@ namespace Chess.GameUnits
                     curColor = (curColor == (int)CellType.BLACK) ? (int)CellType.WHITE : (int)CellType.BLACK;
 
                     // Load chess content
+                    // Подгружаем пешки
                     if (rowID == GC.BoardSize - 2)
-                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID);
-                    else if(rowID == GC.BoardSize - 1 && ( columnID == 1 || columnID == GC.BoardSize - 2) )
-                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int) FigureColor.WHITE);
+                    else if (rowID == 1)
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем коней
+                    else if (rowID == GC.BoardSize - 1 && ( columnID == 1 || columnID == GC.BoardSize - 2) )
+                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 1 || columnID == GC.BoardSize - 2))
+                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем ладей
                     else if (rowID == GC.BoardSize - 1 && (columnID == 0 || columnID == GC.BoardSize - 1))
-                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 0 || columnID == GC.BoardSize - 1))
+                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем слонов
                     else if (rowID == GC.BoardSize - 1 && (columnID == 2 || columnID == GC.BoardSize - 3))
-                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 2 || columnID == GC.BoardSize - 3))
+                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем ферзей
                     else if (rowID == GC.BoardSize - 1 && columnID == 4)
-                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && columnID == 4)
+                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем королей
                     else if (rowID == GC.BoardSize - 1 && columnID == 3)
-                        FigureBoard[rowID, columnID] = new King(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && columnID == 3)
+                        FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.BLACK);
                     else
                         FigureBoard[rowID, columnID] = new EmptyCell(rowID, columnID);
                 }
@@ -156,25 +174,26 @@ namespace Chess.GameUnits
                 EndMoveIndexX = selectPos.IndexX;
 
                 // Выполняем ход 
-                // Определяем тип выбранной фигуры
-                object selCellType = FigureBoard[StartMoveIndexY, StartMoveIndexX].GetType();
+                // Определяем тип выбранной фигуры и ее цвет
+                object selFigureType = FigureBoard[StartMoveIndexY, StartMoveIndexX].GetType();
+                int selFigureColor = FigureBoard[StartMoveIndexY, StartMoveIndexX].Color;
+
+                // Клетка в которую мы сходим теперь будет содержать фигуру, которой сделан ход
+                if (selFigureType == typeof(Pawn))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Pawn(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(Knight))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Knight(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(Rook))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Rook(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(Bishop))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Bishop(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(Queen))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Queen(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(King))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new King(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+
                 // Клетка из которой мы ходили теперь пустая
                 FigureBoard[StartMoveIndexY, StartMoveIndexX] = new EmptyCell(StartMoveIndexY, StartMoveIndexX);
-
-                // Клетка в которую мы сходим теперь будет содержать фигуру, которой мы сходили
-                if (selCellType == typeof(Pawn))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Pawn(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(Knight))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Knight(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(Rook))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Rook(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(Bishop))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Bishop(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(Queen))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Queen(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(King))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new King(EndMoveIndexY, EndMoveIndexX);
-
 
                 // Говорим что пользователь сделал ход (Нужно будет для отрисовки)
                 IsFigureMadeStep = true;

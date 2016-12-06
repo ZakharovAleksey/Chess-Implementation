@@ -13,14 +13,17 @@ namespace Chess.GameFigures
     class Knight : Figure
     {
 
-        public Knight(int indexY, int indexX) : base(indexY, indexX) { }
+        public Knight(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
 
 
         #region Methods
 
         public override void LoadContent(ContentManager Content)
         {
-            Texture = Content.Load<Texture2D>(@"figures/Knight_White");
+            if (Color == (int)FigureColor.WHITE)
+                Texture = Content.Load<Texture2D>(@"figures/Knight_White");
+            else
+                Texture = Content.Load<Texture2D>(@"figures/Knight_Black");
         }
 
         // Проверяет существует ли такой индекс для шахматной доски
