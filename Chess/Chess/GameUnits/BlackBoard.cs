@@ -160,6 +160,26 @@ namespace Chess.GameUnits
 
         #region Second click on left button actions
 
+        // Проверяет ставит ли сделанный игроком ход шах
+        void CheckOnShahMat(int figureColor)
+        {
+            // Находим возможные ходы для той позиции куда мы сходили
+            List<IndexPair> postStepPosMoves = new List<IndexPair>();
+            FigureBoard[EndMoveIndexY, EndMoveIndexX].GetPossiblePositions(postStepPosMoves, this.FigureBoard);
+
+            // Провереям есть ли среди них позиции с королем противоположного цвета
+            foreach(IndexPair curPair in postStepPosMoves)
+            {
+                object figureType = FigureBoard[curPair.IndexY, curPair.IndexX].GetType();
+                if (FigureBoard[curPair.IndexY, curPair.IndexX].Color != figureColor && figureType == typeof(King))
+                {
+                    IsSheh = true;
+                    break;
+                }
+            }
+        }
+
+
         void SecondClickOnLeftButtonActions(MouseState curMouseState, int figureColor)
         {
             // Находим все доступные для выбранной фигуры позиции для хода
@@ -214,25 +234,113 @@ namespace Chess.GameUnits
                     IsWhiteMove = true;
                     IsBlackMove = false;
                 }
+
+                // Если до этого королю был поставлен шах, и он нашел как уйти, то продолжаем игру
+                if (IsSheh)
+                {
+                    IsSheh = false;
+                }
+
+                // Проверем на шах мат
+                CheckOnShahMat(figureColor);
+
             }
         }
 
         #endregion
 
+        // Вызывается когда шах, и не позволяет выбрать самому фигуру для хода - заставляет ходить королем
+        void FindAndSetKingToMove(int figureColor)
+        {
+            // Присваиваем стартовой позиции индексы, соответствующие положению короля
+            foreach (Figure figure in FigureBoard)
+            {
+                object figureType = figure.GetType();
+                if (figureType == typeof(King) && figure.Color == figureColor)
+                {
+                    StartMoveIndexY = figure.IndexY;
+                    StartMoveIndexX = figure.IndexX;
+                }
+            }
+
+            Board[StartMoveIndexY, StartMoveIndexX].SetStateSELECT();
+
+            // Говорим что пользователь действительно выбрал клетку с фигурой [чтобы сделать этой фигурой шаг]
+            IsFigureChosenForStep = true;
+        }
+
+        void CheckOnMat(int figureColor)
+        {
+            //int anotherColor = (figureColor == (int)FigureColor.WHITE) ? (int)FigureColor.BLACK : (int)FigureColor.WHITE;
+
+            //List<IndexPair> allSteps = new List<IndexPair>();
+            //foreach (Figure figure in FigureBoard)
+            //{
+            //    figure.GetPossiblePositions(allSteps, FigureBoard);
+            //}
+
+            //// Все позиции КОРОЛЯ : только надо проверить чтобы не выходили за границы
+            //List<IndexPair> KingPosSteps = new List<IndexPair>();
+            //if (StartMoveIndexY - 1 >= 0)
+            //    KingPosSteps.Add(new IndexPair(StartMoveIndexY - 1, StartMoveIndexX));
+            //if(StartMoveIndexY + 1 < GC.BoardSize)
+            //    KingPosSteps.Add(new IndexPair(StartMoveIndexY + 1, StartMoveIndexX));
+            //if(StartMoveIndexX - 1 >= 0)
+            //    KingPosSteps.Add(new IndexPair(StartMoveIndexY, StartMoveIndexX - 1));
+            //if(StartMoveIndexX + 1 < GC.BoardSize)
+            //    KingPosSteps.Add(new IndexPair(StartMoveIndexY, StartMoveIndexX + 1));
+
+            object curCellType;
+
+            // Проверяем заняты ли возможные для Короля позиции для хода другими фигурами !!!! ПРОВЕРКА ПО СОФПАДЕНИЮ ЦВЕТА ОКРУЖАЮЩИХ ФИГУР
+            bool up = true, down = true, left = true, right = true;
+            if (StartMoveIndexY - 1 >= 0)
+                if ((curCellType = FigureBoard[StartMoveIndexY - 1, StartMoveIndexX].GetType()) == typeof(EmptyCell))
+                    up = false;
+            if (StartMoveIndexY + 1 < GC.BoardSize)
+                if ((curCellType = FigureBoard[StartMoveIndexY + 1, StartMoveIndexX].GetType()) == typeof(EmptyCell))
+                    down = false;
+            if (StartMoveIndexX - 1 >= 0)
+                if ((curCellType = FigureBoard[StartMoveIndexY, StartMoveIndexX - 1].GetType()) == typeof(EmptyCell))
+                    left = false;
+            if (StartMoveIndexX + 1 >= 0)
+                if ((curCellType = FigureBoard[StartMoveIndexY, StartMoveIndexX + 1].GetType()) == typeof(EmptyCell))
+                    right = false;
+
+            if (left && up && down && right)
+            {
+                isMat = true;
+            }
+
+        }
+
         void ClickOnLeftButtonActions(MouseState curMouseState, GameTime gameTime, int figureColor)
         {
-            if (curMouseState.LeftButton == ButtonState.Pressed)
+            // Если Шах то заставляем игрока ходить королем
+            if (IsSheh)
             {
-                if (!IsFigureChosenForStep)
+                FindAndSetKingToMove(figureColor);
+                // Уже поставлен шах - проверем мат ли это
+                CheckOnMat(figureColor);
+
+            }
+            else
+            {
+                // Пользователь может выбрать фигуру, которой ходить
+                if (curMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    // Сделано чтобы при нажатии два раза мыши по одной позиции она не загаралась как выделенная
-                    if (prevMouseState != curMouseState)
-                        FirstClickOnLeftButtonActions(curMouseState, figureColor);
+                    if (!IsFigureChosenForStep)
+                    {
+                        // Сделано чтобы при нажатии два раза мыши по одной позиции она не загаралась как выделенная
+                        if (prevMouseState != curMouseState)
+                            FirstClickOnLeftButtonActions(curMouseState, figureColor);
+                    }
                 }
-                else if (IsFigureChosenForStep)
-                {
-                    SecondClickOnLeftButtonActions(curMouseState, figureColor);
-                }
+            }
+            // Попытка хода выбранной фигурой
+            if (curMouseState.LeftButton == ButtonState.Pressed && IsFigureChosenForStep)
+            {
+                SecondClickOnLeftButtonActions(curMouseState, figureColor);
             }
         }
 
@@ -281,6 +389,7 @@ namespace Chess.GameUnits
                 {
                     ClickOnLeftButtonActions(curMouseState, gameTime, (int)FigureColor.BLACK);
                     ClickOnRightButtonActions(curMouseState);
+
                 }
 
                 // Таймер установлен так как мышь делает двойное нажатие (почему то!!) И поэтому после хода сразу выполняется функция выбрать ячейку
@@ -356,9 +465,15 @@ namespace Chess.GameUnits
         // Хранит предыдущее состояние мыши! Нужно чтобы не нажималось два раза.
         MouseState prevMouseState = new MouseState();
 
+        // Показывает ходят ли сейчас белые
         bool IsWhiteMove { get; set; } = true;
-
+        // Показывает ходят ли сейчас черные
         bool IsBlackMove { get; set; } = false;
+
+
+        bool IsSheh { get; set; } = false;
+        bool isMat { get; set; } = false;
+
 
         #endregion
 

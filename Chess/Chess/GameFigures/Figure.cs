@@ -66,8 +66,8 @@ namespace Chess.GameFigures
         #region Properties
 
         // y и x координата положения фигуры на доске соответственно
-        protected int IndexY { get; set; }
-        protected int IndexX { get; set; }
+        public int IndexY { get; set; }
+        public int IndexX { get; set; }
 
         // Показывает выбрана ли данная фигура на текущий момент пользователем
         protected bool IsChoosen { get; set; } = false;
