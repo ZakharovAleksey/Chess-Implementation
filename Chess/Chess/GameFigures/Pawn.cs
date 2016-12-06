@@ -41,13 +41,31 @@ namespace Chess.GameFigures
         {
             if (Color == (int)FigureColor.WHITE)
             {
+                // Шаг вперед
                 if (IndexY > 0 && IsCellEmpty(board, IndexY - 1, IndexX))
                     possibleSteps.Add(new IndexPair(IndexY - 1, IndexX));
+
+                // Может ли бить на лево
+                if(IndexY > 0 && IsCellOtherColor(board, IndexY - 1, IndexX - 1, this.Color))
+                    possibleSteps.Add(new IndexPair(IndexY - 1, IndexX - 1));
+
+                // Может ли бить на право
+                if (IndexY > 0 && IsCellOtherColor(board, IndexY - 1, IndexX + 1, this.Color))
+                    possibleSteps.Add(new IndexPair(IndexY - 1, IndexX + 1));
             }
             else
             {
+                // Шаг вперед
                 if (IndexY < GC.BoardSize && IsCellEmpty(board, IndexY + 1, IndexX))
                     possibleSteps.Add(new IndexPair(IndexY + 1, IndexX));
+
+                // Может ли бить на лево
+                if (IndexY > 0 && IsCellOtherColor(board, IndexY + 1, IndexX - 1, this.Color))
+                    possibleSteps.Add(new IndexPair(IndexY + 1, IndexX - 1));
+
+                // Может ли бить на право
+                if (IndexY > 0 && IsCellOtherColor(board, IndexY + 1, IndexX + 1, this.Color))
+                    possibleSteps.Add(new IndexPair(IndexY + 1, IndexX + 1));
             }
 
         }

@@ -49,9 +49,18 @@ namespace Chess.GameFigures
         // Вычисляет все возможные позикии для хода
         public virtual void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board) { }
 
+        // Проверяет пуста ли клетка с указанными индексами
         protected bool IsCellEmpty(Figure[,] board, int IndexY, int IndexX)
         {
             return (board[IndexY, IndexX].GetType() == typeof(EmptyCell)) ? true : false;
+        }
+
+        // Проверяет противополжный ли цвет у фигуры с указанными индексами, переданному цвету
+        protected bool IsCellOtherColor(Figure[,] board, int IndexY, int IndexX, int color)
+        {
+            int anotherColor = (color == (int)FigureColor.WHITE) ? (int)FigureColor.BLACK : (int)FigureColor.WHITE;
+
+            return (!IsCellEmpty(board, IndexY, IndexX) && board[IndexY, IndexX].Color == anotherColor) ? true : false;
         }
 
         #region Properties
