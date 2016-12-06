@@ -14,7 +14,7 @@ namespace Chess.GameFigures
     {
         #region Construcor
 
-        public Queen(int indexY, int indexX) : base(indexY, indexX) { }
+        public Queen(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
 
         #endregion
 
@@ -22,7 +22,10 @@ namespace Chess.GameFigures
 
         public override void LoadContent(ContentManager Content)
         {
-            Texture = Content.Load<Texture2D>(@"figures/Queen_White");
+            if (Color == (int)FigureColor.WHITE)
+                Texture = Content.Load<Texture2D>(@"figures/Queen_White");
+            else
+                Texture = Content.Load<Texture2D>(@"figures/Queen_Black");
         }
 
         // Вычисляет все возможные позиции для хода королевы как слоном
@@ -37,6 +40,11 @@ namespace Chess.GameFigures
             {
                 if (IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y--, X--));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -48,6 +56,11 @@ namespace Chess.GameFigures
             {
                 if (IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y++, X--));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -59,6 +72,11 @@ namespace Chess.GameFigures
             {
                 if (IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y--, X++));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -70,6 +88,11 @@ namespace Chess.GameFigures
             {
                 if (IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y++, X++));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -78,31 +101,53 @@ namespace Chess.GameFigures
         // Вычисляет все возможные позиции для хода королевы как ладьей
         void RookSteps(List<IndexPair> possibleSteps, Figure[,] board)
         {
-            // Проверем возможные движения вдоль оси X до первой попавшейся фигуры
+            // Проверем возможные движения вдоль оси X в право до первой попавшейся фигуры 
             int curX = IndexX - 1;
             while (curX >= 0 && IsCellEmpty(board, IndexY, curX))
             {
                 possibleSteps.Add(new IndexPair(IndexY, curX--));
             }
 
+            // Если первая попавшаяся фигура при движении вправо вдоль оси X вправо другого цвета то мы можем ее бить
+            if (curX >= 0)
+                if (IsCellOtherColor(board, IndexY, curX, this.Color))
+                    possibleSteps.Add(new IndexPair(IndexY, curX));
+
+            // Проверем возможные движения вдоль оси X в лево до первой попавшейся фигуры 
             curX = IndexX + 1;
             while (curX < GC.BoardSize && IsCellEmpty(board, IndexY, curX))
             {
                 possibleSteps.Add(new IndexPair(IndexY, curX++));
             }
 
-            // Проверем возможные движения вдоль оси Y до первой попавшейся фигуры
+            // Если первая попавшаяся фигура при движении влево  вдоль оси X другого цвета то мы можем ее бить
+            if (curX < GC.BoardSize - 1)
+                if (IsCellOtherColor(board, IndexY, curX, this.Color))
+                    possibleSteps.Add(new IndexPair(IndexY, curX));
+
+
+            // Проверем возможные движения вдоль оси Y вверх до первой попавшейся фигуры
             int curY = IndexY - 1;
             while (curY >= 0 && IsCellEmpty(board, curY, IndexX))
             {
                 possibleSteps.Add(new IndexPair(curY--, IndexX));
             }
 
+            // Если первая попавшаяся фигура при движении влево  вдоль оси X другого цвета то мы можем ее бить
+            if (curY >= 0)
+                if (IsCellOtherColor(board, curY, IndexX, this.Color))
+                    possibleSteps.Add(new IndexPair(curY, IndexX));
+
+            // Проверем возможные движения вдоль оси Y вниз до первой попавшейся фигуры
             curY = IndexY + 1;
             while (curY < GC.BoardSize && IsCellEmpty(board, curY, IndexX))
             {
                 possibleSteps.Add(new IndexPair(curY++, IndexX));
             }
+            // Если первая попавшаяся фигура при движении влево  вдоль оси X другого цвета то мы можем ее бить
+            if (curY < GC.BoardSize - 1)
+                if (IsCellOtherColor(board, curY, IndexX, this.Color))
+                    possibleSteps.Add(new IndexPair(curY, IndexX));
         }
 
 

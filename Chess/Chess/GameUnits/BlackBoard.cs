@@ -46,18 +46,36 @@ namespace Chess.GameUnits
                     curColor = (curColor == (int)CellType.BLACK) ? (int)CellType.WHITE : (int)CellType.BLACK;
 
                     // Load chess content
+                    // Подгружаем пешки
                     if (rowID == GC.BoardSize - 2)
-                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID);
-                    else if(rowID == GC.BoardSize - 1 && ( columnID == 1 || columnID == GC.BoardSize - 2) )
-                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int) FigureColor.WHITE);
+                    else if (rowID == 1)
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем коней
+                    else if (rowID == GC.BoardSize - 1 && ( columnID == 1 || columnID == GC.BoardSize - 2) )
+                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 1 || columnID == GC.BoardSize - 2))
+                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем ладей
                     else if (rowID == GC.BoardSize - 1 && (columnID == 0 || columnID == GC.BoardSize - 1))
-                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 0 || columnID == GC.BoardSize - 1))
+                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем слонов
                     else if (rowID == GC.BoardSize - 1 && (columnID == 2 || columnID == GC.BoardSize - 3))
-                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 2 || columnID == GC.BoardSize - 3))
+                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем ферзей
                     else if (rowID == GC.BoardSize - 1 && columnID == 4)
-                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && columnID == 4)
+                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем королей
                     else if (rowID == GC.BoardSize - 1 && columnID == 3)
-                        FigureBoard[rowID, columnID] = new King(rowID, columnID);
+                        FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && columnID == 3)
+                        FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.BLACK);
                     else
                         FigureBoard[rowID, columnID] = new EmptyCell(rowID, columnID);
                 }
@@ -121,17 +139,20 @@ namespace Chess.GameUnits
         }
 
         // Обеспечивает логику первого клика на левую кнопку мыши
-        void FirstClickOnLeftButtonActions(MouseState curMouseState)
+        void FirstClickOnLeftButtonActions(MouseState curMouseState, int selFigureColor)
         {
             // Переменная хранит выбранную на данный момент пользователем позицию
             IndexPair selectPos = GetChosenCellIndex(curMouseState);
 
-            if (IsCellEmpty(selectPos.IndexY, selectPos.IndexX))
-                SkipSelectedCell();
-            else
+            if ((IsWhiteMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == selFigureColor) || (IsBlackMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == selFigureColor))
             {
-                SetStartMoveCell(selectPos);
-                prevMouseState = curMouseState;
+                if (IsCellEmpty(selectPos.IndexY, selectPos.IndexX))
+                    SkipSelectedCell();
+                else
+                {
+                    SetStartMoveCell(selectPos);
+                    prevMouseState = curMouseState;
+                }
             }
         }
 
@@ -139,7 +160,7 @@ namespace Chess.GameUnits
 
         #region Second click on left button actions
 
-        void SecondClickOnLeftButtonActions(MouseState curMouseState)
+        void SecondClickOnLeftButtonActions(MouseState curMouseState, int figureColor)
         {
             // Находим все доступные для выбранной фигуры позиции для хода
             List<IndexPair> figPosMoves = new List<IndexPair>();
@@ -156,48 +177,61 @@ namespace Chess.GameUnits
                 EndMoveIndexX = selectPos.IndexX;
 
                 // Выполняем ход 
-                // Определяем тип выбранной фигуры
-                object selCellType = FigureBoard[StartMoveIndexY, StartMoveIndexX].GetType();
+                // Определяем тип выбранной фигуры и ее цвет
+                object selFigureType = FigureBoard[StartMoveIndexY, StartMoveIndexX].GetType();
+                int selFigureColor = FigureBoard[StartMoveIndexY, StartMoveIndexX].Color;
+
+                // Клетка в которую мы сходим теперь будет содержать фигуру, которой сделан ход
+                if (selFigureType == typeof(Pawn))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Pawn(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(Knight))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Knight(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(Rook))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Rook(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(Bishop))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Bishop(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(Queen))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Queen(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+                else if (selFigureType == typeof(King))
+                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new King(EndMoveIndexY, EndMoveIndexX, selFigureColor);
+
                 // Клетка из которой мы ходили теперь пустая
                 FigureBoard[StartMoveIndexY, StartMoveIndexX] = new EmptyCell(StartMoveIndexY, StartMoveIndexX);
-
-                // Клетка в которую мы сходим теперь будет содержать фигуру, которой мы сходили
-                if (selCellType == typeof(Pawn))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Pawn(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(Knight))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Knight(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(Rook))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Rook(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(Bishop))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Bishop(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(Queen))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new Queen(EndMoveIndexY, EndMoveIndexX);
-                else if (selCellType == typeof(King))
-                    FigureBoard[EndMoveIndexY, EndMoveIndexX] = new King(EndMoveIndexY, EndMoveIndexX);
-
 
                 // Говорим что пользователь сделал ход (Нужно будет для отрисовки)
                 IsFigureMadeStep = true;
 
                 prevMouseState = curMouseState;
+
+                // Если нам удалось сходить одним из двух игроков, то тогда делаем доступным ход второго игрока
+                if (figureColor == (int)FigureColor.WHITE)
+                {
+                    IsWhiteMove = false;
+                    IsBlackMove = true;
+                }
+                else if (figureColor == (int)FigureColor.BLACK)
+                {
+                    IsWhiteMove = true;
+                    IsBlackMove = false;
+                }
             }
         }
 
         #endregion
 
-        void ClickOnLeftButtonActions(MouseState curMouseState, GameTime gameTime)
+        void ClickOnLeftButtonActions(MouseState curMouseState, GameTime gameTime, int figureColor)
         {
             if (curMouseState.LeftButton == ButtonState.Pressed)
             {
                 if (!IsFigureChosenForStep)
                 {
                     // Сделано чтобы при нажатии два раза мыши по одной позиции она не загаралась как выделенная
-                    if(prevMouseState != curMouseState)
-                        FirstClickOnLeftButtonActions(curMouseState);
+                    if (prevMouseState != curMouseState)
+                        FirstClickOnLeftButtonActions(curMouseState, figureColor);
                 }
                 else if (IsFigureChosenForStep)
                 {
-                    SecondClickOnLeftButtonActions(curMouseState);
+                    SecondClickOnLeftButtonActions(curMouseState, figureColor);
                 }
             }
         }
@@ -238,9 +272,20 @@ namespace Chess.GameUnits
 
             if (IsClickInChessboard(curMouseState))
             {
+                if (IsWhiteMove)
+                {
+                    ClickOnLeftButtonActions(curMouseState, gameTime, (int)FigureColor.WHITE);
+                    ClickOnRightButtonActions(curMouseState);
+                }
+                else if (IsBlackMove)
+                {
+                    ClickOnLeftButtonActions(curMouseState, gameTime, (int)FigureColor.BLACK);
+                    ClickOnRightButtonActions(curMouseState);
+                }
+
                 // Таймер установлен так как мышь делает двойное нажатие (почему то!!) И поэтому после хода сразу выполняется функция выбрать ячейку
-                ClickOnLeftButtonActions(curMouseState, gameTime);
-                ClickOnRightButtonActions(curMouseState);
+                //ClickOnLeftButtonActions(curMouseState, gameTime, (int)FigureColor.WHITE);
+                //ClickOnRightButtonActions(curMouseState);
             }
 
         }
@@ -308,7 +353,12 @@ namespace Chess.GameUnits
         // Таймер нужен для того, чтобы от (якобы) двойнова щелчка фигуры которой сходили сразу же не выбиралась
         double TimeBetweenLeftBTNClick { get; set; } = 0;
 
+        // Хранит предыдущее состояние мыши! Нужно чтобы не нажималось два раза.
         MouseState prevMouseState = new MouseState();
+
+        bool IsWhiteMove { get; set; } = true;
+
+        bool IsBlackMove { get; set; } = false;
 
         #endregion
 

@@ -14,7 +14,7 @@ namespace Chess.GameFigures
     {
         #region Construcor
 
-        public King(int indexY, int indexX) : base(indexY, indexX) { }
+        public King(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
 
         #endregion
 
@@ -22,7 +22,10 @@ namespace Chess.GameFigures
 
         public override void LoadContent(ContentManager Content)
         {
-            Texture = Content.Load<Texture2D>(@"figures/King_White");
+            if (Color == (int)FigureColor.WHITE)
+                Texture = Content.Load<Texture2D>(@"figures/King_White");
+            else
+                Texture = Content.Load<Texture2D>(@"figures/King_Black");
         }
 
         // Вычисляет позиции куда может пойти король
@@ -35,7 +38,7 @@ namespace Chess.GameFigures
             X = IndexX - 1;
             if (X >= 0)
             {
-                if(IsCellEmpty(board, Y, X))
+                if(IsCellEmpty(board, Y, X) || IsCellOtherColor(board, Y,X, this.Color))
                     possibleSteps.Add(new IndexPair(Y, X));
             }
 
@@ -44,7 +47,7 @@ namespace Chess.GameFigures
             X = IndexX + 1;
             if (X < GC.BoardSize)
             {
-                if (IsCellEmpty(board, Y, X))
+                if (IsCellEmpty(board, Y, X) || IsCellOtherColor(board, Y, X, this.Color))
                     possibleSteps.Add(new IndexPair(Y, X));
             }
 
@@ -53,7 +56,7 @@ namespace Chess.GameFigures
             X = IndexX;
             if (Y >= 0)
             {
-                if (IsCellEmpty(board, Y, X))
+                if (IsCellEmpty(board, Y, X) || IsCellOtherColor(board, Y, X, this.Color))
                     possibleSteps.Add(new IndexPair(Y, X));
             }
 
@@ -62,7 +65,7 @@ namespace Chess.GameFigures
             X = IndexX;
             if (Y < GC.BoardSize)
             {
-                if (IsCellEmpty(board, Y, X))
+                if (IsCellEmpty(board, Y, X) || IsCellOtherColor(board, Y, X, this.Color))
                     possibleSteps.Add(new IndexPair(Y, X));
             }
         }

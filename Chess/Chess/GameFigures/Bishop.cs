@@ -14,7 +14,7 @@ namespace Chess.GameFigures
     {
         #region Construcor
 
-        public Bishop(int indexY, int indexX) : base(indexY, indexX) { }
+        public Bishop(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
 
         #endregion
 
@@ -22,7 +22,10 @@ namespace Chess.GameFigures
 
         public override void LoadContent(ContentManager Content)
         {
-            Texture = Content.Load<Texture2D>(@"figures/Bishop_White");
+            if (Color == (int)FigureColor.WHITE)
+                Texture = Content.Load<Texture2D>(@"figures/Bishop_White");
+            else
+                Texture = Content.Load<Texture2D>(@"figures/Bishop_Black");
         }
 
         // Вычисляет позиции куда может пойти слон
@@ -37,6 +40,11 @@ namespace Chess.GameFigures
             {
                 if (IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y--, X--));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -48,6 +56,11 @@ namespace Chess.GameFigures
             {
                 if(IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y++, X--));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -59,6 +72,11 @@ namespace Chess.GameFigures
             {
                 if(IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y--, X++));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
@@ -70,6 +88,11 @@ namespace Chess.GameFigures
             {
                 if(IsCellEmpty(board, Y, X))
                     possibleSteps.Add(new IndexPair(Y++, X++));
+                else if (IsCellOtherColor(board, Y, X, this.Color))
+                {
+                    possibleSteps.Add(new IndexPair(Y, X));
+                    break;
+                }
                 else
                     break;
             }
