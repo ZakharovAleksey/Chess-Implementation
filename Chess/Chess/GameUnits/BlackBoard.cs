@@ -147,20 +147,34 @@ namespace Chess.GameUnits
         }
 
         // Обеспечивает логику первого клика на левую кнопку мыши
-        void FirstClickOnLeftButtonActions(MouseState curMouseState, int selFigureColor)
+        void FirstClickOnLeftButtonActions(MouseState curMouseState, int figureColor)
         {
-            // Переменная хранит выбранную на данный момент пользователем позицию
-            IndexPair selectPos = GetChosenCellIndex(curMouseState);
-
-            // Если ход белых и выбрана белая фигура то можно делать ход
-            if ((IsWhiteMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == selFigureColor) || (IsBlackMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == selFigureColor))
+            if (IsSheh)
             {
-                if (IsCellEmpty(selectPos.IndexY, selectPos.IndexX))
-                    SkipSelectedCell();
-                else
+
+                // Нужно создать лист тех ходов которые могут убрать появление шаха
+                // и потом сказать игроку что он может ходить только теми шагами которые в этом листе
+                // И вообще можно так попробовать переписать выбор фигур чтобы на левой кнопке выбиралась только те чьи ходы приведут к избеганию шаха
+
+                // >>>>> ВОТ ТУТ НЕ ПРАВИЛЬНАЯ ЛОГИКА
+                    SetStartToMovePositionInShehCase(figureColor);
+                // >>>>>
+            }
+            else
+            {
+                // Переменная хранит выбранную на данный момент пользователем позицию
+                IndexPair selectPos = GetChosenCellIndex(curMouseState);
+
+                // Если ход белых и выбрана белая фигура то можно делать ход
+                if ((IsWhiteMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == figureColor) || (IsBlackMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == figureColor))
                 {
-                    SetStartMoveCell(selectPos);
-                    prevMouseState = curMouseState;
+                    if (IsCellEmpty(selectPos.IndexY, selectPos.IndexX))
+                        SkipSelectedCell();
+                    else
+                    {
+                        SetStartMoveCell(selectPos);
+                        prevMouseState = curMouseState;
+                    }
                 }
             }
         }
@@ -406,40 +420,25 @@ namespace Chess.GameUnits
 
         void ClickOnLeftButtonActions(MouseState curMouseState, GameTime gameTime, int figureColor)
         {
-            // Если Шах то заставляем игрока ходить королем
             if (IsSheh)
             {
                 // Уже поставлен шах - проверем мат ли это
                 CheckOnMat(figureColor);
-
-                // Нужно создать лист тех ходов которые могут убрать появление шаха
-                // и потом сказать игроку что он может ходить только теми шагами которые в этом листе
-                // И вообще можно так попробовать переписать выбор фигур чтобы на левой кнопке выбиралась только те чьи ходы приведут к избеганию шаха
-
-                // >>>>> ВОТ ТУТ НЕ ПРАВИЛЬНАЯ ЛОГИКА
-                if (isMat)
-                    return;
-                else
-                    SetStartToMovePositionInShehCase(figureColor);
-                // >>>>>
             }
-            else
-            {
                 // Пользователь может выбрать фигуру, которой ходить
-                if (curMouseState.LeftButton == ButtonState.Pressed)
+            if (curMouseState.LeftButton == ButtonState.Pressed)
+            {
+                if (!IsFigureChosenForStep)
                 {
-                    if (!IsFigureChosenForStep)
-                    {
-                        // Сделано чтобы при нажатии два раза мыши по одной позиции она не загаралась как выделенная
-                        if (prevMouseState != curMouseState)
-                            FirstClickOnLeftButtonActions(curMouseState, figureColor);
-                    }
+                    // Сделано чтобы при нажатии два раза мыши по одной позиции она не загаралась как выделенная
+                    if (prevMouseState != curMouseState)
+                        FirstClickOnLeftButtonActions(curMouseState, figureColor);
                 }
-                // Попытка хода выбранной фигурой
-                if (curMouseState.LeftButton == ButtonState.Pressed && IsFigureChosenForStep)
-                {
-                    SecondClickOnLeftButtonActions(curMouseState, figureColor);
-                }
+            }
+            // Попытка хода выбранной фигурой
+            if (curMouseState.LeftButton == ButtonState.Pressed && IsFigureChosenForStep)
+            {
+                SecondClickOnLeftButtonActions(curMouseState, figureColor);
             }
         }
 
@@ -476,6 +475,7 @@ namespace Chess.GameUnits
             // Играем до тех пор, пока не поставили мат
             if (!isMat)
             {
+
                 MouseState curMouseState = Mouse.GetState();
 
                 TimeBetweenLeftBTNClick += gameTime.ElapsedGameTime.Milliseconds;
