@@ -67,7 +67,7 @@ namespace Chess.GameFigures
             return new IndexPair();
         }
 
-
+        // Делает копию текущего положения шахматных фигур на доске
         Figure[,] CloneBoard(Figure[,] board)
         {
             Figure[,] boardClone = new Figure[GC.BoardSize, GC.BoardSize];
@@ -97,24 +97,27 @@ namespace Chess.GameFigures
 
         bool IsMat(Figure[,] clone)
         {
-            List<IndexPair> lol = new List<IndexPair>();
+            // Список всех возможных позийций для всех фигур цвета, что поставили Шах
+            List<IndexPair> allPosPositons = new List<IndexPair>();
             int anotherColor = GetAnotherColor();
 
-            int KingY = 0;
-            int KingX = 0;
-
+            int kingIndexX = 0;
+            int kingIndexY = 0;
+            
             foreach (Figure fig in clone)
             {
+                // Записываем в список всех возможных позиций - все возможные позиции для текущей фигуры цвета, что поставили Шах
                 if (fig.Color == anotherColor)
-                    fig.GetPossiblePositions(lol, clone);
+                    fig.GetPossiblePositions(allPosPositons, clone);
+                // За одно еще ищем позицию короля цвета, которому поставили Шах
                 if (fig.Color == Color && fig.GetType() == typeof(King))
                 {
-                    KingX = fig.IndexX;
-                    KingY = fig.IndexY;
+                    kingIndexY = fig.IndexY;
+                    kingIndexX = fig.IndexX;
                 }
             }
 
-            if (lol.Contains(new IndexPair(KingY, KingX)))
+            if (allPosPositons.Contains(new IndexPair(kingIndexY, kingIndexX)))
                 return true;
             else
                 return false;

@@ -67,14 +67,14 @@ namespace Chess.GameUnits
                     else if (rowID == 0 && (columnID == 2 || columnID == GC.BoardSize - 3))
                         FigureBoard[rowID, columnID] = new Bishop(rowID, columnID, (int)FigureColor.BLACK);
                     // Подгружаем ферзей
-                    else if (rowID == GC.BoardSize - 1 && columnID == 4)
+                    else if (rowID == GC.BoardSize - 1 && columnID == 3)
                         FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.WHITE);
-                    else if (rowID == 0 && columnID == 4)
+                    else if (rowID == 0 && columnID == 3)
                         FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.BLACK);
                     // Подгружаем королей
-                    else if (rowID == GC.BoardSize - 1 && columnID == 3)
+                    else if (rowID == GC.BoardSize - 1 && columnID == 4)
                         FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.WHITE);
-                    else if (rowID == 0 && columnID == 3)
+                    else if (rowID == 0 && columnID == 4)
                         FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.BLACK);
                     else
                         FigureBoard[rowID, columnID] = new EmptyCell(rowID, columnID);
@@ -149,36 +149,18 @@ namespace Chess.GameUnits
         // Обеспечивает логику первого клика на левую кнопку мыши
         void FirstClickOnLeftButtonActions(MouseState curMouseState, int figureColor)
         {
-            //// А первый if - убрать пользователь может быбирать любую фигуру, но у них позиции - только те что избавляют от шаха!!!
-            //if (IsSheh)
-            //{
+            // Переменная хранит выбранную на данный момент пользователем позицию
+            IndexPair selectPos = GetChosenCellIndex(curMouseState);
 
-            //    // Нужно создать лист тех ходов которые могут убрать появление шаха
-            //    // и потом сказать игроку что он может ходить только теми шагами которые в этом листе
-            //    // И вообще можно так попробовать переписать выбор фигур чтобы на левой кнопке выбиралась только те чьи ходы приведут к избеганию шаха
-
-
-            //    // Берем все позиции которые соответствуют последнему 
-
-            //    // >>>>> ВОТ ТУТ НЕ ПРАВИЛЬНАЯ ЛОГИКА
-            //        SetStartToMovePositionInShehCase(figureColor);
-            //    // >>>>>
-            //}
-            //else
+            // Если ход белых и выбрана белая фигура то можно делать ход
+            if ((IsWhiteMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == figureColor) || (IsBlackMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == figureColor))
             {
-                // Переменная хранит выбранную на данный момент пользователем позицию
-                IndexPair selectPos = GetChosenCellIndex(curMouseState);
-
-                // Если ход белых и выбрана белая фигура то можно делать ход
-                if ((IsWhiteMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == figureColor) || (IsBlackMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == figureColor))
+                if (IsCellEmpty(selectPos.IndexY, selectPos.IndexX))
+                    SkipSelectedCell();
+                else
                 {
-                    if (IsCellEmpty(selectPos.IndexY, selectPos.IndexX))
-                        SkipSelectedCell();
-                    else
-                    {
-                        SetStartMoveCell(selectPos);
-                        prevMouseState = curMouseState;
-                    }
+                    SetStartMoveCell(selectPos);
+                    prevMouseState = curMouseState;
                 }
             }
         }
@@ -211,12 +193,11 @@ namespace Chess.GameUnits
             // Находим все доступные для выбранной фигуры позиции для хода
             List<IndexPair> figPosMoves = new List<IndexPair>();
 
-            // >>>>>>>
-            // ПО ИДЕЕ НУЖНО ВОТ ТУТ НПСАТЬ ДРУГУЮ ФУНКЦИЮ ВЫЧИСЛЕНИЯ ВОЗМОЖНЫХ ШАГОВ
-            // >>>>>>>
-
+            // В случае Шаха - доступных ходов много меньше чем при обычном раскладе - поэтому тут другой алгоритм подсчета
             if (IsSheh)
+            {
                 FigureBoard[StartMoveIndexY, StartMoveIndexX].GetPossiblePositionsInShehCase(figPosMoves, FigureBoard, StartMoveIndexY, StartMoveIndexX, EndMoveIndexY, EndMoveIndexX);
+            }
             else
                 FigureBoard[StartMoveIndexY, StartMoveIndexX].GetPossiblePositions(figPosMoves, this.FigureBoard);
 
@@ -279,68 +260,6 @@ namespace Chess.GameUnits
                 CheckOnShahMat(figureColor);
 
             }
-        }
-
-        #endregion
-
-
-        #region неправильная обработка шаха
-
-        // Если Шах, то функция присваивает стартовой позиции игрока которому стоит Шах - позицию его короля (Чтобы уйти королем)
-        void SetKingStartPositionInShehCase(int figureColor)
-        {
-            // Присваиваем стартовой позиции индексы, соответствующие положению короля
-            foreach (Figure figure in FigureBoard)
-            {
-                object figureType = figure.GetType();
-                if (figureType == typeof(King) && figure.Color == figureColor)
-                {
-                    StartMoveIndexY = figure.IndexY;
-                    StartMoveIndexX = figure.IndexX;
-                }
-            }
-        }
-
-
-        void SetBitStartPositionInShehCase(int figureColor)
-        {
-            // Лист который содержит позиции которые может побить выбранная далее фигура
-            List<IndexPair> figBitMoves = new List<IndexPair>();
-            // Позиция, ход на которую противоположного игрока привел к Шаху
-            IndexPair lastAnotherPlayerMove = new IndexPair(EndMoveIndexY, EndMoveIndexX);
-
-            // Для каждой фигуры цвета короля которому был Шах мы ищем может ли какая-либо из фигур его цвета побить последний ход игрока приведший к Шаху
-            foreach (Figure figure in FigureBoard)
-            {
-                if (figure.Color == figureColor)
-                {
-                    figure.GetPossiblePositions(figBitMoves, FigureBoard);
-
-                    // Если может побить то назначаем ей стартовую позицию
-                    if (figBitMoves.Contains(lastAnotherPlayerMove))
-                    {
-                        StartMoveIndexY = figure.IndexY;
-                        StartMoveIndexX = figure.IndexX;
-                        break;
-                    }
-                    else
-                        figBitMoves.Clear();
-                }
-            }
-        }
-
-        // Вызывается когда шах, и не позволяет выбрать самому фигуру для хода - заставляет ходить королем ИЛИ бить фигурой которая может
-        void SetStartToMovePositionInShehCase(int figureColor)
-        {
-            // Ищем позицию короля которому поставили Шах
-            SetKingStartPositionInShehCase(figureColor);
-            // Поиск существует ли позиция фигуры у игрока которому поставили Шах, такая что фигура бьет фигуру поставившую шах
-            SetBitStartPositionInShehCase(figureColor);
-
-            Board[StartMoveIndexY, StartMoveIndexX].SetStateSELECT();
-
-            // Говорим что пользователь действительно выбрал клетку с фигурой [чтобы сделать этой фигурой шаг]
-            IsFigureChosenForStep = true;
         }
 
         #endregion
@@ -429,15 +348,9 @@ namespace Chess.GameUnits
 
         }
 
-
         void ClickOnLeftButtonActions(MouseState curMouseState, GameTime gameTime, int figureColor)
         {
-            if (IsSheh)
-            {
-                // Уже поставлен шах - проверем мат ли это
-                //CheckOnMat(figureColor, FigureBoard);
-            }
-                // Пользователь может выбрать фигуру, которой ходить
+            // Пользователь может выбрать фигуру, которой ходить
             if (curMouseState.LeftButton == ButtonState.Pressed)
             {
                 if (!IsFigureChosenForStep)
@@ -482,14 +395,40 @@ namespace Chess.GameUnits
 
         #endregion
 
+        // Проверем реально ли текущим ходом мы поставили мат
+        bool IsShehRealMat()
+        {
+            int shehFigureColor = (IsWhiteMove) ? (int)FigureColor.WHITE : (int)FigureColor.BLACK;
+
+            List<IndexPair> resultMoves = new List<IndexPair>();
+
+            foreach (Figure figure in FigureBoard)
+            {
+                if (figure.Color == shehFigureColor)
+                {
+                    figure.GetPossiblePositionsInShehCase(resultMoves, FigureBoard, figure.IndexY, figure.IndexX, EndMoveIndexY, EndMoveIndexX);
+                }
+            }
+
+            return (resultMoves.Count == 0) ? true : false;
+        }
+
         public void Update(GameTime gameTime)
         {
             // Играем до тех пор, пока не поставили мат
             if (!isMat)
             {
+                if (IsSheh)
+                {
+                    // Если был Шах - то проверим не является ли этот Шах одновременно и Матом
+                    if (IsShehRealMat())
+                    {
+                        isMat = true;
+                        return;
+                    }
+                }
 
                 MouseState curMouseState = Mouse.GetState();
-
                 TimeBetweenLeftBTNClick += gameTime.ElapsedGameTime.Milliseconds;
 
                 if (IsClickInChessboard(curMouseState))
@@ -507,6 +446,10 @@ namespace Chess.GameUnits
                         ClickOnRightButtonActions(curMouseState);
                     }
                 }
+            }
+            else
+            {
+                // Игра закончена кто-то победил!!!!
             }
 
         }
