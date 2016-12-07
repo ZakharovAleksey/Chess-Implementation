@@ -149,18 +149,22 @@ namespace Chess.GameUnits
         // Обеспечивает логику первого клика на левую кнопку мыши
         void FirstClickOnLeftButtonActions(MouseState curMouseState, int figureColor)
         {
-            if (IsSheh)
-            {
+            //// А первый if - убрать пользователь может быбирать любую фигуру, но у них позиции - только те что избавляют от шаха!!!
+            //if (IsSheh)
+            //{
 
-                // Нужно создать лист тех ходов которые могут убрать появление шаха
-                // и потом сказать игроку что он может ходить только теми шагами которые в этом листе
-                // И вообще можно так попробовать переписать выбор фигур чтобы на левой кнопке выбиралась только те чьи ходы приведут к избеганию шаха
+            //    // Нужно создать лист тех ходов которые могут убрать появление шаха
+            //    // и потом сказать игроку что он может ходить только теми шагами которые в этом листе
+            //    // И вообще можно так попробовать переписать выбор фигур чтобы на левой кнопке выбиралась только те чьи ходы приведут к избеганию шаха
 
-                // >>>>> ВОТ ТУТ НЕ ПРАВИЛЬНАЯ ЛОГИКА
-                    SetStartToMovePositionInShehCase(figureColor);
-                // >>>>>
-            }
-            else
+
+            //    // Берем все позиции которые соответствуют последнему 
+
+            //    // >>>>> ВОТ ТУТ НЕ ПРАВИЛЬНАЯ ЛОГИКА
+            //        SetStartToMovePositionInShehCase(figureColor);
+            //    // >>>>>
+            //}
+            //else
             {
                 // Переменная хранит выбранную на данный момент пользователем позицию
                 IndexPair selectPos = GetChosenCellIndex(curMouseState);
@@ -206,7 +210,15 @@ namespace Chess.GameUnits
         {
             // Находим все доступные для выбранной фигуры позиции для хода
             List<IndexPair> figPosMoves = new List<IndexPair>();
-            FigureBoard[StartMoveIndexY, StartMoveIndexX].GetPossiblePositions(figPosMoves, this.FigureBoard);
+
+            // >>>>>>>
+            // ПО ИДЕЕ НУЖНО ВОТ ТУТ НПСАТЬ ДРУГУЮ ФУНКЦИЮ ВЫЧИСЛЕНИЯ ВОЗМОЖНЫХ ШАГОВ
+            // >>>>>>>
+
+            if (IsSheh)
+                FigureBoard[StartMoveIndexY, StartMoveIndexX].GetPossiblePositionsInShehCase(figPosMoves, FigureBoard, StartMoveIndexY, StartMoveIndexX, EndMoveIndexY, EndMoveIndexX);
+            else
+                FigureBoard[StartMoveIndexY, StartMoveIndexX].GetPossiblePositions(figPosMoves, this.FigureBoard);
 
             // Индексы клетки куда пользователь хочет сделать ход
             IndexPair selectPos = GetChosenCellIndex(curMouseState);

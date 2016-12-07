@@ -49,6 +49,60 @@ namespace Chess.GameFigures
         // Вычисляет все возможные позикии для хода
         public virtual void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board) { }
 
+
+        #region Sheh Case methods
+
+        // Ищем позицию Короля того же цвета
+        protected IndexPair GetKingPosition(Figure[,] board)
+        {
+            foreach (Figure figure in board)
+            {
+                object ft = figure.GetType();
+                if (figure.Color == this.Color && figure.GetType() == typeof(King))
+                {
+                    return new IndexPair(figure.IndexY, figure.IndexX);
+                }
+            }
+
+            return new IndexPair();
+        }
+
+        // Вычисляет все возможные позиции для хода конкретной фигурой в случае Шаха
+        public virtual void GetPossiblePositionsInShehCase(List<IndexPair> resPosMoves, Figure[,] board, int selFigIndexY, int selFigIndexX, int ShehMadeFigIndexY, int ShehMadeFigIndexX)
+        {
+            // Получаем позицию короля
+            IndexPair KingPosition = GetKingPosition(board);
+
+            // 
+
+            // Тип фигуры поставившей Шах
+            object ShehMadeFigureType = board[ShehMadeFigIndexY, ShehMadeFigIndexX].GetType();
+            // Тип фигуры которой мы хотим предотвратить Шах
+            object SelFigureType = board[selFigIndexY, selFigIndexX].GetType();
+
+
+            // Если мы поставили шаг Конем: то сходить пешкой мы можем только если съедим Коня
+            if (ShehMadeFigureType == typeof(Knight) && SelFigureType == typeof(King))
+            {
+                board[KingPosition.IndexY, KingPosition.IndexX].GetPossiblePositions(resPosMoves, board);
+            }
+            else if (ShehMadeFigureType == typeof(Knight))
+            {
+                // Записываем возможные шаги 
+                List<IndexPair> lol = new List<IndexPair>();
+                board[selFigIndexY, selFigIndexX].GetPossiblePositions(lol, board);
+
+                if (lol.Contains(new IndexPair(ShehMadeFigIndexY, ShehMadeFigIndexX)))
+                    resPosMoves.Add(new IndexPair(ShehMadeFigIndexY, ShehMadeFigIndexX));
+            }
+            
+
+
+
+        }
+
+        #endregion
+
         // Проверяет пуста ли клетка с указанными индексами
         protected bool IsCellEmpty(Figure[,] board, int IndexY, int IndexX)
         {
