@@ -345,16 +345,16 @@ namespace Chess.GameUnits
 
         #endregion
 
-        // Проверка на мат
-        void CheckOnMat(int figureColor)
+        // Проверка на мат : НЕПРАВИЛЬНАЯ
+        void CheckOnMat(int figureColor, Figure[,] board)
         {
             int anotherColor = (figureColor == (int)FigureColor.WHITE) ? (int)FigureColor.BLACK : (int)FigureColor.WHITE;
 
             List<IndexPair> allSteps = new List<IndexPair>();
-            foreach (Figure figure in FigureBoard)
+            foreach (Figure figure in board)
             {
                 if(figure.Color == anotherColor)
-                    figure.GetPossiblePositions(allSteps, FigureBoard);
+                    figure.GetPossiblePositions(allSteps, board);
             }
 
 
@@ -435,7 +435,7 @@ namespace Chess.GameUnits
             if (IsSheh)
             {
                 // Уже поставлен шах - проверем мат ли это
-                CheckOnMat(figureColor);
+                //CheckOnMat(figureColor, FigureBoard);
             }
                 // Пользователь может выбрать фигуру, которой ходить
             if (curMouseState.LeftButton == ButtonState.Pressed)
@@ -446,11 +446,11 @@ namespace Chess.GameUnits
                     if (prevMouseState != curMouseState)
                         FirstClickOnLeftButtonActions(curMouseState, figureColor);
                 }
-            }
-            // Попытка хода выбранной фигурой
-            if (curMouseState.LeftButton == ButtonState.Pressed && IsFigureChosenForStep)
-            {
-                SecondClickOnLeftButtonActions(curMouseState, figureColor);
+                // Попытка хода выбранной фигурой
+                else if (curMouseState.LeftButton == ButtonState.Pressed && IsFigureChosenForStep)
+                {
+                    SecondClickOnLeftButtonActions(curMouseState, figureColor);
+                }
             }
         }
 

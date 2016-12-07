@@ -9,5 +9,13 @@ namespace Chess.GameFigures
     class EmptyCell : Figure
     {
         public EmptyCell(int indexY, int indexX) : base(indexY, indexX) { }
+
+        public override object Clone()
+        {
+            EmptyCell clone = new EmptyCell(this.IndexY, this.IndexX);
+            clone.IsChoosen = this.IsChoosen;
+
+            return clone;
+        }
     }
 }

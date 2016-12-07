@@ -81,6 +81,15 @@ namespace Chess.GameFigures
                     possibleSteps.Add(new IndexPair(curY, IndexX));
         }
 
+
+        public override object Clone()
+        {
+            Rook clone = new Rook(this.IndexY, this.IndexX, this.Color);
+            clone.IsChoosen = this.IsChoosen;
+
+            return clone;
+        }
+
         #endregion
     }
 }

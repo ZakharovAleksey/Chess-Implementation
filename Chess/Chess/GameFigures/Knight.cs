@@ -49,6 +49,14 @@ namespace Chess.GameFigures
             }
         }
 
+        public override object Clone()
+        {
+            Knight clone = new Knight(this.IndexY, this.IndexX, this.Color);
+            clone.IsChoosen = this.IsChoosen;
+
+            return clone;
+        }
+
         #endregion
 
         // Массивы соответствующие индесксы которых задают возможные положения для хода коня

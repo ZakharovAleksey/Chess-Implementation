@@ -90,6 +90,14 @@ namespace Chess.GameFigures
             }
         }
 
+        public override object Clone()
+        {
+            King clone = new King(this.IndexY, this.IndexX, this.Color);
+            clone.IsChoosen = this.IsChoosen;
+
+            return clone;
+        }
+
         #endregion
     }
 }

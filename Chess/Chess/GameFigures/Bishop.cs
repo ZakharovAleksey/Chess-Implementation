@@ -98,6 +98,15 @@ namespace Chess.GameFigures
             }
         }
 
+
+        public override object Clone()
+        {
+            Bishop clone = new Bishop(this.IndexY, this.IndexX, this.Color);
+            clone.IsChoosen = this.IsChoosen;
+
+            return clone;
+        }
+
         #endregion
     }
 }

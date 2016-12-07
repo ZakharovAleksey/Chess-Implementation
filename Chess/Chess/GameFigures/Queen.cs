@@ -161,6 +161,15 @@ namespace Chess.GameFigures
 
         }
 
+
+        public override object Clone()
+        {
+            Queen clone = new Queen(this.IndexY, this.IndexX, this.Color);
+            clone.IsChoosen = this.IsChoosen;
+
+            return clone;
+        }
+
         #endregion
     }
 

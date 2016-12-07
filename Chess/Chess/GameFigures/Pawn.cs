@@ -74,7 +74,14 @@ namespace Chess.GameFigures
 
         }
 
-        #endregion
+        public override object Clone()
+        {
+            Pawn clone = new Pawn(this.IndexY, this.IndexX, this.Color);
+            clone.IsChoosen = this.IsChoosen;
 
+            return clone;
+        }
+
+        #endregion
     }
 }

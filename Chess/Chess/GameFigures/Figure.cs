@@ -20,7 +20,7 @@ namespace Chess.GameFigures
 
 
     // Базовый абстрактный класс для всех фигур на шахматной доске.
-    abstract class Figure : IFigure
+    abstract class Figure : IFigure, ICloneable
     {
         // Задает начальное положение для фигуры
         public Figure(int indexY, int indexX)
@@ -67,38 +67,106 @@ namespace Chess.GameFigures
             return new IndexPair();
         }
 
+
+        Figure[,] CloneBoard(Figure[,] board)
+        {
+            Figure[,] boardClone = new Figure[GC.BoardSize, GC.BoardSize];
+
+            for (int col = 0; col < GC.BoardSize; ++col)
+                for (int row = 0; row < GC.BoardSize; ++row)
+                {
+                    object curType = board[row, col].GetType();
+                    if(curType == typeof(EmptyCell))
+                        boardClone[row, col] = (EmptyCell) board[row, col].Clone();
+                    else if (curType == typeof(Pawn))
+                        boardClone[row, col] = (Pawn)board[row, col].Clone();
+                    else if (curType == typeof(Knight))
+                        boardClone[row, col] = (Knight)board[row, col].Clone();
+                    else if (curType == typeof(Rook))
+                        boardClone[row, col] = (Rook)board[row, col].Clone();
+                    else if (curType == typeof(Bishop))
+                        boardClone[row, col] = (Bishop)board[row, col].Clone();
+                    else if (curType == typeof(Queen))
+                        boardClone[row, col] = (Queen)board[row, col].Clone();
+                    else if (curType == typeof(King))
+                        boardClone[row, col] = (King)board[row, col].Clone();
+                }
+
+            return boardClone;
+        }
+
+        bool IsMat(Figure[,] clone)
+        {
+            List<IndexPair> lol = new List<IndexPair>();
+            int anotherColor = GetAnotherColor();
+
+            int KingY = 0;
+            int KingX = 0;
+
+            foreach (Figure fig in clone)
+            {
+                if (fig.Color == anotherColor)
+                    fig.GetPossiblePositions(lol, clone);
+                if (fig.Color == Color && fig.GetType() == typeof(King))
+                {
+                    KingX = fig.IndexX;
+                    KingY = fig.IndexY;
+                }
+            }
+
+            if (lol.Contains(new IndexPair(KingY, KingX)))
+                return true;
+            else
+                return false;
+                
+
+
+
+        }
+
         // Вычисляет все возможные позиции для хода конкретной фигурой в случае Шаха
         public virtual void GetPossiblePositionsInShehCase(List<IndexPair> resPosMoves, Figure[,] board, int selFigIndexY, int selFigIndexX, int ShehMadeFigIndexY, int ShehMadeFigIndexX)
         {
             // Получаем позицию короля
-            IndexPair KingPosition = GetKingPosition(board);
-
-            // 
+            IndexPair KingPosition = GetKingPosition(board); 
 
             // Тип фигуры поставившей Шах
             object ShehMadeFigureType = board[ShehMadeFigIndexY, ShehMadeFigIndexX].GetType();
+
+
+
+
             // Тип фигуры которой мы хотим предотвратить Шах
             object SelFigureType = board[selFigIndexY, selFigIndexX].GetType();
+            int selColor = board[selFigIndexY, selFigIndexX].Color;
 
 
-            // Если мы поставили шаг Конем: то сходить пешкой мы можем только если съедим Коня
-            if (ShehMadeFigureType == typeof(Knight) && SelFigureType == typeof(King))
+            List<IndexPair> posStepList = new List<IndexPair>();
+
+            board[selFigIndexY, selFigIndexX].GetPossiblePositions(posStepList, board);
+
+            foreach (IndexPair pos in posStepList)
             {
-                board[KingPosition.IndexY, KingPosition.IndexX].GetPossiblePositions(resPosMoves, board);
+                Figure[,] clone = CloneBoard(board);
+
+                if (SelFigureType == typeof(Pawn))
+                    clone[pos.IndexY, pos.IndexX] = new Pawn(pos.IndexY, pos.IndexX, selColor);
+                else if (SelFigureType == typeof(Knight))
+                    clone[pos.IndexY, pos.IndexX] = new Knight(pos.IndexY, pos.IndexX, selColor);
+                else if (SelFigureType == typeof(Rook))
+                    clone[pos.IndexY, pos.IndexX] = new Rook(pos.IndexY, pos.IndexX, selColor);
+                else if (SelFigureType == typeof(Bishop))
+                    clone[pos.IndexY, pos.IndexX] = new Bishop(pos.IndexY, pos.IndexX, selColor);
+                else if (SelFigureType == typeof(Queen))
+                    clone[pos.IndexY, pos.IndexX] = new Queen(pos.IndexY, pos.IndexX, selColor);
+                else if (SelFigureType == typeof(King))
+                    clone[pos.IndexY, pos.IndexX] = new King(pos.IndexY, pos.IndexX, selColor);
+
+                clone[selFigIndexY, selFigIndexX] = new EmptyCell(selFigIndexY, selFigIndexX);
+
+                if (!IsMat(clone))
+                    resPosMoves.Add(new IndexPair( pos.IndexY, pos.IndexX));
             }
-            else if (ShehMadeFigureType == typeof(Knight))
-            {
-                // Записываем возможные шаги 
-                List<IndexPair> lol = new List<IndexPair>();
-                board[selFigIndexY, selFigIndexX].GetPossiblePositions(lol, board);
-
-                if (lol.Contains(new IndexPair(ShehMadeFigIndexY, ShehMadeFigIndexX)))
-                    resPosMoves.Add(new IndexPair(ShehMadeFigIndexY, ShehMadeFigIndexX));
-            }
-            
-
-
-
         }
 
         #endregion
@@ -122,6 +190,8 @@ namespace Chess.GameFigures
 
             return (!IsCellEmpty(board, IndexY, IndexX) && board[IndexY, IndexX].Color == anotherColor) ? true : false;
         }
+
+        public virtual object Clone() { return null; }
 
         #region Properties
 
