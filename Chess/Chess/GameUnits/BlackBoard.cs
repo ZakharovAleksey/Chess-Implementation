@@ -152,6 +152,7 @@ namespace Chess.GameUnits
             // Переменная хранит выбранную на данный момент пользователем позицию
             IndexPair selectPos = GetChosenCellIndex(curMouseState);
 
+            // Если ход белых и выбрана белая фигура то можно делать ход
             if ((IsWhiteMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == selFigureColor) || (IsBlackMove && FigureBoard[selectPos.IndexY, selectPos.IndexX].Color == selFigureColor))
             {
                 if (IsCellEmpty(selectPos.IndexY, selectPos.IndexX))
@@ -186,7 +187,6 @@ namespace Chess.GameUnits
                 }
             }
         }
-
 
         void SecondClickOnLeftButtonActions(MouseState curMouseState, int figureColor)
         {
@@ -257,8 +257,11 @@ namespace Chess.GameUnits
 
         #endregion
 
-        // Вызывается когда шах, и не позволяет выбрать самому фигуру для хода - заставляет ходить королем
-        void FindAndSetKingToMove(int figureColor)
+
+        #region неправильная обработка шаха
+
+        // Если Шах, то функция присваивает стартовой позиции игрока которому стоит Шах - позицию его короля (Чтобы уйти королем)
+        void SetKingStartPositionInShehCase(int figureColor)
         {
             // Присваиваем стартовой позиции индексы, соответствующие положению короля
             foreach (Figure figure in FigureBoard)
@@ -270,6 +273,43 @@ namespace Chess.GameUnits
                     StartMoveIndexX = figure.IndexX;
                 }
             }
+        }
+
+
+        void SetBitStartPositionInShehCase(int figureColor)
+        {
+            // Лист который содержит позиции которые может побить выбранная далее фигура
+            List<IndexPair> figBitMoves = new List<IndexPair>();
+            // Позиция, ход на которую противоположного игрока привел к Шаху
+            IndexPair lastAnotherPlayerMove = new IndexPair(EndMoveIndexY, EndMoveIndexX);
+
+            // Для каждой фигуры цвета короля которому был Шах мы ищем может ли какая-либо из фигур его цвета побить последний ход игрока приведший к Шаху
+            foreach (Figure figure in FigureBoard)
+            {
+                if (figure.Color == figureColor)
+                {
+                    figure.GetPossiblePositions(figBitMoves, FigureBoard);
+
+                    // Если может побить то назначаем ей стартовую позицию
+                    if (figBitMoves.Contains(lastAnotherPlayerMove))
+                    {
+                        StartMoveIndexY = figure.IndexY;
+                        StartMoveIndexX = figure.IndexX;
+                        break;
+                    }
+                    else
+                        figBitMoves.Clear();
+                }
+            }
+        }
+
+        // Вызывается когда шах, и не позволяет выбрать самому фигуру для хода - заставляет ходить королем ИЛИ бить фигурой которая может
+        void SetStartToMovePositionInShehCase(int figureColor)
+        {
+            // Ищем позицию короля которому поставили Шах
+            SetKingStartPositionInShehCase(figureColor);
+            // Поиск существует ли позиция фигуры у игрока которому поставили Шах, такая что фигура бьет фигуру поставившую шах
+            SetBitStartPositionInShehCase(figureColor);
 
             Board[StartMoveIndexY, StartMoveIndexX].SetStateSELECT();
 
@@ -277,6 +317,9 @@ namespace Chess.GameUnits
             IsFigureChosenForStep = true;
         }
 
+        #endregion
+
+        // Проверка на мат
         void CheckOnMat(int figureColor)
         {
             int anotherColor = (figureColor == (int)FigureColor.WHITE) ? (int)FigureColor.BLACK : (int)FigureColor.WHITE;
@@ -343,8 +386,16 @@ namespace Chess.GameUnits
                     couldMoveRight = false;
             }
 
+            List<IndexPair> bitSteps = new List<IndexPair>();
+            foreach (Figure figure in FigureBoard)
+            {
+                if (figure.Color == figureColor)
+                    figure.GetPossiblePositions(bitSteps, FigureBoard);
+            }
 
-            if (!couldMoveLeft && !couldMoveUP && !couldMoveDown && !couldMoveRight)
+            bool IsCOuldBitLastStep = (bitSteps.Contains(new IndexPair(EndMoveIndexY, EndMoveIndexX))) ? true : false;
+
+            if (!couldMoveLeft && !couldMoveUP && !couldMoveDown && !couldMoveRight && !IsCOuldBitLastStep)
             {
                 isMat = true;
                 return;
@@ -352,15 +403,25 @@ namespace Chess.GameUnits
 
         }
 
+
         void ClickOnLeftButtonActions(MouseState curMouseState, GameTime gameTime, int figureColor)
         {
             // Если Шах то заставляем игрока ходить королем
             if (IsSheh)
             {
-                FindAndSetKingToMove(figureColor);
                 // Уже поставлен шах - проверем мат ли это
                 CheckOnMat(figureColor);
 
+                // Нужно создать лист тех ходов которые могут убрать появление шаха
+                // и потом сказать игроку что он может ходить только теми шагами которые в этом листе
+                // И вообще можно так попробовать переписать выбор фигур чтобы на левой кнопке выбиралась только те чьи ходы приведут к избеганию шаха
+
+                // >>>>> ВОТ ТУТ НЕ ПРАВИЛЬНАЯ ЛОГИКА
+                if (isMat)
+                    return;
+                else
+                    SetStartToMovePositionInShehCase(figureColor);
+                // >>>>>
             }
             else
             {
@@ -374,11 +435,11 @@ namespace Chess.GameUnits
                             FirstClickOnLeftButtonActions(curMouseState, figureColor);
                     }
                 }
-            }
-            // Попытка хода выбранной фигурой
-            if (curMouseState.LeftButton == ButtonState.Pressed && IsFigureChosenForStep)
-            {
-                SecondClickOnLeftButtonActions(curMouseState, figureColor);
+                // Попытка хода выбранной фигурой
+                if (curMouseState.LeftButton == ButtonState.Pressed && IsFigureChosenForStep)
+                {
+                    SecondClickOnLeftButtonActions(curMouseState, figureColor);
+                }
             }
         }
 

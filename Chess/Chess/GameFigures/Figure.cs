@@ -55,6 +55,12 @@ namespace Chess.GameFigures
             return (board[IndexY, IndexX].GetType() == typeof(EmptyCell)) ? true : false;
         }
 
+        // Возвращает цвет противоположному у выбранной фигуры
+        protected int GetAnotherColor()
+        {
+            return (this.Color == (int)FigureColor.WHITE) ? (int)FigureColor.BLACK : (int)FigureColor.WHITE;
+        }
+
         // Проверяет противополжный ли цвет у фигуры с указанными индексами, переданному цвету
         protected bool IsCellOtherColor(Figure[,] board, int IndexY, int IndexX, int color)
         {
