@@ -43,6 +43,7 @@
     <Compile Include="GameButtons\BtnLoadGame.cs" />
     <Compile Include="GameButtons\BtnNewGame.cs" />
     <Compile Include="GameButtons\Button.cs" />
+    <Compile Include="GameButtons\GameMenu.cs" />
     <Compile Include="GameButtons\MainMenu.cs" />
     <Compile Include="GameFigures\Bishop.cs" />
     <Compile Include="GameFigures\EmptyCell.cs" />

@@ -26,8 +26,7 @@ namespace Chess
         SpriteBatch spriteBatch;
 
         ChessBoard board;
-        MainMenu ex;
-
+        MainMenu mainMenu;
 
         public int CurGameState { get; set; } = (int) GameState.MAIN_MENU;
 
@@ -42,7 +41,7 @@ namespace Chess
 
             board = new ChessBoard();
 
-            ex = new MainMenu();
+            mainMenu = new MainMenu();
         }
 
         protected override void Initialize()
@@ -58,7 +57,7 @@ namespace Chess
             // TODO: use this.Content to load your game content here
             board.LoadContent(Content);
 
-            ex.LoadContent(Content);
+            mainMenu.LoadContent(Content);
         }
 
         protected override void UnloadContent() { }
@@ -76,7 +75,7 @@ namespace Chess
             switch (CurGameState)
             {
                 case (int)GameState.MAIN_MENU:
-                    ex.Update(curMouseState, this);
+                    mainMenu.Update(curMouseState, this);
                     break;
                 case (int)GameState.EXECUTION:
                     board.Update(gameTime);
@@ -100,7 +99,7 @@ namespace Chess
             switch (CurGameState)
             {
                 case (int)GameState.MAIN_MENU:
-                    ex.Draw(spriteBatch);
+                    mainMenu.Draw(spriteBatch);
                     break;
                 case (int)GameState.EXECUTION:
                     board.Draw(spriteBatch, Content);

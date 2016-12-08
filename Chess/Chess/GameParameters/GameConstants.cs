@@ -49,8 +49,11 @@ namespace Chess.GameParameters
 
         public const int BtnIndentTop = WindowHeight / 10;
         public const int BtnIndentLeft = WindowWidth / 2 - BtnWidth / 2;
-
         public const int BtnDistance = BtnHeight + 30;
+
+        public const int GMBtnIndentTop = 100;
+        public const int GMBtnIndentLeft = 100;
+        public const int GMBtnDistance = BtnHeight + 10;
 
         // Показывает на сколько изменяется глубина цвета кнопки, когда на нее наводишь мышь
         public const int BtnColorDepthInc = 5;
