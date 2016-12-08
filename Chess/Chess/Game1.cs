@@ -7,6 +7,9 @@ using Chess.GameParameters;
 using Chess.GameUnits;
 using Chess.GameFigures;
 
+using Chess.GameButtons.GameMenu;
+
+
 using Chess.GameButtons;
 
 namespace Chess
@@ -28,6 +31,9 @@ namespace Chess
         ChessBoard board;
         MainMenu mainMenu;
 
+        GameMenu gameMenu;
+
+
         public int CurGameState { get; set; } = (int) GameState.MAIN_MENU;
 
 
@@ -40,6 +46,8 @@ namespace Chess
             graphics.PreferredBackBufferHeight = GameConstants.WindowHeight;
 
             board = new ChessBoard();
+            gameMenu = new GameMenu();
+
 
             mainMenu = new MainMenu();
         }
@@ -56,6 +64,8 @@ namespace Chess
 
             // TODO: use this.Content to load your game content here
             board.LoadContent(Content);
+            gameMenu.LoadContent(Content);
+
 
             mainMenu.LoadContent(Content);
         }
@@ -79,19 +89,16 @@ namespace Chess
                     break;
                 case (int)GameState.EXECUTION:
                     board.Update(gameTime);
+                    gameMenu.Update(curMouseState, this);
                     break;
             }
-
-            //board.Update(gameTime);
-
-            //ex.Update(curMouseState,this);
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.SaddleBrown);
+            GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
@@ -103,11 +110,10 @@ namespace Chess
                     break;
                 case (int)GameState.EXECUTION:
                     board.Draw(spriteBatch, Content);
+                    gameMenu.Draw(spriteBatch);
                     break;
             }
 
-            //ex.Draw(spriteBatch);
-            //board.Draw(spriteBatch, Content);
             spriteBatch.End();
 
             base.Draw(gameTime);

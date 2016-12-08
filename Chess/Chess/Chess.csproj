@@ -39,12 +39,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
-    <Compile Include="GameButtons\BtnExitGame.cs" />
-    <Compile Include="GameButtons\BtnLoadGame.cs" />
-    <Compile Include="GameButtons\BtnNewGame.cs" />
+    <Compile Include="GameButtons\GameMenu\GameMenu.cs" />
+    <Compile Include="GameButtons\GameMenu\GMBtnOpen.cs" />
+    <Compile Include="GameButtons\GameMenu\GMBtnSettings.cs" />
+    <Compile Include="GameButtons\Icon.cs" />
+    <Compile Include="GameButtons\MainMenu\BtnExitGame.cs" />
+    <Compile Include="GameButtons\MainMenu\BtnLoadGame.cs" />
+    <Compile Include="GameButtons\MainMenu\BtnNewGame.cs" />
     <Compile Include="GameButtons\Button.cs" />
-    <Compile Include="GameButtons\GameMenu.cs" />
-    <Compile Include="GameButtons\MainMenu.cs" />
+    <Compile Include="GameButtons\GameMenu\GMBtnMenu.cs" />
+    <Compile Include="GameButtons\GameMenu\GMBtnSave.cs" />
+    <Compile Include="GameButtons\MainMenu\MainMenu.cs" />
     <Compile Include="GameFigures\Bishop.cs" />
     <Compile Include="GameFigures\EmptyCell.cs" />
     <Compile Include="GameFigures\Figure.cs" />
@@ -158,6 +163,24 @@
   <ItemGroup>
     <Content Include="..\..\Content\bin\cell\possible.xnb">
       <Link>Content\cell\possible.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\GameMenu\Menu.xnb">
+      <Link>Content\GameMenu\Menu.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\GameMenu\Open.xnb">
+      <Link>Content\GameMenu\Open.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\GameMenu\Save.xnb">
+      <Link>Content\GameMenu\Save.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\GameMenu\Settings.xnb">
+      <Link>Content\GameMenu\Settings.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

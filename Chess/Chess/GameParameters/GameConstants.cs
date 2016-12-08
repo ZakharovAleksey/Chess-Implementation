@@ -12,7 +12,7 @@ namespace Chess.GameParameters
     {
         #region Main window parameters
 
-        public const int WindowWidth = 900;
+        public const int WindowWidth = 800;
         public const int WindowHeight = 500;
 
         #endregion
@@ -35,7 +35,7 @@ namespace Chess.GameParameters
 
         public const int IndentTop = CellHeight;
         public const int IndentBottom = WindowHeight - CellHeight;
-        public const int IndentRight = WindowWidth - CellWidth;
+        public const int IndentRight = WindowWidth  - CellWidth;
         public const int IndentLeft = WindowWidth - (CellWidth * (BoardSize + 1));
 
         #endregion
@@ -47,18 +47,30 @@ namespace Chess.GameParameters
         public const int BtnWidth = WindowWidth / 5;
         public const int BtnHeight = WindowHeight / 10;
 
-        public const int BtnIndentTop = WindowHeight / 10;
+        public const int BtnIndentTop = WindowHeight / 2 - BtnDistance - BtnDistance / 2;
         public const int BtnIndentLeft = WindowWidth / 2 - BtnWidth / 2;
         public const int BtnDistance = BtnHeight + 30;
 
-        public const int GMBtnIndentTop = 100;
-        public const int GMBtnIndentLeft = 100;
-        public const int GMBtnDistance = BtnHeight + 10;
-
         // Показывает на сколько изменяется глубина цвета кнопки, когда на нее наводишь мышь
         public const int BtnColorDepthInc = 5;
-        
+
         public const int BtnCountInMainMenu = 3;
+
+        #region Game Menu parameters
+
+        public const int GMIconWidth = 40;
+        public const int GMIconHeight = 40;
+
+        public const int GMIconIndentTop = WindowHeight / 10;
+        public const int GMIconIndentLeft = 100;
+
+        public const int GMIconDistance = BtnHeight + 30;
+
+
+        public const int GMCount = 4;
+
+        #endregion
+
 
         #endregion
 
