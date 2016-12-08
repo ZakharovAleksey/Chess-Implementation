@@ -16,19 +16,22 @@ using GC = Chess.GameParameters.GameConstants;
 
 namespace Chess.GameUnits
 {
+    // Возможные цвета клеток
     enum CellType
     {
         WHITE = 0,
         BLACK = 1,
-    } 
-
-    enum CellState
-    {
-        IDLE = 0, 
-        SELECT = 1,
-        POSSIBLE = 2
     }
 
+    // Возможные состояния клеток
+    enum CellState
+    {
+        IDLE = 0,       // Не выбрана пользователем
+        SELECT = 1,     // Выбрана пользователем
+        POSSIBLE = 2    // Возможна для хода пользователем (НЕ РЕАЛИЗОВАНО)
+    }
+
+    // Клетка - отображается как клетка доски (белая черная или красная если выбрана пользователем для хода)
     class Cell
     {
 
@@ -54,79 +57,49 @@ namespace Chess.GameUnits
             StatesArray[(int)CellState.POSSIBLE] = Content.Load<Texture2D>(@"cell/possible");
         }
 
-        bool IsInCell(MouseState curMouseState)
-        {
-            return (curMouseState.Y> ScreenPos.Top && curMouseState.Y < ScreenPos.Bottom  && curMouseState.X > ScreenPos.Left && curMouseState.X < ScreenPos.Right) ? true : false;
-        }
-
-        public void Update()
-        {
-            MouseState currentMouseState = Mouse.GetState();
-
-            if (IsInCell(currentMouseState))
-            {
-                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                {
-                    if (!IsSelect)
-                    {
-                        CurrentState = (int)CellState.SELECT;
-                        IsSelect = true;
-                    }
-                }
-                if (Mouse.GetState().RightButton == ButtonState.Pressed)
-                {
-                    if (IsSelect)
-                    {
-                        CurrentState = (int)CellState.IDLE;
-                        IsSelect = false;
-                    }
-                }
-            }
-
-        }
-
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(StatesArray[CurrentState], ScreenPos, Color.White);
         }
 
-        #endregion
 
+        // Ставит клетку в состояние - не выбрана
         public void SetStateIDLE()
         {
             CurrentState = (int)CellState.IDLE;
             IsSelect = false;
         }
 
+        // Ставит клетку в состояние - выбрана
         public void SetStateSELECT()
         {
             CurrentState = (int)CellState.SELECT;
             IsSelect = true;
         }
 
+        #endregion
 
         #region Fields
 
-
-        int CurrentState { get; set; } = 0;
+        // Количество состояний в которых может находиться клетка
         static int StatesCount { get; } = 3;
-
+        // Текущее состояние клетки с шахматной фигурой (или без нее)
+        int CurrentState { get; set; } = 0;
+        // Тип клетки - белая или черная или красная
         int Type { get; set; }
 
-
-        Texture2D[] StatesArray { get; set; } = new Texture2D[StatesCount];
-        Rectangle ScreenPos { get; set; }
-        
-
+        // Индексы клетки 
         int IndexX { get; set; }
         int IndexY { get; set; }
 
-        #region Actions
-
-        // True if cell is selected, false otherwise [Means player click on it with left button]
+        // Показывает выбрана ли клетка на данный момент пользователем
         public bool IsSelect { get; set; } = false;
 
-        #endregion
+
+        // Массив содержит контент для всех возможных состояний клетки
+        Texture2D[] StatesArray { get; set; } = new Texture2D[StatesCount];
+        // Координаты клетки на экране
+        Rectangle ScreenPos { get; set; }
 
         #endregion
 

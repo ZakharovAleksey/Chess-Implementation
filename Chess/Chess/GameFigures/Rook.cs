@@ -12,11 +12,7 @@ namespace Chess.GameFigures
 {
     class Rook : Figure
     {
-        #region Construcor
-
         public Rook(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
-
-        #endregion
 
         #region Methods
 
@@ -80,7 +76,6 @@ namespace Chess.GameFigures
                 if (IsCellOtherColor(board, curY, IndexX, this.Color))
                     possibleSteps.Add(new IndexPair(curY, IndexX));
         }
-
 
         public override object Clone()
         {

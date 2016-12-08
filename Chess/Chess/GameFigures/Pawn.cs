@@ -20,11 +20,7 @@ namespace Chess.GameFigures
     /// </summary>
     class Pawn : Figure
     {
-        #region Construcor
-
         public Pawn(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
-
-        #endregion
 
         #region Methods
 

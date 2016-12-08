@@ -12,11 +12,7 @@ namespace Chess.GameFigures
 {
     class Bishop : Figure
     {
-        #region Construcor
-
         public Bishop(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
-
-        #endregion
 
         #region Methods
 
@@ -97,7 +93,6 @@ namespace Chess.GameFigures
                     break;
             }
         }
-
 
         public override object Clone()
         {

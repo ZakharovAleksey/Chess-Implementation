@@ -12,9 +12,7 @@ namespace Chess.GameFigures
 {
     class Knight : Figure
     {
-
         public Knight(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
-
 
         #region Methods
 

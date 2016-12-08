@@ -12,11 +12,7 @@ namespace Chess.GameFigures
 {
     class King : Figure
     {
-        #region Construcor
-
         public King(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
-
-        #endregion
 
         #region Methods
 

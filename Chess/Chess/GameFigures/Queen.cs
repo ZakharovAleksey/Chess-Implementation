@@ -12,11 +12,7 @@ namespace Chess.GameFigures
 {
     class Queen : Figure
     {
-        #region Construcor
-
         public Queen(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
-
-        #endregion
 
         #region Methods
 
@@ -150,7 +146,6 @@ namespace Chess.GameFigures
                     possibleSteps.Add(new IndexPair(curY, IndexX));
         }
 
-
         // Вычисляет позиции куда может пойти ферзь
         public override void GetPossiblePositions(List<IndexPair> possibleSteps, Figure[,] board)
         {
@@ -160,7 +155,6 @@ namespace Chess.GameFigures
             RookSteps(possibleSteps, board);
 
         }
-
 
         public override object Clone()
         {

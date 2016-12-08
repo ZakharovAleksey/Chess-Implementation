@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chess.GameFigures
 {
+    // Структура хранит пару : положение индекса X и Y на шахматной доске
     struct IndexPair
     {
         public int IndexX;
