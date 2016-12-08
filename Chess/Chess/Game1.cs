@@ -92,7 +92,7 @@ namespace Chess
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Blue);
+            GraphicsDevice.Clear(Color.SaddleBrown);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();

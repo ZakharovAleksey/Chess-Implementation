@@ -127,7 +127,7 @@ namespace Chess.GameFigures
         {
             if (Texture != null)
             {
-                Rectangle drawPos = new Rectangle(GC.IndentLeft + IndexX * GC.CellHeight, GC.IndentTop + IndexY * GC.CellWidth, GC.CellWidth, GC.CellHeight);
+                Rectangle drawPos = new Rectangle(GC.IndentLeft + IndexX * GC.CellHeight, GC.IndentTop + IndexY * GC.CellWidth + 2, GC.CellWidth, GC.CellHeight - 2);
                 spriteBatch.Draw(Texture, drawPos, Microsoft.Xna.Framework.Color.White);
             }
         }
