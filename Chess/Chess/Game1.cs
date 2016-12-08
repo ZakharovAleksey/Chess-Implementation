@@ -7,8 +7,16 @@ using Chess.GameParameters;
 using Chess.GameUnits;
 using Chess.GameFigures;
 
+using Chess.GameButtons;
+
 namespace Chess
 {
+    enum GameState
+    {
+        MAIN_MENU = 0,
+        EXECUTION = 1
+    }
+
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
@@ -18,6 +26,11 @@ namespace Chess
         SpriteBatch spriteBatch;
 
         ChessBoard board;
+        MainMenu ex;
+
+
+        public int CurGameState { get; set; } = (int) GameState.MAIN_MENU;
+
 
         public Game1()
         {
@@ -28,6 +41,8 @@ namespace Chess
             graphics.PreferredBackBufferHeight = GameConstants.WindowHeight;
 
             board = new ChessBoard();
+
+            ex = new MainMenu();
         }
 
         protected override void Initialize()
@@ -42,18 +57,36 @@ namespace Chess
 
             // TODO: use this.Content to load your game content here
             board.LoadContent(Content);
+
+            ex.LoadContent(Content);
         }
 
         protected override void UnloadContent() { }
 
         protected override void Update(GameTime gameTime)
         {
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
 
-            board.Update(gameTime);
+            MouseState curMouseState = Mouse.GetState();
+
+            switch (CurGameState)
+            {
+                case (int)GameState.MAIN_MENU:
+                    ex.Update(curMouseState, this);
+                    break;
+                case (int)GameState.EXECUTION:
+                    board.Update(gameTime);
+                    break;
+            }
+
+            //board.Update(gameTime);
+
+            //ex.Update(curMouseState,this);
+
             base.Update(gameTime);
         }
 
@@ -63,7 +96,19 @@ namespace Chess
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            board.Draw(spriteBatch, Content);
+
+            switch (CurGameState)
+            {
+                case (int)GameState.MAIN_MENU:
+                    ex.Draw(spriteBatch);
+                    break;
+                case (int)GameState.EXECUTION:
+                    board.Draw(spriteBatch, Content);
+                    break;
+            }
+
+            //ex.Draw(spriteBatch);
+            //board.Draw(spriteBatch, Content);
             spriteBatch.End();
 
             base.Draw(gameTime);

@@ -39,6 +39,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameButtons\BtnExitGame.cs" />
+    <Compile Include="GameButtons\BtnLoadGame.cs" />
+    <Compile Include="GameButtons\BtnNewGame.cs" />
+    <Compile Include="GameButtons\Button.cs" />
+    <Compile Include="GameButtons\MainMenu.cs" />
     <Compile Include="GameFigures\Bishop.cs" />
     <Compile Include="GameFigures\EmptyCell.cs" />
     <Compile Include="GameFigures\Figure.cs" />
@@ -143,6 +148,24 @@
     </Content>
     <Content Include="..\..\Content\bin\figures\Rook_Black.xnb">
       <Link>Content\figures\Rook_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\MainMenu\Exit.xnb">
+      <Link>Content\MainMenu\Exit.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\MainMenu\LoadGame.xnb">
+      <Link>Content\MainMenu\LoadGame.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\MainMenu\NewGame.xnb">
+      <Link>Content\MainMenu\NewGame.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
