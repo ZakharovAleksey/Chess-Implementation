@@ -73,85 +73,6 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\figures\pawn.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Content\bin\cell\black.xnb">
-      <Link>Content\cell\black.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\cell\checked.xnb">
-      <Link>Content\cell\checked.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\cell\possible.xnb">
-      <Link>Content\cell\possible.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\cell\white.xnb">
-      <Link>Content\cell\white.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Knight_White.xnb">
-      <Link>Content\figures\Knight_White.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Rook_White.xnb">
-      <Link>Content\figures\Rook_White.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Bishop_White.xnb">
-      <Link>Content\figures\Bishop_White.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Queen_White.xnb">
-      <Link>Content\figures\Queen_White.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\King_White.xnb">
-      <Link>Content\figures\King_White.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Bishop_Black.xnb">
-      <Link>Content\figures\Bishop_Black.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\figures\King_Black.xnb">
-      <Link>Content\figures\King_Black.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\figures\Knight_Black.xnb">
-      <Link>Content\figures\Knight_Black.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\figures\Pawn_Black.xnb">
-      <Link>Content\figures\Pawn_Black.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\figures\Queen_Black.xnb">
-      <Link>Content\figures\Queen_Black.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Content\bin\figures\Rook_Black.xnb">
-      <Link>Content\figures\Rook_Black.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="..\..\Content\bin\MainMenu\Exit.xnb">
       <Link>Content\MainMenu\Exit.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -166,6 +87,76 @@
   <ItemGroup>
     <Content Include="..\..\Content\bin\MainMenu\NewGame.xnb">
       <Link>Content\MainMenu\NewGame.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\figures\Bishop_Black.xnb">
+      <Link>Content\figures\Bishop_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Bishop_White.xnb">
+      <Link>Content\figures\Bishop_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\King_Black.xnb">
+      <Link>Content\figures\King_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\King_White.xnb">
+      <Link>Content\figures\King_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Knight_Black.xnb">
+      <Link>Content\figures\Knight_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Knight_White.xnb">
+      <Link>Content\figures\Knight_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Pawn_Black.xnb">
+      <Link>Content\figures\Pawn_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Pawn_White.xnb">
+      <Link>Content\figures\Pawn_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Queen_Black.xnb">
+      <Link>Content\figures\Queen_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Queen_White.xnb">
+      <Link>Content\figures\Queen_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Rook_Black.xnb">
+      <Link>Content\figures\Rook_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Rook_White.xnb">
+      <Link>Content\figures\Rook_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\cell\black.xnb">
+      <Link>Content\cell\black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\cell\checked.xnb">
+      <Link>Content\cell\checked.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\cell\white.xnb">
+      <Link>Content\cell\white.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\cell\possible.xnb">
+      <Link>Content\cell\possible.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -11,6 +11,24 @@ using GC = Chess.GameParameters.GameConstants;
 
 namespace Chess.GameButtons
 {
+    /*
+     В игровом меню:
+     - Save
+
+     
+     * В меню Пауза:
+     - Иконка Play button
+     - Иконка Save
+     - Иконка Pause
+     - Иконка Load
+     - Иконка Options
+
+      В основном меню:
+      - Иконка
+      
+     */
+
+
     class MainMenu
     {
         public MainMenu()

@@ -27,7 +27,7 @@ namespace Chess.GameFigures
         public override void  LoadContent(ContentManager Content)
         {
             if(Color == (int)FigureColor.WHITE)
-                Texture = Content.Load<Texture2D>(@"figures/pawn");
+                Texture = Content.Load<Texture2D>(@"figures/Pawn_White");
             else
                 Texture = Content.Load<Texture2D>(@"figures/Pawn_Black");
         }
