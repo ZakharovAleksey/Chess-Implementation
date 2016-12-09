@@ -99,6 +99,18 @@ namespace Chess.GameParameters
         #endregion
 
 
+        #region Win Menu parameters
+
+        public const int WMTrophyHeight = WindowHeight / 3;
+        public const int WMTrophyWidth = WMTrophyHeight;
+
+        public const int WMCount = 2;
+
+        public const int WMIconLevelY = 350;
+
+        #endregion
+
+
         public const double TimerDelay = 75;
     }
 }

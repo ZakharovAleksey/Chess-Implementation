@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 namespace Chess.GameUnits
 {
     // Класс который хранит шахматную доску и в котором прописана всяосновная логика игры
-    class ChessBoard
+    public class ChessBoard
     {
         public ChessBoard()
         {
@@ -68,6 +68,60 @@ namespace Chess.GameUnits
                         FigureBoard[rowID, columnID] = new EmptyCell(rowID, columnID);
                 }
             }
+        }
+
+
+        public void SetStateIDLE()
+        {
+            for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
+            {
+                int curColor = (rowID % 2 == 0) ? (int)CellType.WHITE : (int)CellType.BLACK;
+                for (int columnID = 0; columnID < GC.BoardSize; ++columnID)
+                {
+                    Board[rowID, columnID] = new Cell(rowID, columnID, curColor);
+                    curColor = (curColor == (int)CellType.BLACK) ? (int)CellType.WHITE : (int)CellType.BLACK;
+
+                    // Подгружаем пешки
+                    if (rowID == GC.BoardSize - 2)
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 1)
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем коней
+                    else if (rowID == GC.BoardSize - 1 && (columnID == 1 || columnID == GC.BoardSize - 2))
+                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 1 || columnID == GC.BoardSize - 2))
+                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем ладей
+                    else if (rowID == GC.BoardSize - 1 && (columnID == 0 || columnID == GC.BoardSize - 1))
+                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 0 || columnID == GC.BoardSize - 1))
+                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем слонов
+                    else if (rowID == GC.BoardSize - 1 && (columnID == 2 || columnID == GC.BoardSize - 3))
+                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 2 || columnID == GC.BoardSize - 3))
+                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем ферзей
+                    else if (rowID == GC.BoardSize - 1 && columnID == 3)
+                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && columnID == 3)
+                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем королей
+                    else if (rowID == GC.BoardSize - 1 && columnID == 4)
+                        FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && columnID == 4)
+                        FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.BLACK);
+                    else
+                        FigureBoard[rowID, columnID] = new EmptyCell(rowID, columnID);
+                }
+            }
+
+            //IsBlackMove = false;
+            //IsWhiteMove = true;
+            //IsShah = false;
+            //IsCheckMate = false;
+            //IsFigureChosenForStep = false;
+            //IsFigureMadeStep = false;
         }
 
         #region Methods
@@ -369,7 +423,6 @@ namespace Chess.GameUnits
         public void LoadContent(ContentManager Content)
         {
             BoardBackground = Content.Load<Texture2D>(@"cell/BoardBackground");
-            ChessClock = Content.Load<Texture2D>(@"cell/Clock");
 
             foreach (Cell cell in Board)
                 cell.LoadContent(Content);
@@ -397,6 +450,18 @@ namespace Chess.GameUnits
                 Board[EndMoveIndexY, EndMoveIndexX].SetStateIDLE();
             }
 
+            if (IsCheckMate)
+            {
+                BoardBackground = Content.Load<Texture2D>(@"cell/BoardBackground");
+
+                foreach (Cell cell in Board)
+                    cell.LoadContent(Content);
+
+                // Грузим контент для каждой их фигур на доске
+                foreach (Figure fig in FigureBoard)
+                    fig.LoadContent(Content);
+            }
+
             Rectangle clockRect = new Rectangle();
             //
             if (IsWhiteMove)
@@ -407,8 +472,6 @@ namespace Chess.GameUnits
             {
                 clockRect = new Rectangle(GC.ClockIndentRight, GC.IndentTop + 2 * GC.CellHeight - GC.CellHeight / 2, GC.ClockWidth, GC.ClockHeight);
             }
-
-            spriteBatch.Draw(ChessClock, clockRect, Color.White);
 
             // Рисуем задний фон для доски (окаймление)
             Rectangle backgroundRect = new Rectangle(GC.IndentLeft - GC.CellWidth / 2, GC.IndentTop - GC.CellWidth / 2, GC.CellWidth * GC.BoardSize + GC.CellWidth, GC.CellHeight * GC.BoardSize + GC.CellHeight);
@@ -444,12 +507,12 @@ namespace Chess.GameUnits
         // Показывает поставлен ли в данный момент игры Шах
         bool IsShah { get; set; } = false;
         // Показывает поставлен ли в данный момент игры Мат
-        bool IsCheckMate { get; set; } = false;
+        public bool IsCheckMate { get; set; } = false;
 
         // Показывает ходят ли сейчас белые
-        bool IsWhiteMove { get; set; } = true;
+        public bool IsWhiteMove { get; set; } = true;
         // Показывает ходят ли сейчас черные
-        bool IsBlackMove { get; set; } = false;
+        public bool IsBlackMove { get; set; } = false;
 
         // Показывает выбранна ли какая-либо из фигур
         bool IsFigureChosenForStep { get; set; } = false;
@@ -458,8 +521,6 @@ namespace Chess.GameUnits
 
         // Текстура для окаймления доски [прямойгольник окружающий ее]
         Texture2D BoardBackground { get; set; }
-        // Часы которые показывают кто ходит
-        Texture2D ChessClock { get; set; }
 
         // Таймер нужен для того, чтобы от (якобы) двойнова щелчка фигуры которой сходили сразу же не выбиралась
         double TimeBetweenLeftBTNClick { get; set; } = 0;

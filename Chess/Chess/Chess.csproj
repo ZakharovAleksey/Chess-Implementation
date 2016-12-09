@@ -53,6 +53,9 @@
     <Compile Include="GameButtons\MainMenu\MainMenu.cs" />
     <Compile Include="GameButtons\PauseMenu\PauseMenu.cs" />
     <Compile Include="GameButtons\PauseMenu\PMBtnResume.cs" />
+    <Compile Include="GameButtons\WinMenu\WinMenu.cs" />
+    <Compile Include="GameButtons\WinMenu\WMBtnQuit.cs" />
+    <Compile Include="GameButtons\WinMenu\WMBtnRefresh.cs" />
     <Compile Include="GameFigures\Bishop.cs" />
     <Compile Include="GameFigures\EmptyCell.cs" />
     <Compile Include="GameFigures\Figure.cs" />
@@ -216,6 +219,36 @@
   <ItemGroup>
     <Content Include="..\..\Content\bin\PauseMenu\Quit.xnb">
       <Link>Content\PauseMenu\Quit.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\MainMenu\MenuBackGround.xnb">
+      <Link>Content\MainMenu\MenuBackGround.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\WinMenu\Quit.xnb">
+      <Link>Content\WinMenu\Quit.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\WinMenu\Trophy_Black.xnb">
+      <Link>Content\WinMenu\Trophy_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\WinMenu\Trophy_White.xnb">
+      <Link>Content\WinMenu\Trophy_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\WinMenu\WinBackgroung.xnb">
+      <Link>Content\WinMenu\WinBackgroung.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\WinMenu\Refresh.xnb">
+      <Link>Content\WinMenu\Refresh.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

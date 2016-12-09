@@ -11,7 +11,11 @@ using Chess.GameButtons.GameMenu;
 
 using Chess.GameButtons.PauseMenu;
 
+using Chess.GameButtons.WinMenu;
+
 using Chess.GameButtons;
+
+
 
 namespace Chess
 {
@@ -19,7 +23,14 @@ namespace Chess
     {
         MAIN_MENU = 0,
         EXECUTION = 1,
-        PAUSE     = 2
+        PAUSE     = 2,
+        WIN       = 3
+    }
+
+    enum GameWinner
+    {
+        WHITE = 0,
+        BLACK = 1
     }
 
     /// <summary>
@@ -30,14 +41,18 @@ namespace Chess
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        ChessBoard board;
+        public ChessBoard board;
         MainMenu mainMenu;
 
         GameMenu gameMenu;
         PauseMenu pauseMenu;
 
-        public int CurGameState { get; set; } = (int) GameState.MAIN_MENU;
+        WinMenu winMenu;
 
+        public int Winner { get; set; }
+
+        public int CurGameState { get; set; } = (int) GameState.MAIN_MENU;
+        public int PrevGameState { get; set; }
 
         public Game1()
         {
@@ -51,6 +66,8 @@ namespace Chess
             gameMenu = new GameMenu();
 
             pauseMenu = new PauseMenu();
+
+            winMenu = new WinMenu();
 
             mainMenu = new MainMenu();
         }
@@ -68,7 +85,7 @@ namespace Chess
             // TODO: use this.Content to load your game content here
             board.LoadContent(Content);
             gameMenu.LoadContent(Content);
-
+            winMenu.LoadContent(Content);
             pauseMenu.LoadContent(Content);
             mainMenu.LoadContent(Content);
         }
@@ -85,17 +102,28 @@ namespace Chess
 
             MouseState curMouseState = Mouse.GetState();
 
+            PrevGameState = CurGameState;
             switch (CurGameState)
             {
                 case (int)GameState.MAIN_MENU:
                     mainMenu.Update(curMouseState, this);
                     break;
                 case (int)GameState.EXECUTION:
+                    if (board.IsCheckMate)
+                    {
+                        // Определяем цвет победителя и переходим в соответствующий раздел игрового меню
+                        Winner = (board.IsBlackMove) ? (int)GameWinner.WHITE : (int)GameWinner.BLACK;
+                        CurGameState = (int)GameState.WIN;
+                        break;
+                    }
                     board.Update(gameTime);
                     gameMenu.Update(curMouseState, this);
                     break;
                 case (int)GameState.PAUSE:
                     pauseMenu.Update(curMouseState, this);
+                    break;
+                case (int)GameState.WIN:
+                    winMenu.Update(curMouseState, this);
                     break;
             }
 
@@ -115,12 +143,20 @@ namespace Chess
                     mainMenu.Draw(spriteBatch);
                     break;
                 case (int)GameState.EXECUTION:
-                    board.Draw(spriteBatch, Content);
-                    gameMenu.Draw(spriteBatch);
+                    // Это чтобы отрисовыволось после победы - так ка не успевали загружать контент
+                    if (PrevGameState != (int)GameState.WIN)
+                    {
+                        board.Draw(spriteBatch, Content);
+                        gameMenu.Draw(spriteBatch);
+                    }
                     break;
                 case (int)GameState.PAUSE:
                     board.Draw(spriteBatch, Content);
                     pauseMenu.Draw(spriteBatch);
+                    break;
+                case (int)GameState.WIN:
+                    board.Draw(spriteBatch, Content);
+                    winMenu.Draw(spriteBatch);
                     break;
             }
 
