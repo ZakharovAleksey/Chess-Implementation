@@ -9,6 +9,7 @@ using Chess.GameFigures;
 
 using Chess.GameButtons.GameMenu;
 
+using Chess.GameButtons.PauseMenu;
 
 using Chess.GameButtons;
 
@@ -17,7 +18,8 @@ namespace Chess
     enum GameState
     {
         MAIN_MENU = 0,
-        EXECUTION = 1
+        EXECUTION = 1,
+        PAUSE     = 2
     }
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace Chess
         MainMenu mainMenu;
 
         GameMenu gameMenu;
-
+        PauseMenu pauseMenu;
 
         public int CurGameState { get; set; } = (int) GameState.MAIN_MENU;
 
@@ -48,6 +50,7 @@ namespace Chess
             board = new ChessBoard();
             gameMenu = new GameMenu();
 
+            pauseMenu = new PauseMenu();
 
             mainMenu = new MainMenu();
         }
@@ -66,7 +69,7 @@ namespace Chess
             board.LoadContent(Content);
             gameMenu.LoadContent(Content);
 
-
+            pauseMenu.LoadContent(Content);
             mainMenu.LoadContent(Content);
         }
 
@@ -91,6 +94,9 @@ namespace Chess
                     board.Update(gameTime);
                     gameMenu.Update(curMouseState, this);
                     break;
+                case (int)GameState.PAUSE:
+                    pauseMenu.Update(curMouseState, this);
+                    break;
             }
 
             base.Update(gameTime);
@@ -98,7 +104,7 @@ namespace Chess
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.LightGray);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
@@ -111,6 +117,10 @@ namespace Chess
                 case (int)GameState.EXECUTION:
                     board.Draw(spriteBatch, Content);
                     gameMenu.Draw(spriteBatch);
+                    break;
+                case (int)GameState.PAUSE:
+                    board.Draw(spriteBatch, Content);
+                    pauseMenu.Draw(spriteBatch);
                     break;
             }
 

@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.GameButtons.GameMenu
+namespace Chess.GameButtons.PauseMenu
 {
-    class GMBtnSettings : Icon
+    class PMBtnSettings : Icon
     {
-        public GMBtnSettings(int posY, int posX) : base(posY, posX) { }
+        public PMBtnSettings(int posY, int posX) : base(posY, posX) { }
 
 
         public override void OnButtonClick(Game1 game)
@@ -19,7 +19,7 @@ namespace Chess.GameButtons.GameMenu
 
         public override void LoadContent(ContentManager Content)
         {
-            this.Texture = Content.Load<Texture2D>(@"GameMenu/Settings");
+            this.Texture = Content.Load<Texture2D>(@"PauseMenu/Settings");
         }
     }
 }

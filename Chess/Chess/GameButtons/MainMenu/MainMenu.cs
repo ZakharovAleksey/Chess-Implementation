@@ -33,9 +33,9 @@ namespace Chess.GameButtons
     {
         public MainMenu()
         {
-            Body[0] = new BtnNewGame(GC.BtnIndentTop, GC.BtnIndentLeft);
-            Body[1] = new BtnLoadGame(GC.BtnIndentTop + GC.BtnDistance, GC.BtnIndentLeft);
-            Body[2] = new BtnExitGame(GC.BtnIndentTop + 2 *  GC.BtnDistance, GC.BtnIndentLeft);
+            Body[0] = new BtnNewGame(GC.MMBtnIndentTop, GC.MMBtnIndentLeft);
+            Body[1] = new BtnLoadGame(GC.MMBtnIndentTop + GC.MMBtnDistance, GC.MMBtnIndentLeft);
+            Body[2] = new BtnExitGame(GC.MMBtnIndentTop + 2 *  GC.MMBtnDistance, GC.MMBtnIndentLeft);
         }
 
         public void Update(MouseState curMouseState, Game1 game)

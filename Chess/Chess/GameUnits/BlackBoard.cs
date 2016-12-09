@@ -368,6 +368,9 @@ namespace Chess.GameUnits
 
         public void LoadContent(ContentManager Content)
         {
+            BoardBackground = Content.Load<Texture2D>(@"cell/BoardBackground");
+            ChessClock = Content.Load<Texture2D>(@"cell/Clock");
+
             foreach (Cell cell in Board)
                 cell.LoadContent(Content);
 
@@ -393,6 +396,24 @@ namespace Chess.GameUnits
                 Board[StartMoveIndexY, StartMoveIndexX].SetStateIDLE();
                 Board[EndMoveIndexY, EndMoveIndexX].SetStateIDLE();
             }
+
+            Rectangle clockRect = new Rectangle();
+            //
+            if (IsWhiteMove)
+            {
+                clockRect = new Rectangle(GC.ClockIndentRight, GC.IndentTop + 6 * GC.CellHeight - GC.CellHeight / 2, GC.ClockWidth, GC.ClockHeight);
+            }
+            else if (IsBlackMove)
+            {
+                clockRect = new Rectangle(GC.ClockIndentRight, GC.IndentTop + 2 * GC.CellHeight - GC.CellHeight / 2, GC.ClockWidth, GC.ClockHeight);
+            }
+
+            spriteBatch.Draw(ChessClock, clockRect, Color.White);
+
+            // Рисуем задний фон для доски (окаймление)
+            Rectangle backgroundRect = new Rectangle(GC.IndentLeft - GC.CellWidth / 2, GC.IndentTop - GC.CellWidth / 2, GC.CellWidth * GC.BoardSize + GC.CellWidth, GC.CellHeight * GC.BoardSize + GC.CellHeight);
+
+            spriteBatch.Draw(BoardBackground, backgroundRect, Color.White);
 
             foreach (Cell cell in Board)
                 cell.Draw(spriteBatch);
@@ -435,6 +456,10 @@ namespace Chess.GameUnits
         // True если сделан ход! False в противном случае 
         bool IsFigureMadeStep { get; set; } = false;
 
+        // Текстура для окаймления доски [прямойгольник окружающий ее]
+        Texture2D BoardBackground { get; set; }
+        // Часы которые показывают кто ходит
+        Texture2D ChessClock { get; set; }
 
         // Таймер нужен для того, чтобы от (якобы) двойнова щелчка фигуры которой сходили сразу же не выбиралась
         double TimeBetweenLeftBTNClick { get; set; } = 0;

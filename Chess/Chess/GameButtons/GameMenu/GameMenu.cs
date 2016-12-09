@@ -16,10 +16,7 @@ namespace Chess.GameButtons.GameMenu
 
         public GameMenu()
         {
-            GMMenu[0] = new GMBtnMenu(GC.GMIconIndentLeft, GC.GMIconIndentTop);
-            GMMenu[1] = new GMBtnOpen(GC.GMIconIndentLeft + GC.GMIconDistance, GC.GMIconIndentTop);
-            GMMenu[2] = new GMBtnSave(GC.GMIconIndentLeft + 2 * GC.GMIconDistance, GC.GMIconIndentTop);
-            GMMenu[3] = new GMBtnSettings(GC.GMIconIndentLeft + 3 * GC.GMIconDistance, GC.GMIconIndentTop);
+            GMMenu[0] = new GMBtnPause(GC.GMIconIndentTop, GC.GMIconIndentLeft);
         }
 
         public void Update(MouseState curMouseState, Game1 game)

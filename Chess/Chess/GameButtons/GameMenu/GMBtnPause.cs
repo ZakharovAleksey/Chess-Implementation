@@ -6,20 +6,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GC = Chess.GameParameters.GameConstants;
+
 namespace Chess.GameButtons.GameMenu
 {
-    class GMBtnMenu : Icon
+    class GMBtnPause : Icon
     {
-        public GMBtnMenu(int posY, int posX) : base(posY, posX) { }
+        public GMBtnPause(int posY, int posX) : base(posY, posX) { }
 
 
         public override void OnButtonClick(Game1 game)
         {
+            if (IsCkicked)
+            {
+                game.CurGameState = (int)GameState.PAUSE;
+            }
         }
 
         public override void LoadContent(ContentManager Content)
         {
-            this.Texture = Content.Load<Texture2D>(@"GameMenu/Menu");
+            this.Texture = Content.Load<Texture2D>(@"GameMenu/Pause");
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Chess.GameButtons
             this.PositionY = posY;
             this.PositionX = posX;
 
-            ScreenRectangle = new Rectangle(PositionX, PositionY, GC.BtnWidth, GC.BtnHeight);
+            ScreenRectangle = new Rectangle(PositionX, PositionY, GC.MMBtnWidth, GC.MMBtnHeight);
         }
 
         public void Update(MouseState curMouseState, Game1 game)

@@ -40,16 +40,19 @@
   <ItemGroup>
     <Compile Include="Game1.cs" />
     <Compile Include="GameButtons\GameMenu\GameMenu.cs" />
-    <Compile Include="GameButtons\GameMenu\GMBtnOpen.cs" />
-    <Compile Include="GameButtons\GameMenu\GMBtnSettings.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnOpen.cs" />
+    <Compile Include="GameButtons\GameMenu\GMBtnPause.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnQuit.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnSettings.cs" />
     <Compile Include="GameButtons\Icon.cs" />
     <Compile Include="GameButtons\MainMenu\BtnExitGame.cs" />
     <Compile Include="GameButtons\MainMenu\BtnLoadGame.cs" />
     <Compile Include="GameButtons\MainMenu\BtnNewGame.cs" />
     <Compile Include="GameButtons\Button.cs" />
-    <Compile Include="GameButtons\GameMenu\GMBtnMenu.cs" />
-    <Compile Include="GameButtons\GameMenu\GMBtnSave.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnSave.cs" />
     <Compile Include="GameButtons\MainMenu\MainMenu.cs" />
+    <Compile Include="GameButtons\PauseMenu\PauseMenu.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnResume.cs" />
     <Compile Include="GameFigures\Bishop.cs" />
     <Compile Include="GameFigures\EmptyCell.cs" />
     <Compile Include="GameFigures\Figure.cs" />
@@ -167,20 +170,52 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Content\bin\GameMenu\Menu.xnb">
-      <Link>Content\GameMenu\Menu.xnb</Link>
+    <Content Include="..\..\Content\bin\cell\BoardBackground.xnb">
+      <Link>Content\cell\BoardBackground.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\GameMenu\Open.xnb">
-      <Link>Content\GameMenu\Open.xnb</Link>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\GameMenu\Pause.xnb">
+      <Link>Content\GameMenu\Pause.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\GameMenu\Save.xnb">
-      <Link>Content\GameMenu\Save.xnb</Link>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\PauseMenu\PauseBackgroung.xnb">
+      <Link>Content\PauseMenu\PauseBackgroung.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\GameMenu\Settings.xnb">
-      <Link>Content\GameMenu\Settings.xnb</Link>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\PauseMenu\Resume.xnb">
+      <Link>Content\PauseMenu\Resume.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\cell\Clock.xnb">
+      <Link>Content\cell\Clock.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\PauseMenu\Open.xnb">
+      <Link>Content\PauseMenu\Open.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\PauseMenu\Save.xnb">
+      <Link>Content\PauseMenu\Save.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\PauseMenu\Settings.xnb">
+      <Link>Content\PauseMenu\Settings.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\PauseMenu\Quit.xnb">
+      <Link>Content\PauseMenu\Quit.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
