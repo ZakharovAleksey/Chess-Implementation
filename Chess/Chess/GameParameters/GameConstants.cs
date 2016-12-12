@@ -12,7 +12,7 @@ namespace Chess.GameParameters
     {
         #region Main window parameters
 
-        public const int WindowWidth = 500;
+        public const int WindowWidth = 600;
         public const int WindowHeight = 500;
 
         #endregion
@@ -104,7 +104,7 @@ namespace Chess.GameParameters
         public const int WMTrophyHeight = WindowHeight / 3;
         public const int WMTrophyWidth = WMTrophyHeight;
 
-        public const int WMCount = 2;
+        public const int WMCount = 3;
 
         public const int WMIconLevelY = 350;
 

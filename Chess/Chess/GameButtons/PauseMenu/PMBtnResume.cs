@@ -15,13 +15,13 @@ namespace Chess.GameButtons.PauseMenu
     {
         public PMBtnResume(int posY, int posX) : base(posY, posX)
         {
-            ScreenRectangle = new Rectangle(PositionX, PositionY, GC.PMIconPauseWidth, GC.PMIconPauseHeight);
+            OnScreenPos = new Rectangle(PositionX, PositionY, GC.PMIconPauseWidth, GC.PMIconPauseHeight);
         }
 
 
         public override void OnButtonClick(Game1 game)
         {
-            if (IsCkicked)
+            if (IsClicked)
                 game.CurGameState = (int)GameState.EXECUTION;
                 
         }

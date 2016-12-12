@@ -15,7 +15,7 @@ namespace Chess.GameButtons.PauseMenu
 
         public override void OnButtonClick(Game1 game)
         {
-            if (IsCkicked)
+            if (IsClicked)
             {
                 game.Exit();
             }

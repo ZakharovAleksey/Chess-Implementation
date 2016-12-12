@@ -21,7 +21,8 @@ using System.Runtime.InteropServices;
 namespace Chess.GameUnits
 {
     // Класс который хранит шахматную доску и в котором прописана всяосновная логика игры
-    public class ChessBoard
+    [Serializable]
+    class ChessBoard
     {
         public ChessBoard()
         {
@@ -70,8 +71,12 @@ namespace Chess.GameUnits
             }
         }
 
+        #region Methods
 
-        public void SetStateIDLE()
+        #region Create New Game functions
+
+        // Вызывается при кнопке новая игра: Ставит элементы доски в начальное состояние
+        public void CreateNew()
         {
             for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
             {
@@ -115,16 +120,22 @@ namespace Chess.GameUnits
                         FigureBoard[rowID, columnID] = new EmptyCell(rowID, columnID);
                 }
             }
-
-            //IsBlackMove = false;
-            //IsWhiteMove = true;
-            //IsShah = false;
-            //IsCheckMate = false;
-            //IsFigureChosenForStep = false;
-            //IsFigureMadeStep = false;
         }
 
-        #region Methods
+        // Вызывается при кнопке новая игра:  Устанавливает параметры необходимые для логики проведения игры в начальное состояние
+        public void SetLogicParamToInitalState()
+        {
+            // В новой игре первыми ходят белые 
+            IsWhiteMove = true;
+            IsBlackMove = false;
+
+            // В новой игре нет ни Шаха ни Мата
+            IsShah = false;
+            IsCheckMate = false;
+        }
+
+        #endregion
+
 
         #region Update 
 
@@ -462,17 +473,6 @@ namespace Chess.GameUnits
                     fig.LoadContent(Content);
             }
 
-            Rectangle clockRect = new Rectangle();
-            //
-            if (IsWhiteMove)
-            {
-                clockRect = new Rectangle(GC.ClockIndentRight, GC.IndentTop + 6 * GC.CellHeight - GC.CellHeight / 2, GC.ClockWidth, GC.ClockHeight);
-            }
-            else if (IsBlackMove)
-            {
-                clockRect = new Rectangle(GC.ClockIndentRight, GC.IndentTop + 2 * GC.CellHeight - GC.CellHeight / 2, GC.ClockWidth, GC.ClockHeight);
-            }
-
             // Рисуем задний фон для доски (окаймление)
             Rectangle backgroundRect = new Rectangle(GC.IndentLeft - GC.CellWidth / 2, GC.IndentTop - GC.CellWidth / 2, GC.CellWidth * GC.BoardSize + GC.CellWidth, GC.CellHeight * GC.BoardSize + GC.CellHeight);
 
@@ -488,7 +488,6 @@ namespace Chess.GameUnits
         #endregion
 
         #region Fields
-
         // Матрица показывающая выбрана ли клетка или нет
         Cell[,] Board { get; set; } = new Cell[GC.BoardSize, GC.BoardSize];
 
@@ -505,7 +504,7 @@ namespace Chess.GameUnits
 
 
         // Показывает поставлен ли в данный момент игры Шах
-        bool IsShah { get; set; } = false;
+        public bool IsShah { get; set; } = false;
         // Показывает поставлен ли в данный момент игры Мат
         public bool IsCheckMate { get; set; } = false;
 

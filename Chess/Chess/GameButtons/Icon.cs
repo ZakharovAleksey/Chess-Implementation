@@ -15,12 +15,23 @@ namespace Chess.GameButtons
     {
         public Icon(int posY, int posX) : base(posY, posX)
         {
-            ScreenRectangle = new Rectangle(PositionX, PositionY, GC.GMIconWidth, GC.GMIconHeight);
+            OnScreenPos = new Rectangle(PositionX, PositionY, GC.GMIconWidth, GC.GMIconHeight);
         }
 
+        #region Methods
+
+        public override void SetPosition(int positionY, int positionX)
+        {
+            PositionY = positionY;
+            PositionX = positionX;
+
+            OnScreenPos = new Rectangle(PositionX, PositionY, GC.GMIconWidth, GC.GMIconHeight);
+        }
 
         public override void OnButtonClick(Game1 game) { }
 
         public override void LoadContent(ContentManager Content) { }
+
+        #endregion
     }
 }

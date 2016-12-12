@@ -14,43 +14,48 @@ namespace Chess.GameButtons
 {
     class MainMenu
     {
+        enum MainMenuID
+        {
+            NEW_GAME = 0,
+            LOAD_GAME = 1,
+            EXIT_GAME = 2
+        }
+
         public MainMenu()
         {
-            // Инициализируем каждую из кнопока главного меню
-            Body[0] = new BtnNewGame(GC.MMBtnIndentTop, GC.MMBtnIndentLeft);
-            Body[1] = new BtnLoadGame(GC.MMBtnIndentTop + GC.MMBtnDistance, GC.MMBtnIndentLeft);
-            Body[2] = new BtnExitGame(GC.MMBtnIndentTop + 2 *  GC.MMBtnDistance, GC.MMBtnIndentLeft);
+            MMenu[(int)MainMenuID.NEW_GAME] = new BtnNewGame(GC.MMBtnIndentTop, GC.MMBtnIndentLeft);
+            MMenu[(int)MainMenuID.LOAD_GAME] = new BtnLoadGame(GC.MMBtnIndentTop + GC.MMBtnDistance, GC.MMBtnIndentLeft);
+            MMenu[(int)MainMenuID.EXIT_GAME] = new BtnExitGame(GC.MMBtnIndentTop + 2 *  GC.MMBtnDistance, GC.MMBtnIndentLeft);
         }
 
         public void Update(MouseState curMouseState, Game1 game)
         {
-            foreach (Button btn in Body)
+            foreach (Button btn in MMenu)
                 btn.Update(curMouseState, game);
         }
 
         public void LoadContent(ContentManager Content)
         {
-            BackGround = Content.Load<Texture2D>("MainMenu/MenuBackGround");
+            background = Content.Load<Texture2D>("MainMenu/MenuBackGround");
 
-            foreach (Button btn in Body)
+            foreach (Button btn in MMenu)
                 btn.LoadContent(Content);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(BackGround, new Rectangle(0, 0, GC.WindowWidth, GC.WindowHeight), Color.White);
+            spriteBatch.Draw(background, new Rectangle(0, 0, GC.WindowWidth, GC.WindowHeight), Color.White);
 
-            foreach (Button btn in Body)
+            foreach (Button btn in MMenu)
                 btn.Draw(spriteBatch);
         }
 
         #region Fields
 
+        // Задний фон
+        Texture2D background;
         // Массив который хранит все кнопки в главном меню
-        Button[] Body { get; set; } = new Button[GC.BtnCountInMainMenu];
-
-        // Фон Главного меню
-        Texture2D BackGround { get; set; }
+        Button[] MMenu { get; set; } = new Button[GC.BtnCountInMainMenu];
 
         #endregion
     }

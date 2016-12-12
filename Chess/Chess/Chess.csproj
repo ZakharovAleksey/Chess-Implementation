@@ -56,6 +56,7 @@
     <Compile Include="GameButtons\WinMenu\WinMenu.cs" />
     <Compile Include="GameButtons\WinMenu\WMBtnQuit.cs" />
     <Compile Include="GameButtons\WinMenu\WMBtnRefresh.cs" />
+    <Compile Include="GameButtons\WinMenu\WMBtnWatch.cs" />
     <Compile Include="GameFigures\Bishop.cs" />
     <Compile Include="GameFigures\EmptyCell.cs" />
     <Compile Include="GameFigures\Figure.cs" />
@@ -233,10 +234,6 @@
       <Link>Content\WinMenu\Quit.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\WinMenu\Trophy_Black.xnb">
-      <Link>Content\WinMenu\Trophy_Black.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\Content\bin\WinMenu\Trophy_White.xnb">
       <Link>Content\WinMenu\Trophy_White.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -249,6 +246,12 @@
   <ItemGroup>
     <Content Include="..\..\Content\bin\WinMenu\Refresh.xnb">
       <Link>Content\WinMenu\Refresh.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\WinMenu\Watch.xnb">
+      <Link>Content\WinMenu\Watch.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

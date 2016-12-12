@@ -41,15 +41,17 @@ namespace Chess
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public ChessBoard board;
-        MainMenu mainMenu;
+        // Класс Реализующий игровую доску
+        ChessBoard board;
 
+        // Классы различных меню игры
+        MainMenu mainMenu;
         GameMenu gameMenu;
         PauseMenu pauseMenu;
-
         WinMenu winMenu;
 
-        public int Winner { get; set; }
+
+        public static int WinnerColor { get; set; }
 
         public int CurGameState { get; set; } = (int) GameState.MAIN_MENU;
         public int PrevGameState { get; set; }
@@ -63,13 +65,11 @@ namespace Chess
             graphics.PreferredBackBufferHeight = GameConstants.WindowHeight;
 
             board = new ChessBoard();
-            gameMenu = new GameMenu();
-
-            pauseMenu = new PauseMenu();
-
-            winMenu = new WinMenu();
 
             mainMenu = new MainMenu();
+            gameMenu = new GameMenu();
+            pauseMenu = new PauseMenu();
+            winMenu = new WinMenu();
         }
 
         protected override void Initialize()
@@ -101,8 +101,8 @@ namespace Chess
             // TODO: Add your update logic here
 
             MouseState curMouseState = Mouse.GetState();
-
             PrevGameState = CurGameState;
+
             switch (CurGameState)
             {
                 case (int)GameState.MAIN_MENU:
@@ -112,7 +112,7 @@ namespace Chess
                     if (board.IsCheckMate)
                     {
                         // Определяем цвет победителя и переходим в соответствующий раздел игрового меню
-                        Winner = (board.IsBlackMove) ? (int)GameWinner.WHITE : (int)GameWinner.BLACK;
+                        WinnerColor = (board.IsBlackMove) ? (int)GameWinner.WHITE : (int)GameWinner.BLACK;
                         CurGameState = (int)GameState.WIN;
                         break;
                     }
@@ -123,7 +123,9 @@ namespace Chess
                     pauseMenu.Update(curMouseState, this);
                     break;
                 case (int)GameState.WIN:
-                    winMenu.Update(curMouseState, this);
+                    winMenu.Update(curMouseState, this, WinnerColor);
+                    if (WinMenu.IsNewGameBtnCliced)
+                        board.CreateNew();
                     break;
             }
 
@@ -155,8 +157,16 @@ namespace Chess
                     pauseMenu.Draw(spriteBatch);
                     break;
                 case (int)GameState.WIN:
+
                     board.Draw(spriteBatch, Content);
                     winMenu.Draw(spriteBatch);
+                    if (WinMenu.IsNewGameBtnCliced)
+                    {
+                        CurGameState = (int)GameState.EXECUTION;
+                        board.SetLogicParamToInitalState();
+                        WinMenu.IsNewGameBtnCliced = false;
+                    }
+
                     break;
             }
 

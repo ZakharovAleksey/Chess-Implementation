@@ -14,6 +14,13 @@ using GC = Chess.GameParameters.GameConstants;
 
 namespace Chess.GameButtons
 {
+    enum ColorBorder
+    {
+        UP = 255,
+        DOWN = 0
+    }
+    
+    // Класс являющийся базовым для всех кнопок и иконок
     abstract class Button
     {
         public Button(int posY, int posX)
@@ -21,52 +28,66 @@ namespace Chess.GameButtons
             this.PositionY = posY;
             this.PositionX = posX;
 
-            ScreenRectangle = new Rectangle(PositionX, PositionY, GC.MMBtnWidth, GC.MMBtnHeight);
+            OnScreenPos = new Rectangle(PositionX, PositionY, GC.MMBtnWidth, GC.MMBtnHeight);
         }
 
+        #region Methods
+
+        // Метод отрабатывает нажатие на кнопку и изменение ее цвета при наведении на мышь кнопкой
         public void Update(MouseState curMouseState, Game1 game)
         {
             Rectangle mouseRect = new Rectangle(curMouseState.X, curMouseState.Y, 1, 1);
 
             // Если мышь пересекает область кнопки то делаем ее обновление
-            if (mouseRect.Intersects(ScreenRectangle))
+            if (mouseRect.Intersects(OnScreenPos))
             {
                 // Определяем как будет изменяться глубина цвета - увеличиваться или уменьшаться
-                if (color.A == 255)
-                    IsColorDown = true;
-                else if (color.A == 0)
-                    IsColorDown = false;
+                if (btnCurColor.A >= (int)ColorBorder.UP)
+                    IsBtnColorReduce = true;
+                else if (btnCurColor.A <= (int)ColorBorder.DOWN)
+                    IsBtnColorReduce = false;
 
                 // Уменьшаем или увеличиваем соответственно цвет кнопки
-                if (IsColorDown)
-                    color.A -= GC.BtnColorDepthInc;
+                if (IsBtnColorReduce)
+                    btnCurColor.A -= GC.BtnColorDepthInc;
                 else
-                    color.A += GC.BtnColorDepthInc;
+                    btnCurColor.A += GC.BtnColorDepthInc;
 
                 // Если нажали на кнопку
                 if (curMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    IsCkicked = true;
+                    IsClicked = true;
                     OnButtonClick(game);
                 }
             }
-            // Когда убрали мышь цвет должен вернуться в искодное состояние
-            else if (color.A < 255)
+            // Когда убрали мышь цвет должен вернуться в исходное состояние
+            else if (btnCurColor.A < (int)ColorBorder.UP)
             {
-                color.A += GC.BtnColorDepthInc;
-                IsCkicked = false;
+                btnCurColor.A += GC.BtnColorDepthInc;
+                IsClicked = false;
             }
         }
 
-        public void Draw(SpriteBatch spritebatch)
+        public virtual void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(Texture, ScreenRectangle, color);
+            spritebatch.Draw(Texture, OnScreenPos, btnCurColor);
         }
 
+        // Назначает кнопке новое положение
+        public virtual void SetPosition(int positionY, int positionX)
+        {
+            PositionY = positionY;
+            PositionX = positionX;
+
+            OnScreenPos = new Rectangle(PositionX, PositionY, GC.MMBtnWidth, GC.MMBtnHeight);
+        }
 
         public virtual void LoadContent(ContentManager Content) { }
 
+        // Опрделеляет действие по нажатию на данную кнопку
         public virtual void OnButtonClick(Game1 game) { }
+
+        #endregion
 
         #region Fields
 
@@ -75,14 +96,14 @@ namespace Chess.GameButtons
         protected int PositionX { get; set; }
 
         // Квадрат который определяет положение кнопки на экране
-        protected Rectangle ScreenRectangle { get; set; }
+        protected Rectangle OnScreenPos { get; set; }
 
         // Определяет нажата ли кнопка
-        protected bool IsCkicked { get; set; } = false;
+        protected bool IsClicked { get; set; } = false;
         // Показывает убывает или возрастает глубина цвета для текущей кнопки
-        protected bool IsColorDown { get; set; } = true;
+        protected bool IsBtnColorReduce { get; set; } = true;
         // Текущий цвет кнопки
-        protected Color color = new Color(255, 255, 255, 255);
+        protected Color btnCurColor = new Color(255, 255, 255, 255);
         // Текстура с надписью кнопки
         protected Texture2D Texture { get; set; } = null;
 

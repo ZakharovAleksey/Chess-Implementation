@@ -18,7 +18,7 @@ namespace Chess.GameButtons
 
         public override void OnButtonClick(Game1 game)
         {
-            if(IsCkicked)
+            if(IsClicked)
                 game.Exit();
         }
 
