@@ -33,7 +33,7 @@ namespace Chess.GameButtons.PauseMenu
 
         public void LoadContent(ContentManager Content)
         {
-            pauseBackground = Content.Load<Texture2D>(@"PauseMenu/PauseBackgroung");
+            background = Content.Load<Texture2D>(@"PauseMenu/PauseBackgroung");
 
             foreach (Icon icon in PMenu)
                 icon.LoadContent(Content);
@@ -42,7 +42,7 @@ namespace Chess.GameButtons.PauseMenu
         public void Draw(SpriteBatch spriteBatch)
         {
             Rectangle fullScreen = new Rectangle(0, 0, GC.WindowWidth, GC.WindowHeight);
-            spriteBatch.Draw(pauseBackground, fullScreen, Color.White);
+            spriteBatch.Draw(background, fullScreen, Color.White);
 
             foreach (Icon icon in PMenu)
                 icon.Draw(spriteBatch);
@@ -50,9 +50,12 @@ namespace Chess.GameButtons.PauseMenu
 
         #region Fields
 
-        Icon[] PMenu = new Icon[GC.PMCount];
+        public static bool IsSaveBtnClicked { get; set; } = false;
 
-        Texture2D pauseBackground;
+
+
+        Texture2D background;
+        Icon[] PMenu = new Icon[GC.PMCount];
 
         #endregion
 

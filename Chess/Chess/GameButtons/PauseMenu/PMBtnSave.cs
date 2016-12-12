@@ -15,6 +15,9 @@ namespace Chess.GameButtons.PauseMenu
 
         public override void OnButtonClick(Game1 game)
         {
+            PauseMenu.IsSaveBtnClicked = true;
+
+
         }
 
         public override void LoadContent(ContentManager Content)

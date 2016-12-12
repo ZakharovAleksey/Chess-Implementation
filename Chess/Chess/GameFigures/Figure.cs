@@ -19,6 +19,7 @@ namespace Chess.GameFigures
     }
 
     // Базовый абстрактный класс для всех фигур на шахматной доске.
+    [Serializable]
     abstract class Figure : IFigure, ICloneable
     {
         #region Methods

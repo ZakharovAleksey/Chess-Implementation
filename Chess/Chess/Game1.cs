@@ -14,8 +14,8 @@ using Chess.GameButtons.PauseMenu;
 using Chess.GameButtons.WinMenu;
 
 using Chess.GameButtons;
-
-
+using System.Xml.Serialization;
+using System.IO;
 
 namespace Chess
 {
@@ -121,6 +121,14 @@ namespace Chess
                     break;
                 case (int)GameState.PAUSE:
                     pauseMenu.Update(curMouseState, this);
+                    if (PauseMenu.IsSaveBtnClicked)
+                    {
+                        ChessBoard.SaveInXML(ref board, "lol");
+
+                        CurGameState = (int)GameState.EXECUTION;
+                        PauseMenu.IsSaveBtnClicked = false;
+
+                    }
                     break;
                 case (int)GameState.WIN:
                     winMenu.Update(curMouseState, this, WinnerColor);

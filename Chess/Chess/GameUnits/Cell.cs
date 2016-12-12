@@ -10,6 +10,12 @@ using System.Threading.Tasks;
 
 using System.Collections.Generic;
 
+using System.IO;
+using System.Xml.Serialization;
+
+using System.Runtime.Serialization;
+
+
 using Chess.GameParameters;
 
 using GC = Chess.GameParameters.GameConstants;
@@ -32,9 +38,9 @@ namespace Chess.GameUnits
     }
 
     // Клетка - отображается как клетка доски (белая черная или красная если выбрана пользователем для хода)
+    [DataContract]
     class Cell
     {
-
         public Cell(int indexY, int indexX, int cellType)
         {
             this.IndexY = indexY;
@@ -84,12 +90,16 @@ namespace Chess.GameUnits
         // Количество состояний в которых может находиться клетка
         static int StatesCount { get; } = 3;
         // Текущее состояние клетки с шахматной фигурой (или без нее)
+        [DataMember]
         int CurrentState { get; set; } = 0;
         // Тип клетки - белая или черная или красная
+        [DataMember]
         int Type { get; set; }
 
         // Индексы клетки 
+        [DataMember]
         int IndexX { get; set; }
+        [DataMember]
         int IndexY { get; set; }
 
         // Показывает выбрана ли клетка на данный момент пользователем
@@ -99,6 +109,7 @@ namespace Chess.GameUnits
         // Массив содержит контент для всех возможных состояний клетки
         Texture2D[] StatesArray { get; set; } = new Texture2D[StatesCount];
         // Координаты клетки на экране
+        [DataMember]
         Rectangle ScreenPos { get; set; }
 
         #endregion
