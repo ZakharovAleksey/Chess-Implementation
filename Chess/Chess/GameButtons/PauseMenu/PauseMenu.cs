@@ -14,14 +14,34 @@ namespace Chess.GameButtons.PauseMenu
 {
     class PauseMenu
     {
+        // Определяет номера иконок в меню паузы
+        enum PauseMenuID
+        {
+            RESUME = 0,
+            NEW_GAME = 1,
+            OPEN = 2, 
+            SAVE = 3,
+            SETTINGS = 4,
+            QUIT = 5,
+            
+        }
+
 
         public PauseMenu()
         {
-            PMenu[0] = new PMBtnResume(100, GC.WindowWidth / 2 - GC.PMIconPauseWidth / 2);
-            PMenu[1] = new PMBtnOpen(GC.PMIconLevelY, 100);
-            PMenu[2] = new PMBtnSave(GC.PMIconLevelY, 200);
-            PMenu[3] = new PMBtnSettings(GC.PMIconLevelY, 300);
-            PMenu[4] = new PMBtnQuit(GC.PMIconLevelY, 400);
+            PMenu[(int) PauseMenuID.RESUME] = new PMBtnResume(GC.WindowHeight / 2 - GC.PMIconPauseHeight /4 * 3 , GC.WindowWidth / 2 - GC.PMIconPauseWidth / 2);
+
+            int Indent = GC.WindowWidth / 2 - GC.GMIconWidth / 2 - 2 * GC.GMIconWidth - GC.WindowWidth / 15;
+
+            PMenu[(int)PauseMenuID.NEW_GAME] = new PMBtnNewGame(GC.PMIconLevelY, Indent);
+            Indent += GC.GMIconWidth + GC.WindowWidth / 30;
+            PMenu[(int)PauseMenuID.OPEN] = new PMBtnOpen(GC.PMIconLevelY, Indent);
+            Indent += GC.GMIconWidth + GC.WindowWidth / 30;
+            PMenu[(int)PauseMenuID.SAVE] = new PMBtnSave(GC.PMIconLevelY, Indent);
+            Indent += GC.GMIconWidth + GC.WindowWidth / 30;
+            PMenu[(int)PauseMenuID.SETTINGS] = new PMBtnSettings(GC.PMIconLevelY, Indent);
+            Indent += GC.GMIconWidth + GC.WindowWidth / 30;
+            PMenu[(int)PauseMenuID.QUIT] = new PMBtnQuit(GC.PMIconLevelY, Indent);
         }
 
 
@@ -51,9 +71,11 @@ namespace Chess.GameButtons.PauseMenu
         #region Fields
 
         public static bool IsSaveBtnClicked { get; set; } = false;
+        public static bool IsLoadBtmClicked { get; set; } = false;
+        public static bool IsNewGameCliced { get; set; } = false;
 
 
-
+        // Текстуры для заднего фона и иконок меню
         Texture2D background;
         Icon[] PMenu = new Icon[GC.PMCount];
 

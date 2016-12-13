@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace Chess.GameButtons.PauseMenu
 {
-    class PMBtnSave : Icon
+    class PMBtnNewGame : Icon
     {
-        public PMBtnSave(int posY, int posX) : base(posY, posX) { }
+        public PMBtnNewGame(int posY, int posX) : base(posY, posX) { }
 
 
         public override void OnButtonClick(Game1 game)
         {
-            PauseMenu.IsSaveBtnClicked = true;
+            PauseMenu.IsNewGameCliced = true;
         }
 
         public override void LoadContent(ContentManager Content)
         {
-            this.Texture = Content.Load<Texture2D>(@"PauseMenu/Save");
+            this.Texture = Content.Load<Texture2D>(@"PauseMenu/NewGame");
         }
     }
 }

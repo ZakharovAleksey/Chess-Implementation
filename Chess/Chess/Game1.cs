@@ -38,11 +38,19 @@ namespace Chess
     /// </summary>
     public class Game1 : Game
     {
+        #region Fields
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
         // Класс Реализующий игровую доску
-        ChessBoard board;
+        ChessBoard chessBoard;
+        // Цвет победившего игрока
+        public static int WinnerColor { get; set; }
+
+        // Текущее и предыдущее состояния меню игр
+        public int CurGameState { get; set; } = (int)GameState.MAIN_MENU;
+        public int PrevGameState { get; set; }
 
         // Классы различных меню игры
         MainMenu mainMenu;
@@ -50,11 +58,7 @@ namespace Chess
         PauseMenu pauseMenu;
         WinMenu winMenu;
 
-
-        public static int WinnerColor { get; set; }
-
-        public int CurGameState { get; set; } = (int) GameState.MAIN_MENU;
-        public int PrevGameState { get; set; }
+        #endregion
 
         public Game1()
         {
@@ -64,7 +68,7 @@ namespace Chess
             graphics.PreferredBackBufferWidth = GameConstants.WindowWidth;
             graphics.PreferredBackBufferHeight = GameConstants.WindowHeight;
 
-            board = new ChessBoard();
+            chessBoard = new ChessBoard();
 
             mainMenu = new MainMenu();
             gameMenu = new GameMenu();
@@ -83,7 +87,7 @@ namespace Chess
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            board.LoadContent(Content);
+            chessBoard.LoadContent(Content);
             gameMenu.LoadContent(Content);
             winMenu.LoadContent(Content);
             pauseMenu.LoadContent(Content);
@@ -103,37 +107,60 @@ namespace Chess
             MouseState curMouseState = Mouse.GetState();
             PrevGameState = CurGameState;
 
+            // В зависимости от текущего состояния игры выбираем ту или иную ветвь
             switch (CurGameState)
             {
                 case (int)GameState.MAIN_MENU:
                     mainMenu.Update(curMouseState, this);
                     break;
                 case (int)GameState.EXECUTION:
-                    if (board.IsCheckMate)
+                    if (chessBoard.IsCheckMate)
                     {
                         // Определяем цвет победителя и переходим в соответствующий раздел игрового меню
-                        WinnerColor = (board.IsBlackMove) ? (int)GameWinner.WHITE : (int)GameWinner.BLACK;
+                        WinnerColor = (chessBoard.IsBlackMove) ? (int)GameWinner.WHITE : (int)GameWinner.BLACK;
                         CurGameState = (int)GameState.WIN;
                         break;
                     }
-                    board.Update(gameTime);
+                    chessBoard.Update(gameTime);
                     gameMenu.Update(curMouseState, this);
                     break;
                 case (int)GameState.PAUSE:
                     pauseMenu.Update(curMouseState, this);
                     if (PauseMenu.IsSaveBtnClicked)
                     {
-                        ChessBoard.SaveInXML(ref board, "lol");
-
+                        // Попытка сохранить текущее состояние игры
+                        ChessBoard.SaveInXML(ref chessBoard, "lol");
+                        // Переходим к игре
                         CurGameState = (int)GameState.EXECUTION;
                         PauseMenu.IsSaveBtnClicked = false;
-
+                    }
+                    else if (PauseMenu.IsLoadBtmClicked)
+                    {
+                        // Попытка сохранить текущее состояние игры
+                        ChessBoard.LoadFromXML(ref chessBoard, "lol");
+                        // Переходим к игре
+                        CurGameState = (int)GameState.EXECUTION;
+                        PauseMenu.IsLoadBtmClicked = false;
+                    }
+                    else if (PauseMenu.IsNewGameCliced)
+                    {
+                        // Обновляем доску и параметры начала игры
+                        chessBoard.CreateNew();
+                        chessBoard.SetLogicParamToInitalState();
+                        // Переходим в режим игры
+                        CurGameState = (int)GameState.EXECUTION;
                     }
                     break;
                 case (int)GameState.WIN:
                     winMenu.Update(curMouseState, this, WinnerColor);
                     if (WinMenu.IsNewGameBtnCliced)
-                        board.CreateNew();
+                    {
+                        // Обновляем доску и параметры начала игры
+                        chessBoard.CreateNew();
+                        chessBoard.SetLogicParamToInitalState();
+                        // Переходим в режим игры
+                        CurGameState = (int)GameState.EXECUTION;
+                    }
                     break;
             }
 
@@ -147,6 +174,7 @@ namespace Chess
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
+            // В зависимости от текущего состояния игры выбираем ту или иную ветвь
             switch (CurGameState)
             {
                 case (int)GameState.MAIN_MENU:
@@ -156,24 +184,26 @@ namespace Chess
                     // Это чтобы отрисовыволось после победы - так ка не успевали загружать контент
                     if (PrevGameState != (int)GameState.WIN)
                     {
-                        board.Draw(spriteBatch, Content);
+                        chessBoard.Draw(spriteBatch, Content);
                         gameMenu.Draw(spriteBatch);
                     }
                     break;
                 case (int)GameState.PAUSE:
-                    board.Draw(spriteBatch, Content);
+                    chessBoard.Draw(spriteBatch, Content);
                     pauseMenu.Draw(spriteBatch);
+
+                    // Делаем это тут так как в противном случае не подгружается контент
+                    if (PauseMenu.IsNewGameCliced)
+                        PauseMenu.IsNewGameCliced = false;
+
                     break;
                 case (int)GameState.WIN:
-
-                    board.Draw(spriteBatch, Content);
+                    chessBoard.Draw(spriteBatch, Content);
                     winMenu.Draw(spriteBatch);
+
+                    // Делаем это тут так как в противном случае не подгружается контент
                     if (WinMenu.IsNewGameBtnCliced)
-                    {
-                        CurGameState = (int)GameState.EXECUTION;
-                        board.SetLogicParamToInitalState();
                         WinMenu.IsNewGameBtnCliced = false;
-                    }
 
                     break;
             }

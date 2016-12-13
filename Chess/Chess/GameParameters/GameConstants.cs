@@ -55,7 +55,7 @@ namespace Chess.GameParameters
 
         #region Button parameters
 
-        public const int MMBtnWidth = WindowWidth / 5;
+        public const int MMBtnWidth = WindowWidth / 3;
         public const int MMBtnHeight = WindowHeight / 10;
 
         public const int MMBtnIndentTop = WindowHeight / 2 - MMBtnDistance - MMBtnDistance / 2;
@@ -92,9 +92,9 @@ namespace Chess.GameParameters
         public const int PMIconPauseHeight = PMIconPauseWidth;
 
 
-        public const int PMIconLevelY = 350;
+        public const int PMIconLevelY = WindowWidth / 2 + 50;
 
-        public const int PMCount = 5;
+        public const int PMCount = 6;
 
         #endregion
 

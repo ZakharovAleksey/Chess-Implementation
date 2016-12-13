@@ -18,6 +18,7 @@ using GC = Chess.GameParameters.GameConstants;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
+#region Serialization
 
 using System.IO;
 using System.Xml.Serialization;
@@ -25,10 +26,16 @@ using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Xml;
 
+using System.Runtime.Serialization.Formatters.Binary;
+
+using Chess.GameButtons.PauseMenu;
+using Chess.GameButtons.WinMenu;
+
+#endregion
+
 namespace Chess.GameUnits
 {
     // Класс который хранит шахматную доску и в котором прописана всяосновная логика игры
-    [DataContract]
     public class ChessBoard
     {
         public ChessBoard()
@@ -468,7 +475,7 @@ namespace Chess.GameUnits
                 Board[EndMoveIndexY, EndMoveIndexX].SetStateIDLE();
             }
 
-            if (IsCheckMate)
+            if (IsCheckMate || PauseMenu.IsNewGameCliced || WinMenu.IsNewGameBtnCliced)
             {
                 BoardBackground = Content.Load<Texture2D>(@"cell/BoardBackground");
 
@@ -496,11 +503,9 @@ namespace Chess.GameUnits
 
         #region Fields
         // Матрица показывающая выбрана ли клетка или нет
-        [DataMember]
         Cell[,] Board { get; set; } = new Cell[GC.BoardSize, GC.BoardSize];
 
-        // Матрица хранящая фигуры тип шахматной фигуры для данной клетки [если нет фигуры - EmptyCell]
-        
+        // Матрица хранящая фигуры тип шахматной фигуры для данной клетки [если нет фигуры - EmptyCell]  
         Figure[,] FigureBoard { get; set; } = new Figure[GC.BoardSize, GC.BoardSize];
 
         // Индексы ячейки откуда начнется движение выбранной фигуры
@@ -512,17 +517,13 @@ namespace Chess.GameUnits
         int EndMoveIndexY { get; set; } = -1;
 
         // Показывает поставлен ли в данный момент игры Шах
-        [DataMember]
         public bool IsShah { get; set; } = false;
         // Показывает поставлен ли в данный момент игры Мат
-        [DataMember]
         public bool IsCheckMate { get; set; } = false;
 
         // Показывает ходят ли сейчас белые
-        [DataMember]
         public bool IsWhiteMove { get; set; } = true;
         // Показывает ходят ли сейчас черные
-        [DataMember]
         public bool IsBlackMove { get; set; } = false;
 
         // Показывает выбранна ли какая-либо из фигур
@@ -546,23 +547,12 @@ namespace Chess.GameUnits
         {
             if (!Directory.Exists("Saves"))
                 Directory.CreateDirectory("Saves");
+        }
 
-            DataContractSerializer XML = new DataContractSerializer(typeof(ChessBoard));
-
-            using (Stream s = File.Create("Saves/hah.xml"))
-                XML.WriteObject(s, board);
-
-            //string fullPath = @"Saves/"+ fileName + ".xml";
-            ////fullPath += DateTime.Now.ToString() + ".xml";
-            ////fullPath = fileName.Replace('/', '_');
-            ////fullPath = fileName.Replace(':', '_');
-            ////fullPath = fileName.Replace(' ', '_');
-            //FileStream writeStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None); // Create - переписывает файл автомвтически, не CreateNew
-            //XmlSerializer XML = new XmlSerializer(typeof(ChessBoard));
-            //XML.Serialize(writeStream, board);
-
-
-            //writeStream.Close();
+        public static void LoadFromXML(ref ChessBoard board, string fileName)
+        {
+            if (!Directory.Exists("Saves"))
+                Directory.CreateDirectory("Saves");
         }
     }
 }

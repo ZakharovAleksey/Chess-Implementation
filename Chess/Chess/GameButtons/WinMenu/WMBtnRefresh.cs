@@ -30,7 +30,7 @@ namespace Chess.GameButtons.WinMenu
         public override void Draw(SpriteBatch spritebatch)
         {
             if (WinMenu.IsWatchBtnClicked)
-                this.SetPosition(GC.GMIconIndentTop, GC.GMIconIndentLeft);
+                this.SetPosition(GC.GMIconIndentTop + GC.GMIconHeight, GC.GMIconIndentLeft);
             base.Draw(spritebatch);
         }
     }
