@@ -1,37 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-
-using Chess.GameParameters;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Chess.GameFigures;
-
-using GC = Chess.GameParameters.GameConstants;
-
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using Chess.GameButtons.PauseMenu;
+using Chess.GameButtons.WinMenu;
 
 #region Serialization
 
 using System.IO;
-using System.Xml.Serialization;
-
 using System.Runtime.Serialization;
-using System.Xml;
-
-using System.Runtime.Serialization.Formatters.Binary;
-
-using Chess.GameButtons.PauseMenu;
-using Chess.GameButtons.WinMenu;
 
 #endregion
+
+
+using GC = Chess.GameParameters.GameConstants;
 
 namespace Chess.GameUnits
 {
@@ -530,11 +516,12 @@ namespace Chess.GameUnits
         // Матрица показывающая выбрана ли клетка или нет
         Cell[,] Board { get; set; } = new Cell[GC.BoardSize, GC.BoardSize];
 
+        // Нужен только для сериализации: https://social.msdn.microsoft.com/Forums/vstudio/en-US/ff233917-eabf-47a3-8127-55fac4188b94/define-double-as-datamember?forum=wcf
         [DataMember]
         Cell[][] serializationBoard = new Cell[GC.BoardSize][];
 
         [OnSerializing]
-        public void BeforeSerializing(StreamingContext ctx)
+        public void BeforeSerializingBoard(StreamingContext ctx)
         {
 
             for (int columnID = 0; columnID < GC.BoardSize; ++columnID)
@@ -546,8 +533,24 @@ namespace Chess.GameUnits
 
         }
 
-        // Матрица хранящая фигуры тип шахматной фигуры для данной клетки [если нет фигуры - EmptyCell]  
+        // Матрица хранящая фигуры тип шахматной фигуры для данной клетки [если нет фигуры - EmptyCell] 
         Figure[,] FigureBoard { get; set; } = new Figure[GC.BoardSize, GC.BoardSize];
+
+        //[DataMember]
+        Figure[][] serializatioFigurenBoard = new Figure[GC.BoardSize][];
+
+        //[OnSerializing]
+        public void BeforeSerializingFigureBoard(StreamingContext ctx)
+        {
+
+            for (int columnID = 0; columnID < GC.BoardSize; ++columnID)
+            {
+                this.serializatioFigurenBoard[columnID] = new Figure[GC.BoardSize];
+                for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
+                    this.serializatioFigurenBoard[columnID][rowID] = this.FigureBoard[columnID, rowID];
+            }
+
+        }
 
         // Индексы ячейки откуда начнется движение выбранной фигуры
         int StartMoveIndexX { get; set; } = -1;
