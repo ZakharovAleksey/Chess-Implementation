@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Chess.GameParameters;
 using Microsoft.Xna.Framework.Input;
 
+using System.Runtime.Serialization;
+
 using GC = Chess.GameParameters.GameConstants;
 
 namespace Chess.GameFigures
@@ -18,6 +20,7 @@ namespace Chess.GameFigures
     /// <summary>
     /// Pawn loginc implementation.
     /// </summary>
+    [DataContract]
     class Pawn : Figure
     {
         public Pawn(int indexY, int indexX, int color) : base(indexY, indexX, color) { }
@@ -27,7 +30,7 @@ namespace Chess.GameFigures
         public override void  LoadContent(ContentManager Content)
         {
             if(Color == (int)FigureColor.WHITE)
-                Texture = Content.Load<Texture2D>(@"figures/pawn");
+                Texture = Content.Load<Texture2D>(@"figures/Pawn_White");
             else
                 Texture = Content.Load<Texture2D>(@"figures/Pawn_Black");
         }

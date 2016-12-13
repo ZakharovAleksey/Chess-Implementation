@@ -35,10 +35,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>queen.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameButtons\GameMenu\GameMenu.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnNewGame.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnOpen.cs" />
+    <Compile Include="GameButtons\GameMenu\GMBtnPause.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnQuit.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnSettings.cs" />
+    <Compile Include="GameButtons\Icon.cs" />
+    <Compile Include="GameButtons\MainMenu\BtnExitGame.cs" />
+    <Compile Include="GameButtons\MainMenu\BtnLoadGame.cs" />
+    <Compile Include="GameButtons\MainMenu\BtnNewGame.cs" />
+    <Compile Include="GameButtons\Button.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnSave.cs" />
+    <Compile Include="GameButtons\MainMenu\MainMenu.cs" />
+    <Compile Include="GameButtons\PauseMenu\PauseMenu.cs" />
+    <Compile Include="GameButtons\PauseMenu\PMBtnResume.cs" />
+    <Compile Include="GameButtons\WinMenu\WinMenu.cs" />
+    <Compile Include="GameButtons\WinMenu\WMBtnQuit.cs" />
+    <Compile Include="GameButtons\WinMenu\WMBtnRefresh.cs" />
+    <Compile Include="GameButtons\WinMenu\WMBtnWatch.cs" />
     <Compile Include="GameFigures\Bishop.cs" />
     <Compile Include="GameFigures\EmptyCell.cs" />
     <Compile Include="GameFigures\Figure.cs" />
@@ -59,16 +78,77 @@
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="queen.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\figures\pawn.xnb">
+    <Content Include="..\..\Content\bin\MainMenu\Exit.xnb">
+      <Link>Content\MainMenu\Exit.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\MainMenu\LoadGame.xnb">
+      <Link>Content\MainMenu\LoadGame.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\figures\Bishop_Black.xnb">
+      <Link>Content\figures\Bishop_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Bishop_White.xnb">
+      <Link>Content\figures\Bishop_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\King_Black.xnb">
+      <Link>Content\figures\King_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\King_White.xnb">
+      <Link>Content\figures\King_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Knight_Black.xnb">
+      <Link>Content\figures\Knight_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Knight_White.xnb">
+      <Link>Content\figures\Knight_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Pawn_Black.xnb">
+      <Link>Content\figures\Pawn_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Pawn_White.xnb">
+      <Link>Content\figures\Pawn_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Queen_Black.xnb">
+      <Link>Content\figures\Queen_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Queen_White.xnb">
+      <Link>Content\figures\Queen_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Rook_Black.xnb">
+      <Link>Content\figures\Rook_Black.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\figures\Rook_White.xnb">
+      <Link>Content\figures\Rook_White.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -81,68 +161,111 @@
       <Link>Content\cell\checked.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\cell\possible.xnb">
-      <Link>Content\cell\possible.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\Content\bin\cell\white.xnb">
       <Link>Content\cell\white.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Knight_White.xnb">
-      <Link>Content\figures\Knight_White.xnb</Link>
+    <Content Include="..\..\Content\bin\cell\possible.xnb">
+      <Link>Content\cell\possible.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Rook_White.xnb">
-      <Link>Content\figures\Rook_White.xnb</Link>
+    <Content Include="..\..\Content\bin\cell\BoardBackground.xnb">
+      <Link>Content\cell\BoardBackground.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Bishop_White.xnb">
-      <Link>Content\figures\Bishop_White.xnb</Link>
+    <Content Include="..\..\Content\bin\GameMenu\Pause.xnb">
+      <Link>Content\GameMenu\Pause.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Queen_White.xnb">
-      <Link>Content\figures\Queen_White.xnb</Link>
+    <Content Include="..\..\Content\bin\PauseMenu\PauseBackgroung.xnb">
+      <Link>Content\PauseMenu\PauseBackgroung.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\King_White.xnb">
-      <Link>Content\figures\King_White.xnb</Link>
+    <Content Include="..\..\Content\bin\PauseMenu\Resume.xnb">
+      <Link>Content\PauseMenu\Resume.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Content\bin\figures\Bishop_Black.xnb">
-      <Link>Content\figures\Bishop_Black.xnb</Link>
+    <Content Include="..\..\Content\bin\cell\Clock.xnb">
+      <Link>Content\cell\Clock.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\figures\King_Black.xnb">
-      <Link>Content\figures\King_Black.xnb</Link>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\PauseMenu\Open.xnb">
+      <Link>Content\PauseMenu\Open.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\figures\Knight_Black.xnb">
-      <Link>Content\figures\Knight_Black.xnb</Link>
+    <Content Include="..\..\Content\bin\PauseMenu\Save.xnb">
+      <Link>Content\PauseMenu\Save.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\figures\Pawn_Black.xnb">
-      <Link>Content\figures\Pawn_Black.xnb</Link>
+    <Content Include="..\..\Content\bin\PauseMenu\Settings.xnb">
+      <Link>Content\PauseMenu\Settings.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\figures\Queen_Black.xnb">
-      <Link>Content\figures\Queen_Black.xnb</Link>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\PauseMenu\Quit.xnb">
+      <Link>Content\PauseMenu\Quit.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Content\bin\figures\Rook_Black.xnb">
-      <Link>Content\figures\Rook_Black.xnb</Link>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\MainMenu\MenuBackGround.xnb">
+      <Link>Content\MainMenu\MenuBackGround.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\WinMenu\Quit.xnb">
+      <Link>Content\WinMenu\Quit.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\WinMenu\Trophy_White.xnb">
+      <Link>Content\WinMenu\Trophy_White.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Content\bin\WinMenu\WinBackgroung.xnb">
+      <Link>Content\WinMenu\WinBackgroung.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\WinMenu\Refresh.xnb">
+      <Link>Content\WinMenu\Refresh.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\WinMenu\Watch.xnb">
+      <Link>Content\WinMenu\Watch.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\MainMenu\NewGame.xnb">
+      <Link>Content\MainMenu\NewGame.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Content\bin\PauseMenu\NewGame.xnb">
+      <Link>Content\PauseMenu\NewGame.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

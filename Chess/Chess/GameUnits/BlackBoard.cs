@@ -1,30 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-
-using Chess.GameParameters;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Chess.GameFigures;
+using Chess.GameButtons.PauseMenu;
+using Chess.GameButtons.WinMenu;
+
+#region Serialization
+
+using System.IO;
+using System.Runtime.Serialization;
+
+#endregion
+
 
 using GC = Chess.GameParameters.GameConstants;
-
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace Chess.GameUnits
 {
     // Класс который хранит шахматную доску и в котором прописана всяосновная логика игры
-    class ChessBoard
+    [DataContract]
+    public class ChessBoard
     {
         public ChessBoard()
         {
+
             // Объявляем шахматную доску
             for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
             {
@@ -71,6 +74,70 @@ namespace Chess.GameUnits
         }
 
         #region Methods
+
+        #region Create New Game functions
+
+        // Вызывается при кнопке новая игра: Ставит элементы доски в начальное состояние
+        public void CreateNew()
+        {
+            for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
+            {
+                int curColor = (rowID % 2 == 0) ? (int)CellType.WHITE : (int)CellType.BLACK;
+                for (int columnID = 0; columnID < GC.BoardSize; ++columnID)
+                {
+                    Board[rowID, columnID] = new Cell(rowID, columnID, curColor);
+                    curColor = (curColor == (int)CellType.BLACK) ? (int)CellType.WHITE : (int)CellType.BLACK;
+
+                    // Подгружаем пешки
+                    if (rowID == GC.BoardSize - 2)
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 1)
+                        FigureBoard[rowID, columnID] = new Pawn(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем коней
+                    else if (rowID == GC.BoardSize - 1 && (columnID == 1 || columnID == GC.BoardSize - 2))
+                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 1 || columnID == GC.BoardSize - 2))
+                        FigureBoard[rowID, columnID] = new Knight(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем ладей
+                    else if (rowID == GC.BoardSize - 1 && (columnID == 0 || columnID == GC.BoardSize - 1))
+                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 0 || columnID == GC.BoardSize - 1))
+                        FigureBoard[rowID, columnID] = new Rook(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем слонов
+                    else if (rowID == GC.BoardSize - 1 && (columnID == 2 || columnID == GC.BoardSize - 3))
+                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && (columnID == 2 || columnID == GC.BoardSize - 3))
+                        FigureBoard[rowID, columnID] = new Bishop(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем ферзей
+                    else if (rowID == GC.BoardSize - 1 && columnID == 3)
+                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && columnID == 3)
+                        FigureBoard[rowID, columnID] = new Queen(rowID, columnID, (int)FigureColor.BLACK);
+                    // Подгружаем королей
+                    else if (rowID == GC.BoardSize - 1 && columnID == 4)
+                        FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.WHITE);
+                    else if (rowID == 0 && columnID == 4)
+                        FigureBoard[rowID, columnID] = new King(rowID, columnID, (int)FigureColor.BLACK);
+                    else
+                        FigureBoard[rowID, columnID] = new EmptyCell(rowID, columnID);
+                }
+            }
+        }
+
+        // Вызывается при кнопке новая игра:  Устанавливает параметры необходимые для логики проведения игры в начальное состояние
+        public void SetLogicParamToInitalState()
+        {
+            // В новой игре первыми ходят белые 
+            IsWhiteMove = true;
+            IsBlackMove = false;
+
+            // В новой игре нет ни Шаха ни Мата
+            IsShah = false;
+            IsCheckMate = false;
+        }
+
+        #endregion
+
 
         #region Update 
 
@@ -368,6 +435,8 @@ namespace Chess.GameUnits
 
         public void LoadContent(ContentManager Content)
         {
+            BoardBackground = Content.Load<Texture2D>(@"cell/BoardBackground");
+
             foreach (Cell cell in Board)
                 cell.LoadContent(Content);
 
@@ -394,6 +463,23 @@ namespace Chess.GameUnits
                 Board[EndMoveIndexY, EndMoveIndexX].SetStateIDLE();
             }
 
+            if (IsCheckMate || PauseMenu.IsNewGameCliced || WinMenu.IsNewGameBtnCliced)
+            {
+                BoardBackground = Content.Load<Texture2D>(@"cell/BoardBackground");
+
+                foreach (Cell cell in Board)
+                    cell.LoadContent(Content);
+
+                // Грузим контент для каждой их фигур на доске
+                foreach (Figure fig in FigureBoard)
+                    fig.LoadContent(Content);
+            }
+
+            // Рисуем задний фон для доски (окаймление)
+            Rectangle backgroundRect = new Rectangle(GC.IndentLeft - GC.CellWidth / 2, GC.IndentTop - GC.CellWidth / 2, GC.CellWidth * GC.BoardSize + GC.CellWidth, GC.CellHeight * GC.BoardSize + GC.CellHeight);
+
+            spriteBatch.Draw(BoardBackground, backgroundRect, Color.White);
+
             foreach (Cell cell in Board)
                 cell.Draw(spriteBatch);
 
@@ -403,13 +489,68 @@ namespace Chess.GameUnits
 
         #endregion
 
-        #region Fields
+        public static void SaveInXML(ref ChessBoard board, string fileName)
+        {
+            if (!Directory.Exists("Saves"))
+                Directory.CreateDirectory("Saves");
 
+            string fullpath = "Saves/" + fileName + ".xml";
+
+            DataContractSerializer dc = new DataContractSerializer(typeof(ChessBoard));
+            FileStream stream = new FileStream(fullpath, FileMode.Create);
+
+            dc.WriteObject(stream, board);
+
+            stream.Close();
+
+            
+        }
+
+        public static void LoadFromXML(ref ChessBoard board, string fileName)
+        {
+            if (!Directory.Exists("Saves"))
+                Directory.CreateDirectory("Saves");
+        }
+
+        #region Fields
         // Матрица показывающая выбрана ли клетка или нет
         Cell[,] Board { get; set; } = new Cell[GC.BoardSize, GC.BoardSize];
 
-        // Матрица хранящая фигуры тип шахматной фигуры для данной клетки [если нет фигуры - EmptyCell]
+        // Нужен только для сериализации: https://social.msdn.microsoft.com/Forums/vstudio/en-US/ff233917-eabf-47a3-8127-55fac4188b94/define-double-as-datamember?forum=wcf
+        [DataMember]
+        Cell[][] serializationBoard = new Cell[GC.BoardSize][];
+
+        [OnSerializing]
+        public void BeforeSerializingBoard(StreamingContext ctx)
+        {
+
+            for (int columnID = 0; columnID < GC.BoardSize; ++columnID)
+            {
+                this.serializationBoard[columnID] = new Cell[GC.BoardSize];
+                for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
+                    this.serializationBoard[columnID][rowID] = this.Board[columnID, rowID];
+            }
+
+        }
+
+        // Матрица хранящая фигуры тип шахматной фигуры для данной клетки [если нет фигуры - EmptyCell] 
         Figure[,] FigureBoard { get; set; } = new Figure[GC.BoardSize, GC.BoardSize];
+
+        //[DataMember]
+        Figure[][] serializatioFigurenBoard = new Figure[GC.BoardSize][];
+
+        //[OnSerializing]
+        public void BeforeSerializingFigureBoard(StreamingContext ctx)
+        {
+
+            for (int columnID = 0; columnID < GC.BoardSize; ++columnID)
+            {
+                this.serializatioFigurenBoard[columnID] = new Figure[GC.BoardSize];
+                for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
+                    this.serializatioFigurenBoard[columnID][rowID] = this.FigureBoard[columnID, rowID];
+            }
+
+        }
 
         // Индексы ячейки откуда начнется движение выбранной фигуры
         int StartMoveIndexX { get; set; } = -1;
@@ -419,22 +560,27 @@ namespace Chess.GameUnits
         int EndMoveIndexX { get; set; } = -1;
         int EndMoveIndexY { get; set; } = -1;
 
-
         // Показывает поставлен ли в данный момент игры Шах
-        bool IsShah { get; set; } = false;
+        [DataMember]
+        public bool IsShah { get; set; } = false;
         // Показывает поставлен ли в данный момент игры Мат
-        bool IsCheckMate { get; set; } = false;
+        [DataMember]
+        public bool IsCheckMate { get; set; } = false;
 
         // Показывает ходят ли сейчас белые
-        bool IsWhiteMove { get; set; } = true;
+        [DataMember]
+        public bool IsWhiteMove { get; set; } = true;
         // Показывает ходят ли сейчас черные
-        bool IsBlackMove { get; set; } = false;
+        [DataMember]
+        public bool IsBlackMove { get; set; } = false;
 
         // Показывает выбранна ли какая-либо из фигур
         bool IsFigureChosenForStep { get; set; } = false;
         // True если сделан ход! False в противном случае 
         bool IsFigureMadeStep { get; set; } = false;
 
+        // Текстура для окаймления доски [прямойгольник окружающий ее]
+        Texture2D BoardBackground { get; set; }
 
         // Таймер нужен для того, чтобы от (якобы) двойнова щелчка фигуры которой сходили сразу же не выбиралась
         double TimeBetweenLeftBTNClick { get; set; } = 0;

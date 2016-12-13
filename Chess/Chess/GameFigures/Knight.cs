@@ -6,10 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Runtime.Serialization;
+
 using GC = Chess.GameParameters.GameConstants;
 
 namespace Chess.GameFigures
 {
+    [DataContract]
     class Knight : Figure
     {
         public Knight(int indexY, int indexX, int color) : base(indexY, indexX, color) { }

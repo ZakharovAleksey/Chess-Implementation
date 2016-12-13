@@ -9,6 +9,19 @@ using System.Threading.Tasks;
 
 using GC = Chess.GameParameters.GameConstants;
 
+#region Serialization
+
+using System.IO;
+using System.Xml.Serialization;
+
+using System.Runtime.Serialization;
+using System.Xml;
+
+using System.Runtime.Serialization.Formatters.Binary;
+
+
+#endregion
+
 namespace Chess.GameFigures
 {
     // Тип текущей фигуры
@@ -19,6 +32,15 @@ namespace Chess.GameFigures
     }
 
     // Базовый абстрактный класс для всех фигур на шахматной доске.
+    [DataContract]
+    [KnownType(typeof(Rook))]
+    [KnownType(typeof(EmptyCell))]
+    [KnownType(typeof(Figure))]
+    [KnownType(typeof(King))]
+    [KnownType(typeof(Knight))]
+    [KnownType(typeof(Pawn))]
+    [KnownType(typeof(Queen))]
+    [KnownType(typeof(Rook))]
     abstract class Figure : IFigure, ICloneable
     {
         #region Methods
@@ -127,7 +149,7 @@ namespace Chess.GameFigures
         {
             if (Texture != null)
             {
-                Rectangle drawPos = new Rectangle(GC.IndentLeft + IndexX * GC.CellHeight, GC.IndentTop + IndexY * GC.CellWidth, GC.CellWidth, GC.CellHeight);
+                Rectangle drawPos = new Rectangle(GC.IndentLeft + IndexX * GC.CellHeight, GC.IndentTop + IndexY * GC.CellWidth + 2, GC.CellWidth, GC.CellHeight - 5);
                 spriteBatch.Draw(Texture, drawPos, Microsoft.Xna.Framework.Color.White);
             }
         }
@@ -181,7 +203,9 @@ namespace Chess.GameFigures
         #region Properties
 
         // y и x координата положения фигуры на доске соответственно
+        [DataMember]
         public int IndexY { get; set; }
+        [DataMember]
         public int IndexX { get; set; }
 
         // Показывает выбрана ли данная фигура на текущий момент пользователем
@@ -189,6 +213,7 @@ namespace Chess.GameFigures
         // Текстура для фигуры
         protected Texture2D Texture { get; set; } = null;
         // Цвет фигуры
+        [DataMember]
         public int Color { get; set; }
 
         #endregion
