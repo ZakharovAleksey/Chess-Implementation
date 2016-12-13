@@ -129,7 +129,7 @@ namespace Chess
                     if (PauseMenu.IsSaveBtnClicked)
                     {
                         // Попытка сохранить текущее состояние игры
-                        ChessBoard.SaveInXML(ref chessBoard, "lol");
+                        ChessBoard.SaveInXML(ref chessBoard, "saveGame");
                         // Переходим к игре
                         CurGameState = (int)GameState.EXECUTION;
                         PauseMenu.IsSaveBtnClicked = false;
@@ -137,7 +137,7 @@ namespace Chess
                     else if (PauseMenu.IsLoadBtmClicked)
                     {
                         // Попытка сохранить текущее состояние игры
-                        ChessBoard.LoadFromXML(ref chessBoard, "lol");
+                        ChessBoard.LoadFromXML(ref chessBoard, "saveGame");
                         // Переходим к игре
                         CurGameState = (int)GameState.EXECUTION;
                         PauseMenu.IsLoadBtmClicked = false;

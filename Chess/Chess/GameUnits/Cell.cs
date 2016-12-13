@@ -93,10 +93,13 @@ namespace Chess.GameUnits
         [DataMember]
         int CurrentState { get; set; } = 0;
         // Тип клетки - белая или черная или красная
+        [DataMember]
         int Type { get; set; }
 
         // Индексы клетки 
+        [DataMember]
         int IndexX { get; set; }
+        [DataMember]
         int IndexY { get; set; }
 
         // Показывает выбрана ли клетка на данный момент пользователем

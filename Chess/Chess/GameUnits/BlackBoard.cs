@@ -36,10 +36,12 @@ using Chess.GameButtons.WinMenu;
 namespace Chess.GameUnits
 {
     // Класс который хранит шахматную доску и в котором прописана всяосновная логика игры
+    [DataContract]
     public class ChessBoard
     {
         public ChessBoard()
         {
+
             // Объявляем шахматную доску
             for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
             {
@@ -501,9 +503,48 @@ namespace Chess.GameUnits
 
         #endregion
 
+        public static void SaveInXML(ref ChessBoard board, string fileName)
+        {
+            if (!Directory.Exists("Saves"))
+                Directory.CreateDirectory("Saves");
+
+            string fullpath = "Saves/" + fileName + ".xml";
+
+            DataContractSerializer dc = new DataContractSerializer(typeof(ChessBoard));
+            FileStream stream = new FileStream(fullpath, FileMode.Create);
+
+            dc.WriteObject(stream, board);
+
+            stream.Close();
+
+            
+        }
+
+        public static void LoadFromXML(ref ChessBoard board, string fileName)
+        {
+            if (!Directory.Exists("Saves"))
+                Directory.CreateDirectory("Saves");
+        }
+
         #region Fields
         // Матрица показывающая выбрана ли клетка или нет
         Cell[,] Board { get; set; } = new Cell[GC.BoardSize, GC.BoardSize];
+
+        [DataMember]
+        Cell[][] serializationBoard = new Cell[GC.BoardSize][];
+
+        [OnSerializing]
+        public void BeforeSerializing(StreamingContext ctx)
+        {
+
+            for (int columnID = 0; columnID < GC.BoardSize; ++columnID)
+            {
+                this.serializationBoard[columnID] = new Cell[GC.BoardSize];
+                for (int rowID = 0; rowID < GC.BoardSize; ++rowID)
+                    this.serializationBoard[columnID][rowID] = this.Board[columnID, rowID];
+            }
+
+        }
 
         // Матрица хранящая фигуры тип шахматной фигуры для данной клетки [если нет фигуры - EmptyCell]  
         Figure[,] FigureBoard { get; set; } = new Figure[GC.BoardSize, GC.BoardSize];
@@ -517,13 +558,17 @@ namespace Chess.GameUnits
         int EndMoveIndexY { get; set; } = -1;
 
         // Показывает поставлен ли в данный момент игры Шах
+        [DataMember]
         public bool IsShah { get; set; } = false;
         // Показывает поставлен ли в данный момент игры Мат
+        [DataMember]
         public bool IsCheckMate { get; set; } = false;
 
         // Показывает ходят ли сейчас белые
+        [DataMember]
         public bool IsWhiteMove { get; set; } = true;
         // Показывает ходят ли сейчас черные
+        [DataMember]
         public bool IsBlackMove { get; set; } = false;
 
         // Показывает выбранна ли какая-либо из фигур
@@ -541,18 +586,5 @@ namespace Chess.GameUnits
 
         #endregion
 
-
-
-        public static void SaveInXML(ref ChessBoard board, string fileName)
-        {
-            if (!Directory.Exists("Saves"))
-                Directory.CreateDirectory("Saves");
-        }
-
-        public static void LoadFromXML(ref ChessBoard board, string fileName)
-        {
-            if (!Directory.Exists("Saves"))
-                Directory.CreateDirectory("Saves");
-        }
     }
 }
