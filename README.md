@@ -26,9 +26,44 @@ To deploy or run this solution you need:
 * [Monogame for Visual Studio 2015] (http://www.monogame.net/downloads/) - software used to make Windows and Windows Phone games used in this pgoject.
 
 
-### Give examples
-Here is the Start menu:
+### Examples and game Screenshots
 
+In this section You could watch screenshots of the implemented game.
+
+First of all when you double click on game executed file Chess.exe you will see Main Chess Game menu. In the Main menu you'll see three buttons:
+* New Game button - click on this button creates a new game.
+* Load Game - this button click loaded the last saved Chess Game. (Possibility of choosing loaded game will be implemented later).
+* Exit Game - click on this button lead to the game leaving.
+
+![alt text](Screenshot/MainMenu.png "Main menu in Chess Game.")
+
+If You decide to choose and click New Game button you will see the Main Game window with:
+* Chess Board, witch allows players to make their own game steps.
+* Pause Button - allows to stop the game for a some time.
+
+![alt text](Screenshot/GameScreen.png "Main window in Chess Game.")
+
+On the left side of the Main Chess Game Window you could press on Pause button, it will lead you to the next Pause menu.
+In this menu you can see six different buttons:
+* Resume game button - allows you to continue your game.
+* New Game button - removes all your currently achieved game results and initialize a new Chess Game.
+* Load Last Saved Game button - allows you to load your last saved game.
+* Save Game button - saves Your current game progress to XML file.
+* Settings button - allows you to change properties of Chess game (Not yet implemented).
+* Exit Game button - lead to the Chess Game exit. You loose all unsaved achievements.
+
+![alt text](Screenshot/OnPauseGame.png "Pause menu in Chess Game.")
+
+If one of two players has won (set checkmate to another person), players will see next Win Game Menu, where:
+* Big trophy with color depending on the color of winner. White trophy if white player has won, black trophy otherwise.
+Three buttons:
+* New Game button - initialize new game.
+* Watch button - button click on which allows to see clear chess board. Because of the winner trophy, did not allow players to see checkmate posotion, You could simply click on this button and see your chessboard with checkmate position. 
+* Exit Game button - button ckick leed to the Chess Game Exit.
+
+![alt text](Screenshot/CheckMateMenu.png "Checkmate menu in Chess Game.")
+
+So, in this section I tried to make an overview all Chess Game menus and describe all on button click actions.
 
 
 ## Authors
