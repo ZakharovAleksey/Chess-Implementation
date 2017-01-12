@@ -1,4 +1,4 @@
-# Chess game
+# Chess game.
 
 In this project chess game has been made. 
 
@@ -7,7 +7,7 @@ If you want to find more information about this game, it's rules you can visit [
 
 
 
-## Getting Started
+## Getting Started.
 
 To play this game, or use it as the base for your own project, first thing you need to do - is just to clone it into your local repository.
 
@@ -19,14 +19,14 @@ To do this step, you need to go to Content folder, find Monogame execution file:
 * To run the project, click Start button in Visual Studio menu or Ctrl+F5.
 
 
-### Prerequisites
+### Prerequisites.
 
 To deploy or run this solution you need:
 * [Visual Studio 2015] (https://www.visualstudio.com/ru/downloads/) - an integrated development environment (IDE) from Microsoft used in this pgoject.
 * [Monogame for Visual Studio 2015] (http://www.monogame.net/downloads/) - software used to make Windows and Windows Phone games used in this pgoject.
 
 
-### Examples and game Screenshots
+### Examples and game Screenshots.
 
 In this section You could watch screenshots of the implemented game.
 
@@ -66,6 +66,6 @@ Three buttons:
 So, in this section I tried to make an overview all Chess Game menus and describe all on button click actions.
 
 
-## Authors
+## Authors.
 
 * **Zakharov Aleksey** - *Initial work* - [PurpleBooth](https://github.com/ZakharovAleksey)
